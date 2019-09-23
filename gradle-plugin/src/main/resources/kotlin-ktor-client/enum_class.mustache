@@ -1,0 +1,21 @@
+import kotlinx.serialization.SerialName
+import com.icerockdev.mpp.ktor.serializer.SerialEnum
+import com.icerockdev.mpp.ktor.serializer.serial
+import kotlinx.serialization.internal.CommonEnumSerializer
+
+/**
+* {{{description}}}
+* Values: {{#allowableValues}}{{#enumVars}}{{{value}}}{{^-last}},{{/-last}}{{/enumVars}}{{/allowableValues}}
+*/
+@Serializable(with = {{classname}}Serializer::class)
+internal enum class {{classname}}(override val serialName: String? = null): SerialEnum {
+{{#allowableValues}}{{#enumVars}}
+    {{name}}(serialName = {{^isString}}"{{/isString}}{{{value}}}{{^isString}}"{{/isString}}){{^-last}},{{/-last}}{{#-last}};{{/-last}}
+{{/enumVars}}{{/allowableValues}}
+}
+
+internal object {{classname}}Serializer: CommonEnumSerializer<{{classname}}>(
+    serialName = "{{classname}}",
+    choices = {{classname}}.values(),
+    choicesNames = {{classname}}.values().serial()
+)

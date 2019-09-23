@@ -1,0 +1,38 @@
+import kotlinx.serialization.SerialName
+import dev.icerock.moko.network.serializer.SerialEnum
+import dev.icerock.moko.network.serializer.serial
+import kotlinx.serialization.internal.CommonEnumSerializer
+
+/**
+ * {{{description}}}
+{{#vars}}
+ * @param {{name}} {{{description}}}
+{{/vars}}
+ */
+@Serializable
+internal data class {{classname}} (
+{{#requiredVars}}
+{{>data_class_req_var}}{{^-last}},
+{{/-last}}{{/requiredVars}}{{#hasRequired}}{{#hasOptional}},
+{{/hasOptional}}{{/hasRequired}}{{#optionalVars}}{{>data_class_opt_var}}{{^-last}},
+{{/-last}}{{/optionalVars}}
+) {
+{{#hasEnums}}{{#vars}}{{#isEnum}}
+    /**
+    * {{{description}}}
+    * Values: {{#allowableValues}}{{#enumVars}}{{{value}}}{{^-last}},{{/-last}}{{/enumVars}}{{/allowableValues}}
+    */
+    @Serializable(with = {{nameInCamelCase}}Serializer::class)
+    enum class {{nameInCamelCase}}(override val serialName: String? = null): SerialEnum {
+    {{#allowableValues}}{{#enumVars}}
+        {{name}}(serialName = {{^isString}}"{{/isString}}{{{value}}}{{^isString}}"{{/isString}}){{^-last}},{{/-last}}{{#-last}};{{/-last}}
+    {{/enumVars}}{{/allowableValues}}
+    }
+
+    object {{nameInCamelCase}}Serializer: CommonEnumSerializer<{{nameInCamelCase}}>(
+        serialName = "{{nameInCamelCase}}",
+        choices = {{nameInCamelCase}}.values(),
+        choicesNames = {{nameInCamelCase}}.values().serial()
+    )
+{{/isEnum}}{{/vars}}{{/hasEnums}}
+}

@@ -1,0 +1,89 @@
+{{>licenseInfo}}
+package {{apiPackage}}
+
+{{#imports}}import {{import}}
+{{/imports}}
+
+import io.ktor.client.HttpClient
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.request
+import io.ktor.client.request.forms.FormDataContent
+import io.ktor.http.ContentType
+import io.ktor.http.HttpMethod
+import io.ktor.http.Parameters
+import io.ktor.http.takeFrom
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.list
+import dev.icerock.moko.network.LargeTextContent
+import io.ktor.client.call.ReceivePipelineException
+
+{{#operations}}
+internal class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpClient: HttpClient, json: Json) {
+    private val _basePath = basePath
+    private val _httpClient = httpClient
+    private val _json = json
+
+    {{#operation}}
+    /**
+    * {{summary}}
+    * {{notes}}
+    {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
+    {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
+    */{{#returnType}}
+    @Suppress("UNCHECKED_CAST"){{/returnType}}
+    suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}} {
+        val builder = HttpRequestBuilder()
+
+        builder.method = HttpMethod.{{httpMethod}}
+        builder.url {
+            takeFrom(_basePath)
+            encodedPath = encodedPath.let { startingPath ->
+                path("{{path}}")
+                return@let startingPath + encodedPath.substring(1)
+            }
+            {{#hasQueryParams}}
+            with(parameters) {
+                {{#queryParams}}
+                {{paramName}}?.let { append("{{baseName}}", it.toString()) }
+                {{/queryParams}}
+            }
+            {{/hasQueryParams}}
+        }
+        {{#bodyParams}}
+        if({{paramName}} != null) {
+            builder.body = LargeTextContent(
+                _json.stringify({{dataType}}.serializer(),{{paramName}}),
+                ContentType.Application.Json.withoutParameters()
+            )
+        }
+        {{/bodyParams}}
+
+        {{#hasFormParams}}
+        val formData = FormDataContent(Parameters.build {
+            {{#formParams}}
+            {{paramName}}?.let { append("{{baseName}}", it.toString()) }
+            {{/formParams}}
+        })
+        builder.body = formData
+        {{/hasFormParams}}
+        with(builder.headers) {
+            append("Accept", "application/json")
+        }
+
+        try {
+        {{#returnType}}
+            val result: String = _httpClient.request(builder)
+
+            return _json.parse({{returnBaseType}}.serializer(){{#isListContainer}}.list{{/isListContainer}}, result)
+        {{/returnType}}
+        {{^returnType}}
+            return _httpClient.request(builder)
+        {{/returnType}}
+        } catch (pipeline: ReceivePipelineException) {
+            throw pipeline.cause
+        }
+    }
+
+    {{/operation}}
+}
+{{/operations}}

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zIh-nI-gcX">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="snE-Ct-w85">
+            <objects>
+                <navigationController id="zIh-nI-gcX" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="aGe-Yj-KQZ">
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="TTy-86-aNs" kind="relationship" relationship="rootViewController" id="y6u-Ao-rTD"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dpF-aw-Lyj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5158" y="-1482"/>
+        </scene>
+        <!--Test-->
+        <scene sceneID="B5V-K5-FDE">
+            <objects>
+                <viewController id="TTy-86-aNs" customClass="TestViewController" customModule="mokoSampleNetwork" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gcA-zH-akF"/>
+                        <viewControllerLayoutGuide type="bottom" id="gTY-6T-yQv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KxK-oh-5KO">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ube-gc-16Y">
+                                <rect key="frame" x="16" y="72" width="288" height="458"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4P3-zK-HqS">
+                                <rect key="frame" x="133.5" y="538" width="53" height="30"/>
+                                <state key="normal" title="Refresh"/>
+                                <connections>
+                                    <action selector="onRefreshPressed" destination="TTy-86-aNs" eventType="touchUpInside" id="2wv-pf-F8T"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ube-gc-16Y" secondAttribute="trailing" id="AFn-lg-Fp6"/>
+                            <constraint firstItem="4P3-zK-HqS" firstAttribute="centerX" secondItem="KxK-oh-5KO" secondAttribute="centerX" id="BdP-u5-seY"/>
+                            <constraint firstItem="4P3-zK-HqS" firstAttribute="top" secondItem="Ube-gc-16Y" secondAttribute="bottom" constant="8" id="NTb-BU-gg1"/>
+                            <constraint firstItem="Ube-gc-16Y" firstAttribute="centerX" secondItem="KxK-oh-5KO" secondAttribute="centerX" id="OiW-o5-Vxr"/>
+                            <constraint firstItem="Ube-gc-16Y" firstAttribute="leading" secondItem="KxK-oh-5KO" secondAttribute="leadingMargin" id="mrT-nK-Jt7"/>
+                            <constraint firstItem="Ube-gc-16Y" firstAttribute="top" secondItem="gcA-zH-akF" secondAttribute="bottom" constant="8" id="ohz-xd-Wfq"/>
+                            <constraint firstItem="gTY-6T-yQv" firstAttribute="top" secondItem="4P3-zK-HqS" secondAttribute="bottom" id="vGU-Q9-vhy"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Test" id="0jM-60-fjM"/>
+                    <connections>
+                        <outlet property="imageView" destination="Ube-gc-16Y" id="iCx-HQ-gln"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jxh-nl-GiI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4297.5" y="-1482.0422535211267"/>
+        </scene>
+    </scenes>
+</document>
