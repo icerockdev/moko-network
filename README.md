@@ -1,5 +1,5 @@
 ![moko-network](img/logo.png)  
-[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://api.bintray.com/packages/icerockdev/moko/moko-network/images/download.svg) ](https://bintray.com/icerockdev/moko/moko-network/_latestVersion)
+[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://api.bintray.com/packages/icerockdev/moko/moko-network/images/download.svg) ](https://bintray.com/icerockdev/moko/moko-network/_latestVersion) ![kotlin-version](https://img.shields.io/badge/kotlin-1.3.50-orange)
 
 # Mobile Kotlin network components
 This is a Kotlin MultiPlatform library that provide network components for iOS & Android. Library is
@@ -27,6 +27,11 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
 - Android API 21+
 - iOS version 9.0+
 
+## Versions
+- kotlin 1.3.50
+  - 0.1.0
+  - 0.1.1
+  
 ## Installation
 root build.gradle  
 ```groovy
@@ -36,7 +41,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.1.0"
+        classpath "dev.icerock.moko:network-generator:0.1.1"
     }
 }
 
@@ -53,7 +58,7 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.1.0")
+    commonMainApi("dev.icerock.moko:network:0.1.1")
 }
 ```
 
