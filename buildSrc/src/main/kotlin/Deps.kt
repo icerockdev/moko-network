@@ -10,8 +10,6 @@ object Deps {
             "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Plugins.kotlin}"
         const val kotlinSerialization =
             "org.jetbrains.kotlin:kotlin-serialization:${Versions.Plugins.kotlin}"
-        const val androidExtensions =
-            "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.Plugins.androidExtensions}"
         const val mokoNetwork =
             "dev.icerock.moko:network-generator:${Versions.Plugins.mokoNetwork}"
     }
@@ -77,7 +75,6 @@ object Deps {
         "kotlin-kapt" to Plugins.kotlin,
         "kotlin-android" to Plugins.kotlin,
         "kotlinx-serialization" to Plugins.kotlinSerialization,
-        "kotlin-android-extensions" to Plugins.androidExtensions,
         "dev.icerock.mobile.multiplatform-network-generator" to Plugins.mokoNetwork
     )
 }
