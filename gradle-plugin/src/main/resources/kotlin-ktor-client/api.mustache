@@ -53,10 +53,17 @@ internal class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpCli
         if({{paramName}} != null) {
             builder.body = LargeTextContent(
         {{#dataType}}
-            _json.stringify({{dataBaseType}}.serializer(){{#isListContainer}}.list{{/isListContainer}}
-            {{#isMapContainer}}.map{{/isMapContainer}}, {{paramName}}),
+            {{#isListContainer}}
+                {{#items}}
+                _json.stringify({{dataType}}.serializer().list,
+                {{/items}}
+            {{/isListContainer}}
+            {{^isListContainer}}
+                _json.stringify({{dataType}}.serializer(),
+            {{/isListContainer}}
+                {{paramName}}),
         {{/dataType}}
-        ContentType.Application.Json.withoutParameters()
+                ContentType.Application.Json.withoutParameters()
             )
         }
         {{/bodyParams}}
@@ -75,9 +82,15 @@ internal class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpCli
 
         try {
         {{#returnType}}
+            {{^returnTypeIsPrimitive}}
+            //not primitive type
             val result: String = _httpClient.request(builder)
-            return _json.parse({{returnBaseType}}.serializer(){{#isListContainer}}.list{{/isListContainer}}
-            {{#isMapContainer}}.map{{/isMapContainer}}, result)
+            return _json.parse({{returnBaseType}}.serializer(){{#isListContainer}}.list{{/isListContainer}}, result)
+            {{/returnTypeIsPrimitive}}
+            {{#returnTypeIsPrimitive}}
+            //primitive type
+            return _httpClient.request(builder)
+            {{/returnTypeIsPrimitive}}
         {{/returnType}}
         {{^returnType}}
             return _httpClient.request(builder)
