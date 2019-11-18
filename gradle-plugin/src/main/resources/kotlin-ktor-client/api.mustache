@@ -52,8 +52,11 @@ internal class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpCli
         {{#bodyParams}}
         if({{paramName}} != null) {
             builder.body = LargeTextContent(
-                _json.stringify({{dataType}}.serializer(),{{paramName}}),
-                ContentType.Application.Json.withoutParameters()
+        {{#dataType}}
+            _json.stringify({{dataBaseType}}.serializer(){{#isListContainer}}.list{{/isListContainer}}
+            {{#isMapContainer}}.map{{/isMapContainer}}, {{paramName}}),
+        {{/dataType}}
+        ContentType.Application.Json.withoutParameters()
             )
         }
         {{/bodyParams}}
@@ -73,8 +76,8 @@ internal class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpCli
         try {
         {{#returnType}}
             val result: String = _httpClient.request(builder)
-
-            return _json.parse({{returnBaseType}}.serializer(){{#isListContainer}}.list{{/isListContainer}}, result)
+            return _json.parse({{returnBaseType}}.serializer(){{#isListContainer}}.list{{/isListContainer}}
+            {{#isMapContainer}}.map{{/isMapContainer}}, result)
         {{/returnType}}
         {{^returnType}}
             return _httpClient.request(builder)
