@@ -1,7 +1,6 @@
 import kotlinx.serialization.SerialName
 import dev.icerock.moko.network.serializer.SerialEnum
 import dev.icerock.moko.network.serializer.serial
-import kotlinx.serialization.internal.CommonEnumSerializer
 
 /**
  * {{{description}}}
@@ -22,17 +21,12 @@ internal data class {{classname}} (
     * {{{description}}}
     * Values: {{#allowableValues}}{{#enumVars}}{{{value}}}{{^-last}},{{/-last}}{{/enumVars}}{{/allowableValues}}
     */
-    @Serializable(with = {{nameInCamelCase}}Serializer::class)
-    enum class {{nameInCamelCase}}(override val serialName: String? = null): SerialEnum {
+    @Serializable
+    enum class {{nameInCamelCase}} {
     {{#allowableValues}}{{#enumVars}}
-        {{name}}(serialName = {{^isString}}"{{/isString}}{{{value}}}{{^isString}}"{{/isString}}){{^-last}},{{/-last}}{{#-last}};{{/-last}}
+        @SerialName({{^isString}}"{{/isString}}{{{value}}}{{^isString}}"{{/isString}})
+        {{name}}{{^-last}},{{/-last}}{{#-last}};{{/-last}}
     {{/enumVars}}{{/allowableValues}}
     }
-
-    object {{nameInCamelCase}}Serializer: CommonEnumSerializer<{{nameInCamelCase}}>(
-        serialName = "{{nameInCamelCase}}",
-        choices = {{nameInCamelCase}}.values(),
-        choicesNames = {{nameInCamelCase}}.values().serial()
-    )
 {{/isEnum}}{{/vars}}{{/hasEnums}}
 }
