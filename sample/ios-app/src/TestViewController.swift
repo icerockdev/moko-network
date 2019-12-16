@@ -4,11 +4,10 @@
 
 import UIKit
 import MultiPlatformLibrary
-import SwiftyGif
 
 class TestViewController: UIViewController {
     
-    @IBOutlet private var imageView: UIImageView!
+    @IBOutlet private var textView: UITextView!
     
     private var viewModel: TestViewModel!
     
@@ -17,13 +16,8 @@ class TestViewController: UIViewController {
         
         viewModel = TestViewModel()
         
-        viewModel.gifUrl.addObserver { [weak self] url in
-            guard let url = url as String? else {
-                self?.imageView.image = nil
-                return
-            }
-            
-            self?.imageView.setGifFromURL(URL(string: url)!)
+        viewModel.petInfo.addObserver { [weak self] info in
+            self?.textView.text = info as? String
         }
     }
     
