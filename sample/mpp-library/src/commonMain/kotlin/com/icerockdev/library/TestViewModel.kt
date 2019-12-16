@@ -8,50 +8,36 @@ import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.livedata.readOnly
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import dev.icerock.moko.network.features.TokenFeature
-import dev.icerock.moko.network.generated.apis.GifsApi
+import dev.icerock.moko.network.generated.apis.PetApi
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 class TestViewModel : ViewModel() {
-    private val httpClient = HttpClient {
-        install(TokenFeature) {
-            tokenHeaderName = "api_key"
-            tokenProvider = object : TokenFeature.TokenProvider {
-                override fun getToken(): String? {
-                    return "o5tAxORWRXRxxgIvRthxWnsjEbA3vkjV"
-                }
-            }
-        }
-    }
-    private val gifsApi = GifsApi(
-        basePath = "https://api.giphy.com/v1/",
+    private val httpClient = HttpClient { }
+    private val petApi = PetApi(
+        basePath = "https://petstore.swagger.io/v2/",
         httpClient = httpClient,
         json = Json.nonstrict
     )
 
-    private val _gifUrl = MutableLiveData<String?>(null)
-    val gifUrl: LiveData<String?> = _gifUrl.readOnly()
+    private val _petInfo = MutableLiveData<String?>(null)
+    val petInfo: LiveData<String?> = _petInfo.readOnly()
 
     init {
-        reloadGif()
+        reloadPet()
     }
 
     fun onRefreshPressed() {
-        reloadGif()
+        reloadPet()
     }
 
-    private fun reloadGif() {
-        coroutineScope.launch {
+    private fun reloadPet() {
+        viewModelScope.launch {
             try {
-                val gif = gifsApi.randomGif(
-                    rating = null,
-                    tag = null
-                )
+                val pet = petApi.findPetsByTags(emptyList())
 
-                _gifUrl.value = gif.data?.images?.original?.url
-
+                _petInfo.value = pet.toString()
             } catch (error: Exception) {
                 println("can't load $error")
             }

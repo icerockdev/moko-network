@@ -6,10 +6,9 @@ package com.icerockdev.app
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
 import com.icerockdev.library.TestViewModel
 import dev.icerock.moko.mvvm.getViewModel
 
@@ -20,16 +19,13 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val imageView: ImageView = findViewById(R.id.imageView)
+        val textView: TextView = findViewById(R.id.textView)
         val refreshButton: Button = findViewById(R.id.refreshButton)
-        val glide = Glide.with(this)
 
         val viewModel = getViewModel { TestViewModel() }
 
-        viewModel.gifUrl.ld().observe(this, Observer { url ->
-            glide.load(url)
-                .placeholder(R.drawable.loading)
-                .into(imageView)
+        viewModel.petInfo.ld().observe(this, Observer { url ->
+            textView.text = url
         })
 
         refreshButton.setOnClickListener {

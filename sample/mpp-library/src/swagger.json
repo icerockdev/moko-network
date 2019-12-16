@@ -1,1094 +1,1054 @@
 {
   "swagger": "2.0",
-  "schemes": [
-    "https"
-  ],
-  "host": "api.giphy.com",
-  "basePath": "/v1",
   "info": {
+    "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+    "version": "1.0.3",
+    "title": "Swagger Petstore",
+    "termsOfService": "http://swagger.io/terms/",
     "contact": {
-      "email": "support@giphy.com"
+      "email": "apiteam@swagger.io"
     },
-    "description": "Giphy API",
-    "termsOfService": "https://developers.giphy.com/",
-    "title": "Giphy",
-    "version": "1.0",
-    "x-apisguru-categories": [
-      "media"
-    ],
-    "x-logo": {
-      "url": "https://api.apis.guru/v2/cache/logo/https_twitter.com_GIPHY_profile_image.png"
-    },
-    "x-origin": [
-      {
-        "format": "swagger",
-        "url": "https://raw.githubusercontent.com/faragorn/open-api-specs/master/specs/giphy_api/1.0/index.yml",
-        "version": "2.0"
-      }
-    ],
-    "x-preferred": true,
-    "x-providerName": "giphy.com"
-  },
-  "externalDocs": {
-    "description": "Official Giphy Documentation",
-    "url": "https://developers.giphy.com/docs/"
-  },
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "securityDefinitions": {
-    "api_key": {
-      "in": "query",
-      "name": "api_key",
-      "type": "apiKey"
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "security": [
-    {
-      "api_key": []
-    }
-  ],
-  "parameters": {
-    "gifId": {
-      "description": "Filters results by specified GIF ID.",
-      "format": "int32",
-      "in": "path",
-      "name": "gifId",
-      "required": true,
-      "type": "integer"
-    },
-    "gifIds": {
-      "description": "Filters results by specified GIF IDs, separated by commas.",
-      "in": "query",
-      "name": "ids",
-      "type": "string"
-    },
-    "lang": {
-      "description": "Specify default language for regional content; use a 2-letter ISO 639-1 language code.",
-      "in": "query",
-      "name": "lang",
-      "type": "string"
-    },
-    "limit": {
-      "default": 25,
-      "description": "The maximum number of records to return.",
-      "format": "int32",
-      "in": "query",
-      "name": "limit",
-      "type": "integer"
-    },
-    "offset": {
-      "default": 0,
-      "description": "An optional results offset.",
-      "format": "int32",
-      "in": "query",
-      "name": "offset",
-      "type": "integer"
-    },
-    "query": {
-      "description": "Search query term or prhase.",
-      "in": "query",
-      "name": "q",
-      "required": true,
-      "type": "string"
-    },
-    "rating": {
-      "description": "Filters results by specified rating.",
-      "in": "query",
-      "name": "rating",
-      "type": "string"
-    },
-    "tag": {
-      "description": "Filters results by specified tag.",
-      "in": "query",
-      "name": "tag",
-      "type": "string"
-    },
-    "term": {
-      "description": "Search term.",
-      "in": "query",
-      "name": "s",
-      "required": true,
-      "type": "string"
-    }
-  },
-  "responses": {
-    "BadRequest": {
-      "description": "Your request was formatted incorrectly or missing required parameters."
-    },
-    "Forbidden": {
-      "description": "You weren't authorized to make your request; most likely this indicates an issue with your API Key."
-    },
-    "NotFound": {
-      "description": "The particular GIF you are requesting was not found. This occurs, for example, if you request a GIF by an id that does not exist."
-    },
-    "TooManyRequests": {
-      "description": "Your API Key is making too many requests. Read about [requesting a Production Key](https://developers.giphy.com/docs/#access) to upgrade your API Key rate limits.\n"
-    }
-  },
+  "host": "petstore.swagger.io",
+  "basePath": "/v2",
   "tags": [
     {
-      "name": "gifs"
+      "name": "pet",
+      "description": "Everything about your Pets",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
     },
     {
-      "name": "stickers"
+      "name": "store",
+      "description": "Access to Petstore orders"
+    },
+    {
+      "name": "user",
+      "description": "Operations about user",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io"
+      }
     }
   ],
+  "schemes": [
+    "https",
+    "http"
+  ],
   "paths": {
-    "/gifs": {
+    "/pet/{petId}": {
       "get": {
-        "description": "A multiget version of the get GIF by ID endpoint.\n",
-        "operationId": "getGifsById",
+        "tags": [
+          "pet"
+        ],
+        "summary": "Find pet by ID",
+        "description": "Returns a single pet",
+        "operationId": "getPetById",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
         "parameters": [
           {
-            "$ref": "#/parameters/gifIds"
+            "name": "petId",
+            "in": "path",
+            "description": "ID of pet to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "successful operation",
             "schema": {
-              "properties": {
-                "data": {
-                  "items": {
-                    "$ref": "#/definitions/Gif"
-                  },
-                  "type": "array"
-                },
-                "meta": {
-                  "$ref": "#/definitions/Meta"
-                },
-                "pagination": {
-                  "$ref": "#/definitions/Pagination"
-                }
-              },
-              "type": "object"
+              "$ref": "#/definitions/Pet"
             }
           },
           "400": {
-            "$ref": "#/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
+            "description": "Invalid ID supplied"
           },
           "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/responses/TooManyRequests"
+            "description": "Pet not found"
           }
         },
-        "summary": "Get GIFs by ID",
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "post": {
         "tags": [
-          "gifs"
+          "pet"
+        ],
+        "summary": "Updates a pet in the store with form data",
+        "description": "",
+        "operationId": "updatePetWithForm",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "ID of pet that needs to be updated",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "description": "Updated name of the pet",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "formData",
+            "description": "Updated status of the pet",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Deletes a pet",
+        "description": "",
+        "operationId": "deletePet",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "Pet id to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
         ]
       }
     },
-    "/gifs/random": {
-      "get": {
-        "description": "Returns a random GIF, limited by tag. Excluding the tag parameter will return a random GIF from the GIPHY catalog.\n",
-        "operationId": "randomGif",
+    "/pet/{petId}/uploadImage": {
+      "post": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "uploads an image",
+        "description": "",
+        "operationId": "uploadFile",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
-            "$ref": "#/parameters/tag"
+            "name": "petId",
+            "in": "path",
+            "description": "ID of pet to update",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
           },
           {
-            "$ref": "#/parameters/rating"
+            "name": "additionalMetadata",
+            "in": "formData",
+            "description": "Additional data to pass to server",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file to upload",
+            "required": false,
+            "type": "file"
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "successful operation",
             "schema": {
-              "properties": {
-                "data": {
-                  "$ref": "#/definitions/Gif"
-                },
-                "meta": {
-                  "$ref": "#/definitions/Meta"
-                }
-              },
-              "type": "object"
+              "$ref": "#/definitions/ApiResponse"
             }
-          },
-          "400": {
-            "$ref": "#/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/responses/TooManyRequests"
           }
         },
-        "summary": "Random GIF",
-        "tags": [
-          "gifs"
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
         ]
       }
     },
-    "/gifs/search": {
-      "get": {
-        "description": "Search all GIPHY GIFs for a word or phrase. Punctuation will be stripped and ignored.  Use a plus or url encode for phrases. Example paul+rudd, ryan+gosling or american+psycho.\n",
-        "operationId": "searchGifs",
+    "/pet": {
+      "post": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Add a new pet to the store",
+        "description": "",
+        "operationId": "addPet",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
         "parameters": [
           {
-            "$ref": "#/parameters/query"
-          },
-          {
-            "$ref": "#/parameters/limit"
-          },
-          {
-            "$ref": "#/parameters/offset"
-          },
-          {
-            "$ref": "#/parameters/rating"
-          },
-          {
-            "$ref": "#/parameters/lang"
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Search results",
-            "schema": {
-              "properties": {
-                "data": {
-                  "items": {
-                    "$ref": "#/definitions/Gif"
-                  },
-                  "type": "array"
-                },
-                "meta": {
-                  "$ref": "#/definitions/Meta"
-                },
-                "pagination": {
-                  "$ref": "#/definitions/Pagination"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "400": {
-            "$ref": "#/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/responses/TooManyRequests"
+          "405": {
+            "description": "Invalid input"
           }
         },
-        "summary": "Search GIFs",
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      },
+      "put": {
         "tags": [
-          "gifs"
+          "pet"
+        ],
+        "summary": "Update an existing pet",
+        "description": "",
+        "operationId": "updatePet",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
         ]
       }
     },
-    "/gifs/translate": {
+    "/pet/findByStatus": {
       "get": {
-        "description": "The translate API draws on search, but uses the GIPHY `special sauce` to handle translating from one vocabulary to another. In this case, words and phrases to GIF\n",
-        "operationId": "translateGif",
+        "tags": [
+          "pet"
+        ],
+        "summary": "Finds Pets by status",
+        "description": "Multiple status values can be provided with comma separated strings",
+        "operationId": "findPetsByStatus",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
         "parameters": [
           {
-            "$ref": "#/parameters/term"
+            "name": "status",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "available",
+                "pending",
+                "sold"
+              ],
+              "default": "available"
+            },
+            "collectionFormat": "multi"
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "successful operation",
             "schema": {
-              "properties": {
-                "data": {
-                  "$ref": "#/definitions/Gif"
-                },
-                "meta": {
-                  "$ref": "#/definitions/Meta"
-                }
-              },
-              "type": "object"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Pet"
+              }
             }
           },
           "400": {
-            "$ref": "#/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/responses/TooManyRequests"
+            "description": "Invalid status value"
           }
         },
-        "summary": "Translate phrase to GIF",
-        "tags": [
-          "gifs"
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
         ]
       }
     },
-    "/gifs/trending": {
+    "/pet/findByTags": {
       "get": {
-        "description": "Fetch GIFs currently trending online. Hand curated by the GIPHY editorial team.  The data returned mirrors the GIFs showcased on the GIPHY homepage. Returns 25 results by default.\n",
-        "operationId": "trendingGifs",
+        "tags": [
+          "pet"
+        ],
+        "summary": "Finds Pets by tags",
+        "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+        "operationId": "findPetsByTags",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
         "parameters": [
           {
-            "$ref": "#/parameters/limit"
-          },
-          {
-            "$ref": "#/parameters/offset"
-          },
-          {
-            "$ref": "#/parameters/rating"
+            "name": "tags",
+            "in": "query",
+            "description": "Tags to filter by",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "successful operation",
             "schema": {
-              "properties": {
-                "data": {
-                  "items": {
-                    "$ref": "#/definitions/Gif"
-                  },
-                  "type": "array"
-                },
-                "meta": {
-                  "$ref": "#/definitions/Meta"
-                },
-                "pagination": {
-                  "$ref": "#/definitions/Pagination"
-                }
-              },
-              "type": "object"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Pet"
+              }
             }
           },
           "400": {
-            "$ref": "#/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/responses/TooManyRequests"
+            "description": "Invalid tag value"
           }
         },
-        "summary": "Trending GIFs",
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ],
+        "deprecated": true
+      }
+    },
+    "/store/inventory": {
+      "get": {
         "tags": [
-          "gifs"
+          "store"
+        ],
+        "summary": "Returns pet inventories by status",
+        "description": "Returns a map of status codes to quantities",
+        "operationId": "getInventory",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
         ]
       }
     },
-    "/gifs/{gifId}": {
+    "/store/order/{orderId}": {
       "get": {
-        "description": "Returns a GIF given that GIF's unique ID\n",
-        "operationId": "getGifById",
+        "tags": [
+          "store"
+        ],
+        "summary": "Find purchase order by ID",
+        "description": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
+        "operationId": "getOrderById",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
         "parameters": [
           {
-            "$ref": "#/parameters/gifId"
+            "name": "orderId",
+            "in": "path",
+            "description": "ID of pet that needs to be fetched",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "successful operation",
             "schema": {
-              "properties": {
-                "data": {
-                  "$ref": "#/definitions/Gif"
-                },
-                "meta": {
-                  "$ref": "#/definitions/Meta"
-                }
-              },
-              "type": "object"
+              "$ref": "#/definitions/Order"
             }
           },
           "400": {
-            "$ref": "#/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
+            "description": "Invalid ID supplied"
           },
           "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/responses/TooManyRequests"
+            "description": "Order not found"
           }
-        },
-        "summary": "Get GIF by Id",
+        }
+      },
+      "delete": {
         "tags": [
-          "gifs"
-        ]
+          "store"
+        ],
+        "summary": "Delete purchase order by ID",
+        "description": "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
+        "operationId": "deleteOrder",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "ID of the order that needs to be deleted",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        }
       }
     },
-    "/stickers/random": {
-      "get": {
-        "description": "Returns a random GIF, limited by tag. Excluding the tag parameter will return a random GIF from the GIPHY catalog.\n",
-        "operationId": "randomSticker",
+    "/store/order": {
+      "post": {
+        "tags": [
+          "store"
+        ],
+        "summary": "Place an order for a pet",
+        "description": "",
+        "operationId": "placeOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
         "parameters": [
           {
-            "$ref": "#/parameters/tag"
-          },
-          {
-            "$ref": "#/parameters/rating"
+            "in": "body",
+            "name": "body",
+            "description": "order placed for purchasing the pet",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "successful operation",
             "schema": {
-              "properties": {
-                "data": {
-                  "$ref": "#/definitions/Gif"
-                },
-                "meta": {
-                  "$ref": "#/definitions/Meta"
-                }
-              },
-              "type": "object"
+              "$ref": "#/definitions/Order"
             }
           },
           "400": {
-            "$ref": "#/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/responses/TooManyRequests"
+            "description": "Invalid Order"
           }
-        },
-        "summary": "Random Sticker",
-        "tags": [
-          "stickers"
-        ]
+        }
       }
     },
-    "/stickers/search": {
+    "/user/{username}": {
       "get": {
-        "description": "Replicates the functionality and requirements of the classic GIPHY search, but returns animated stickers rather than GIFs.\n",
-        "operationId": "searchStickers",
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user by user name",
+        "description": "",
+        "operationId": "getUserByName",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
         "parameters": [
           {
-            "$ref": "#/parameters/query"
-          },
-          {
-            "$ref": "#/parameters/limit"
-          },
-          {
-            "$ref": "#/parameters/offset"
-          },
-          {
-            "$ref": "#/parameters/rating"
-          },
-          {
-            "$ref": "#/parameters/lang"
+            "name": "username",
+            "in": "path",
+            "description": "The name that needs to be fetched. Use user1 for testing. ",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "Search results",
+            "description": "successful operation",
             "schema": {
-              "properties": {
-                "data": {
-                  "items": {
-                    "$ref": "#/definitions/Gif"
-                  },
-                  "type": "array"
-                },
-                "meta": {
-                  "$ref": "#/definitions/Meta"
-                },
-                "pagination": {
-                  "$ref": "#/definitions/Pagination"
-                }
-              },
-              "type": "object"
+              "$ref": "#/definitions/User"
             }
           },
           "400": {
-            "$ref": "#/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
+            "description": "Invalid username supplied"
           },
           "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/responses/TooManyRequests"
+            "description": "User not found"
           }
-        },
-        "summary": "Search Stickers",
+        }
+      },
+      "put": {
         "tags": [
-          "stickers"
-        ]
+          "user"
+        ],
+        "summary": "Updated user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "updateUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "name that need to be updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid user supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Delete user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "deleteUser",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The name that needs to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
       }
     },
-    "/stickers/translate": {
+    "/user/login": {
       "get": {
-        "description": "The translate API draws on search, but uses the GIPHY `special sauce` to handle translating from one vocabulary to another. In this case, words and phrases to GIFs.\n",
-        "operationId": "translateSticker",
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
         "parameters": [
           {
-            "$ref": "#/parameters/term"
+            "name": "username",
+            "in": "query",
+            "description": "The user name for login",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "The password for login in clear text",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "",
-            "schema": {
-              "properties": {
-                "data": {
-                  "$ref": "#/definitions/Gif"
-                },
-                "meta": {
-                  "$ref": "#/definitions/Meta"
-                }
+            "description": "successful operation",
+            "headers": {
+              "X-Expires-After": {
+                "type": "string",
+                "format": "date-time",
+                "description": "date in UTC when token expires"
               },
-              "type": "object"
+              "X-Rate-Limit": {
+                "type": "integer",
+                "format": "int32",
+                "description": "calls per hour allowed by the user"
+              }
+            },
+            "schema": {
+              "type": "string"
             }
           },
           "400": {
-            "$ref": "#/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/responses/TooManyRequests"
+            "description": "Invalid username/password supplied"
           }
-        },
-        "summary": "Translate phrase to Sticker",
-        "tags": [
-          "stickers"
-        ]
+        }
       }
     },
-    "/stickers/trending": {
+    "/user/logout": {
       "get": {
-        "description": "Fetch Stickers currently trending online. Hand curated by the GIPHY editorial team. Returns 25 results by default.\n",
-        "operationId": "trendingStickers",
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs out current logged in user session",
+        "description": "",
+        "operationId": "logoutUser",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "createUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
         "parameters": [
           {
-            "$ref": "#/parameters/limit"
-          },
-          {
-            "$ref": "#/parameters/offset"
-          },
-          {
-            "$ref": "#/parameters/rating"
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "properties": {
-                "data": {
-                  "items": {
-                    "$ref": "#/definitions/Gif"
-                  },
-                  "type": "array"
-                },
-                "meta": {
-                  "$ref": "#/definitions/Meta"
-                },
-                "pagination": {
-                  "$ref": "#/definitions/Pagination"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "400": {
-            "$ref": "#/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/responses/TooManyRequests"
+          "default": {
+            "description": "successful operation"
           }
-        },
-        "summary": "Trending Stickers",
+        }
+      }
+    },
+    "/user/createWithArray": {
+      "post": {
         "tags": [
-          "stickers"
-        ]
+          "user"
+        ],
+        "summary": "Creates list of users with given input array",
+        "description": "",
+        "operationId": "createUsersWithArrayInput",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of user object",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/createWithList": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Creates list of users with given input array",
+        "description": "",
+        "operationId": "createUsersWithListInput",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of user object",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    },
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "https://petstore.swagger.io/oauth/authorize",
+      "flow": "implicit",
+      "scopes": {
+        "read:pets": "read your pets",
+        "write:pets": "modify pets in your account"
       }
     }
   },
   "definitions": {
-    "Gif": {
+    "Category": {
+      "type": "object",
       "properties": {
-        "bitly_url": {
-          "description": "The unique bit.ly URL for this GIF",
-          "example": "http://gph.is/1gsWDcL",
-          "type": "string"
-        },
-        "content_url": {
-          "description": "Currently unused",
-          "type": "string"
-        },
-        "create_datetime": {
-          "description": "The date this GIF was added to the GIPHY database.",
-          "example": "2013-08-01 12:41:48",
-          "format": "date-time",
-          "type": "string"
-        },
-        "embded_url": {
-          "description": "A URL used for embedding this GIF",
-          "example": "http://giphy.com/embed/YsTs5ltWtEhnq",
-          "type": "string"
-        },
-        "featured_tags": {
-          "description": "An array of featured tags for this GIF (Note: Not available when using the Public Beta Key)\n",
-          "items": {
-            "description": "Tag name",
-            "type": "string"
-          },
-          "type": "array"
-        },
         "id": {
-          "description": "This GIF's unique ID",
-          "example": "YsTs5ltWtEhnq",
-          "type": "string"
+          "type": "integer",
+          "format": "int64"
         },
-        "images": {
-          "description": "An object containing data for various available formats and sizes of this GIF.",
-          "properties": {
-            "downsized": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a version of this GIF downsized to be under 2mb."
-                }
-              ]
-            },
-            "downsized_large": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a version of this GIF downsized to be under 8mb."
-                }
-              ]
-            },
-            "downsized_medium": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a version of this GIF downsized to be under 5mb."
-                }
-              ]
-            },
-            "downsized_small": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a version of this GIF downsized to be under 200kb."
-                }
-              ]
-            },
-            "downsized_still": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a static preview image of the downsized version of this GIF."
-                }
-              ]
-            },
-            "fixed_height": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding versions of this GIF with a fixed height of 200 pixels. Good for mobile use."
-                }
-              ]
-            },
-            "fixed_height_downsampled": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding versions of this GIF with a fixed height of 200 pixels and the number of frames reduced to 6."
-                }
-              ]
-            },
-            "fixed_height_small": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding versions of this GIF with a fixed height of 100 pixels. Good for mobile keyboards."
-                }
-              ]
-            },
-            "fixed_height_small_still": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a static image of this GIF with a fixed height of 100 pixels."
-                }
-              ]
-            },
-            "fixed_height_still": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a static image of this GIF with a fixed height of 200 pixels."
-                }
-              ]
-            },
-            "fixed_width": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding versions of this GIF with a fixed width of 200 pixels. Good for mobile use."
-                }
-              ]
-            },
-            "fixed_width_downsampled": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding versions of this GIF with a fixed width of 200 pixels and the number of frames reduced to 6."
-                }
-              ]
-            },
-            "fixed_width_small": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding versions of this GIF with a fixed width of 100 pixels. Good for mobile keyboards."
-                }
-              ]
-            },
-            "fixed_width_small_still": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a static image of this GIF with a fixed width of 100 pixels."
-                }
-              ]
-            },
-            "fixed_width_still": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a static image of this GIF with a fixed width of 200 pixels."
-                }
-              ]
-            },
-            "looping": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a version of this GIF set to loop for 15 seconds."
-                }
-              ]
-            },
-            "original": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding the original version of this GIF. Good for desktop use."
-                }
-              ]
-            },
-            "original_still": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a static preview image of the original GIF."
-                }
-              ]
-            },
-            "preview": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a version of this GIF in .MP4 format limited to 50kb that displays the first 1-2 seconds of the GIF."
-                }
-              ]
-            },
-            "preview_gif": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Image"
-                },
-                {
-                  "description": "Data surrounding a version of this GIF limited to 50kb that displays the first 1-2 seconds of the GIF."
-                }
-              ]
-            }
+        "name": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Category"
+      }
+    },
+    "Pet": {
+      "type": "object",
+      "required": [
+        "name",
+        "photoUrls"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "name": {
+          "type": "string",
+          "example": "doggie"
+        },
+        "photoUrls": {
+          "type": "array",
+          "xml": {
+            "wrapped": true
           },
-          "type": "object"
-        },
-        "import_datetime": {
-          "description": "The creation or upload date from this GIF's source.",
-          "example": "2013-08-01 12:41:48",
-          "format": "date-time",
-          "type": "string"
-        },
-        "rating": {
-          "description": "The MPAA-style rating for this content. Examples include Y, G, PG, PG-13 and R",
-          "example": "g",
-          "type": "string"
-        },
-        "slug": {
-          "description": "The unique slug used in this GIF's URL",
-          "example": "confused-flying-YsTs5ltWtEhnq",
-          "type": "string"
-        },
-        "source": {
-          "description": "The page on which this GIF was found",
-          "example": "http://www.reddit.com/r/reactiongifs/comments/1xpyaa/superman_goes_to_hollywood/",
-          "type": "string"
-        },
-        "source_post_url": {
-          "description": "The URL of the webpage on which this GIF was found.",
-          "example": "http://cheezburger.com/5282328320",
-          "type": "string"
-        },
-        "source_tld": {
-          "description": "The top level domain of the source URL.",
-          "example": "cheezburger.com",
-          "type": "string"
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "photoUrl"
+            }
+          }
         },
         "tags": {
-          "description": "An array of tags for this GIF (Note: Not available when using the Public Beta Key)\n",
-          "items": {
-            "description": "Tag name",
-            "type": "string"
+          "type": "array",
+          "xml": {
+            "wrapped": true
           },
-          "type": "array"
-        },
-        "trending_datetime": {
-          "description": "The date on which this gif was marked trending, if applicable.",
-          "example": "2013-08-01 12:41:48",
-          "format": "date-time",
-          "type": "string"
-        },
-        "type": {
-          "default": "gif",
-          "description": "Type of the gif. By default, this is almost always gif",
-          "enum": [
-            "gif"
-          ],
-          "type": "string"
-        },
-        "update_datetime": {
-          "description": "The date on which this GIF was last updated.",
-          "example": "2013-08-01 12:41:48",
-          "format": "date-time",
-          "type": "string"
-        },
-        "url": {
-          "description": "The unique URL for this GIF",
-          "example": "http://giphy.com/gifs/confused-flying-YsTs5ltWtEhnq",
-          "type": "string"
-        },
-        "user": {
-          "$ref": "#/definitions/User"
-        },
-        "username": {
-          "description": "The username this GIF is attached to, if applicable",
-          "example": "JoeCool4000",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "Image": {
-      "properties": {
-        "frames": {
-          "description": "The number of frames in this GIF.",
-          "example": "15",
-          "type": "string"
-        },
-        "height": {
-          "description": "The height of this GIF in pixels.",
-          "example": "200",
-          "type": "string"
-        },
-        "mp4": {
-          "description": "The URL for this GIF in .MP4 format.",
-          "example": "https://media1.giphy.com/media/cZ7rmKfFYOvYI/giphy.mp4",
-          "type": "string"
-        },
-        "mp4_size": {
-          "description": "The size in bytes of the .MP4 file corresponding to this GIF.",
-          "example": "25123",
-          "type": "string"
-        },
-        "size": {
-          "description": "The size of this GIF in bytes.",
-          "example": "32381",
-          "type": "string"
-        },
-        "url": {
-          "description": "The publicly-accessible direct URL for this GIF.",
-          "example": "https://media1.giphy.com/media/cZ7rmKfFYOvYI/200.gif",
-          "type": "string"
-        },
-        "webp": {
-          "description": "The URL for this GIF in .webp format.",
-          "example": "https://media1.giphy.com/media/cZ7rmKfFYOvYI/giphy.webp",
-          "type": "string"
-        },
-        "webp_size": {
-          "description": "The size in bytes of the .webp file corresponding to this GIF.",
-          "example": "12321",
-          "type": "string"
-        },
-        "width": {
-          "description": "The width of this GIF in pixels.",
-          "example": "320",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "Meta": {
-      "description": "The Meta Object contains basic information regarding the request, whether it was successful, and the response given by the API.  Check `responses` to see a description of types of response codes the API might give you under different cirumstances.\n",
-      "properties": {
-        "msg": {
-          "description": "HTTP Response Message",
-          "example": "OK",
-          "type": "string"
-        },
-        "response_id": {
-          "description": "A unique ID paired with this response from the API.",
-          "example": "57eea03c72381f86e05c35d2",
-          "type": "string"
+          "items": {
+            "xml": {
+              "name": "tag"
+            },
+            "$ref": "#/definitions/Tag"
+          }
         },
         "status": {
-          "description": "HTTP Response Code",
-          "example": 200,
-          "format": "int32",
-          "type": "integer"
+          "type": "string",
+          "description": "pet status in the store",
+          "enum": [
+            "available",
+            "pending",
+            "sold"
+          ]
         }
       },
-      "type": "object"
+      "xml": {
+        "name": "Pet"
+      }
     },
-    "Pagination": {
-      "description": "The Pagination Object contains information relating to the number of total results available as well as the number of results fetched and their relative positions.\n",
+    "Tag": {
+      "type": "object",
       "properties": {
-        "count": {
-          "description": "Total number of items returned.",
-          "example": 25,
-          "format": "int32",
-          "type": "integer"
+        "id": {
+          "type": "integer",
+          "format": "int64"
         },
-        "offset": {
-          "description": "Position in pagination.",
-          "example": 75,
-          "format": "int32",
-          "type": "integer"
-        },
-        "total_count": {
-          "description": "Total number of items available.",
-          "example": 250,
-          "format": "int32",
-          "type": "integer"
+        "name": {
+          "type": "string"
         }
       },
-      "type": "object"
+      "xml": {
+        "name": "Tag"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "petId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "shipDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "description": "Order Status",
+          "enum": [
+            "placed",
+            "approved",
+            "delivered"
+          ]
+        },
+        "complete": {
+          "type": "boolean"
+        }
+      },
+      "xml": {
+        "name": "Order"
+      }
     },
     "User": {
-      "description": "The User Object contains information about the user associated with a GIF and URLs to assets such as that user's avatar image, profile, and more.",
+      "type": "object",
       "properties": {
-        "avatar_url": {
-          "description": "The URL for this user's avatar image.",
-          "example": "https://media1.giphy.com/avatars/election2016/XwYrZi5H87o6.gif",
-          "type": "string"
-        },
-        "banner_url": {
-          "description": "The URL for the banner image that appears atop this user's profile page.",
-          "example": "https://media4.giphy.com/avatars/cheezburger/XkuejOhoGLE6.jpg",
-          "type": "string"
-        },
-        "display_name": {
-          "description": "The display name associated with this user (contains formatting the base username might not).",
-          "example": "JoeCool4000",
-          "type": "string"
-        },
-        "profile_url": {
-          "description": "The URL for this user's profile.",
-          "example": "https://giphy.com/cheezburger/",
-          "type": "string"
-        },
-        "twitter": {
-          "description": "The Twitter username associated with this user, if applicable.",
-          "example": "@joecool4000",
-          "type": "string"
+        "id": {
+          "type": "integer",
+          "format": "int64"
         },
         "username": {
-          "description": "The username associated with this user.",
-          "example": "joecool4000",
           "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "userStatus": {
+          "type": "integer",
+          "format": "int32",
+          "description": "User Status"
         }
       },
-      "type": "object"
+      "xml": {
+        "name": "User"
+      }
     }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
   }
 }

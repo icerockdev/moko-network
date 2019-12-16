@@ -27,6 +27,10 @@ class KtorCodegen : AbstractKotlinCodegen() {
         typeMapping["Date"] = "kotlin.String"
         typeMapping["DateTime"] = "kotlin.String"
 
+        //TODO: Support files via ByteArray / LargeTextContent
+        typeMapping["File"] = "kotlin.String"
+        typeMapping["file"] = "kotlin.String"
+
         typeMapping["UUID"] = "kotlin.String"
 
         embeddedTemplateDir = "kotlin-ktor-client"
