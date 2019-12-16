@@ -24,7 +24,7 @@ pluginManagement {
 enableFeaturePreview("GRADLE_METADATA")
 
 val properties = startParameter.projectProperties
-// ./gradlew -PlibraryPublish publishPluginPublicationToMavenLocal publishToMavenLocal
+// ./gradlew -PlibraryPublish :gradle-plugin:publishPluginPublicationToMavenLocal :network:publishToMavenLocal
 val libraryPublish: Boolean = properties.containsKey("libraryPublish")
 
 include(":network")

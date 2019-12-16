@@ -43,7 +43,7 @@ class TestViewModel : ViewModel() {
     }
 
     private fun reloadGif() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             try {
                 val gif = gifsApi.randomGif(
                     rating = null,
