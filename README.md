@@ -21,6 +21,7 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
 - **OpenAPI client code generation** - just configure plugin then use generated entities and api classes;
 - **TokenFeature** feature to ktor-client with auth token header support;
 - **ExceptionFeature** feature to ktor-client that parse errors from server to domain exceptions.
+- **RefreshTokenFeature** feature to ktor-client that handle Unauthorized response from server, try to update token and repeat failed request in case, when token update was successful;
 
 ## Requirements
 - Gradle version 5.4.1+
