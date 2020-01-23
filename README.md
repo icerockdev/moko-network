@@ -21,6 +21,7 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
 - **OpenAPI client code generation** - just configure plugin then use generated entities and api classes;
 - **TokenFeature** feature to ktor-client with auth token header support;
 - **ExceptionFeature** feature to ktor-client that parse errors from server to domain exceptions.
+- **RefreshTokenFeature** feature to ktor-client that handle Unauthorized response from server, try to update token and repeat failed request in case, when token update was successful;
 
 ## Requirements
 - Gradle version 5.4.1+
@@ -33,6 +34,7 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
   - 0.1.1
 - kotlin 1.3.61
   - 0.2.0
+  - 0.3.0
   
 ## Installation
 root build.gradle  
@@ -43,7 +45,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.2.0"
+        classpath "dev.icerock.moko:network-generator:0.3.0"
     }
 }
 
@@ -60,7 +62,7 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.2.0")
+    commonMainApi("dev.icerock.moko:network:0.3.0")
 }
 ```
 
