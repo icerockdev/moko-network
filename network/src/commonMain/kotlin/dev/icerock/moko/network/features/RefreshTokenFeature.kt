@@ -43,9 +43,3 @@ class RefreshTokenFeature(
         }
     }
 }
-
-fun HttpClientConfig<*>.install(tokenUpdater: suspend () -> Boolean) {
-    install(RefreshTokenFeature) {
-        this.updateTokenHandler = tokenUpdater
-    }
-}

@@ -12,8 +12,8 @@ import io.ktor.client.request.header
 import io.ktor.util.AttributeKey
 
 class LanguageFeature private constructor(
-    private val mLanguageHeaderName: String,
-    private val mLanguageProvider: LanguageFeature.LanguageCodeProvider
+    private val languageHeaderName: String,
+    private val languageProvider: LanguageFeature.LanguageCodeProvider
 ) {
     class Config {
         var languageHeaderName: String? = null
@@ -31,8 +31,8 @@ class LanguageFeature private constructor(
 
         override fun install(feature: LanguageFeature, scope: HttpClient) {
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
-                feature.mLanguageProvider.getLanguageCode()?.apply {
-                    context.header(feature.mLanguageHeaderName, this)
+                feature.languageProvider.getLanguageCode()?.apply {
+                    context.header(feature.languageHeaderName, this)
                 }
             }
         }
@@ -40,15 +40,5 @@ class LanguageFeature private constructor(
 
     interface LanguageCodeProvider {
         fun getLanguageCode(): String?
-    }
-}
-
-fun HttpClientConfig<*>.install(
-    languageHeaderName: String,
-    languageCodeProvider: LanguageFeature.LanguageCodeProvider
-) {
-    install(LanguageFeature) {
-        this.languageHeaderName = languageHeaderName
-        this.languageCodeProvider = languageCodeProvider
     }
 }

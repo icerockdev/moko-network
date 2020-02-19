@@ -22,7 +22,6 @@ class TestViewModel : ViewModel() {
             languageHeaderName = "X-Language"
             languageCodeProvider = LanguageProvider()
         }
-
     }
     private val petApi = PetApi(
         basePath = "https://petstore.swagger.io/v2/",
