@@ -12,8 +12,8 @@ import io.ktor.client.request.header
 import io.ktor.util.AttributeKey
 
 class TokenFeature private constructor(
-    private val mTokenHeaderName: String,
-    private val mTokenProvider: TokenProvider
+    private val tokenHeaderName: String,
+    private val tokenProvider: TokenProvider
 ) {
 
     class Config {
@@ -32,8 +32,8 @@ class TokenFeature private constructor(
 
         override fun install(feature: TokenFeature, scope: HttpClient) {
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
-                feature.mTokenProvider.getToken()?.apply {
-                    context.header(feature.mTokenHeaderName, this)
+                feature.tokenProvider.getToken()?.apply {
+                    context.header(feature.tokenHeaderName, this)
                 }
             }
         }
@@ -41,15 +41,5 @@ class TokenFeature private constructor(
 
     interface TokenProvider {
         fun getToken(): String?
-    }
-}
-
-fun HttpClientConfig<*>.install(
-    tokenHeaderName: String,
-    tokenProvider: TokenFeature.TokenProvider
-) {
-    install(TokenFeature) {
-        this.tokenHeaderName = tokenHeaderName
-        this.tokenProvider = tokenProvider
     }
 }
