@@ -16,7 +16,7 @@ import kotlinx.coroutines.io.readRemaining
 import kotlinx.io.charsets.Charset
 import kotlinx.io.core.readText
 
-class ExceptionFeature(private val mExceptionFactory: ExceptionFactory) {
+class ExceptionFeature(private val exceptionFactory: ExceptionFactory) {
 
     class Config {
         var exceptionFactory: ExceptionFactory? = null
@@ -40,7 +40,7 @@ class ExceptionFeature(private val mExceptionFactory: ExceptionFactory) {
                 if (!response.status.isSuccess()) {
                     val packet = body.readRemaining()
                     val responseString = packet.readText(charset = Charset.forName("UTF-8"))
-                    throw feature.mExceptionFactory.createException(
+                    throw feature.exceptionFactory.createException(
                         response.status.value,
                         responseString
                     )
@@ -48,11 +48,5 @@ class ExceptionFeature(private val mExceptionFactory: ExceptionFactory) {
                 proceedWith(subject)
             }
         }
-    }
-}
-
-fun HttpClientConfig<*>.install(exceptionFactory: ExceptionFactory) {
-    install(ExceptionFeature) {
-        this.exceptionFactory = exceptionFactory
     }
 }
