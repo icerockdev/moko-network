@@ -33,6 +33,7 @@ class TokenFeature private constructor(
         override fun install(feature: TokenFeature, scope: HttpClient) {
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
                 feature.tokenProvider.getToken()?.apply {
+                    context.headers.remove(feature.tokenHeaderName)
                     context.header(feature.tokenHeaderName, this)
                 }
             }
