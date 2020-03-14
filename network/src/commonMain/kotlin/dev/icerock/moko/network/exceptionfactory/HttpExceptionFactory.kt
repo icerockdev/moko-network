@@ -5,15 +5,12 @@
 package dev.icerock.moko.network.exceptionfactory
 
 import dev.icerock.moko.network.exceptions.ResponseException
-import kotlinx.io.IOException
 
 class HttpExceptionFactory(
     private val defaultParser: HttpExceptionParser,
     private val customParsers: Map<Int, HttpExceptionParser>
-) :
-    ExceptionFactory {
-    override fun createException(httpStatusCode: Int, responseBody: String?): IOException {
-
+) : ExceptionFactory {
+    override fun createException(httpStatusCode: Int, responseBody: String?): ResponseException {
         val parser = customParsers[httpStatusCode] ?: defaultParser
 
         val exception = parser.parseException(httpStatusCode, responseBody)

@@ -13,7 +13,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.list
+import kotlinx.serialization.builtins.list
 import dev.icerock.moko.network.LargeTextContent
 import io.ktor.client.call.ReceivePipelineException
 
@@ -44,7 +44,12 @@ internal class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpCli
             {{#hasQueryParams}}
             with(parameters) {
                 {{#queryParams}}
+                {{#isContainer}}
+                {{paramName}}?.let { appendAll("{{baseName}}", it.map { it.toString() }) }
+                {{/isContainer}}
+                {{^isContainer}}
                 {{paramName}}?.let { append("{{baseName}}", it.toString()) }
+                {{/isContainer}}
                 {{/queryParams}}
             }
             {{/hasQueryParams}}

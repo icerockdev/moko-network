@@ -30,6 +30,7 @@ dependencies {
     mppLibrary(Deps.Libs.MultiPlatform.kotlinStdLib)
     mppLibrary(Deps.Libs.MultiPlatform.coroutines)
     mppLibrary(Deps.Libs.MultiPlatform.ktorClient)
+    mppLibrary(Deps.Libs.MultiPlatform.ktorClientLogging)
     mppLibrary(Deps.Libs.MultiPlatform.serialization)
     mppLibrary(Deps.Libs.MultiPlatform.mokoNetwork)
     mppLibrary(Deps.Libs.MultiPlatform.mokoMvvm)

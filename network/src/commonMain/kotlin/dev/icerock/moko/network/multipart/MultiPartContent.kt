@@ -5,13 +5,17 @@
 package dev.icerock.moko.network.multipart
 
 import dev.icerock.moko.network.plus
-import io.ktor.http.*
+import io.ktor.http.ContentType
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import io.ktor.http.content.OutgoingContent
+import io.ktor.http.headersOf
+import io.ktor.http.withCharset
 import io.ktor.util.flattenEntries
-import kotlinx.coroutines.io.ByteWriteChannel
-import kotlinx.coroutines.io.writeFully
-import kotlinx.coroutines.io.writeStringUtf8
-import kotlinx.io.charsets.Charsets
+import io.ktor.utils.io.ByteWriteChannel
+import io.ktor.utils.io.charsets.Charsets
+import io.ktor.utils.io.writeFully
+import io.ktor.utils.io.writeStringUtf8
 import kotlin.random.Random
 
 // based on https://github.com/ktorio/ktor-samples/blob/master/other/client-multipart/src/MultipartApp.kt

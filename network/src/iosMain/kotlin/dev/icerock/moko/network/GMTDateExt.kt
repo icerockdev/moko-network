@@ -5,7 +5,11 @@
 package dev.icerock.moko.network
 
 import io.ktor.util.date.GMTDate
-import platform.Foundation.*
+import platform.Foundation.NSDate
+import platform.Foundation.NSDateFormatter
+import platform.Foundation.NSLocale
+import platform.Foundation.currentLocale
+import platform.Foundation.timeIntervalSince1970
 
 
 actual fun String.toDate(format: String): GMTDate {

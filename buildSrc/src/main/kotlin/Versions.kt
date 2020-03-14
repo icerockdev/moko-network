@@ -9,12 +9,12 @@ object Versions {
         const val minSdk = 16
     }
 
-    const val kotlin = "1.3.61"
+    const val kotlin = "1.3.70"
 
-    private const val mokoNetwork = "0.5.1"
+    private const val mokoNetwork = "0.6.0"
 
     object Plugins {
-        const val android = "3.5.2"
+        const val android = "3.6.1"
 
         const val kotlin = Versions.kotlin
         const val mokoNetwork = Versions.mokoNetwork
@@ -28,11 +28,12 @@ object Versions {
         }
 
         object MultiPlatform {
-            const val serialization = "0.14.0"
-            const val coroutines = "1.3.3"
-            const val ktorClient = "1.2.6"
+            const val serialization = "0.20.0"
+            const val coroutines = "1.3.4"
+            const val ktorClient = "1.3.2"
+            const val ktorClientLogging = ktorClient
             const val mokoNetwork = Versions.mokoNetwork
-            const val mokoMvvm = "0.4.0"
+            const val mokoMvvm = "0.6.0"
         }
 
         object Jvm {

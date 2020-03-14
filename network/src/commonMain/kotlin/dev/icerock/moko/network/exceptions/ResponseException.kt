@@ -4,12 +4,10 @@
 
 package dev.icerock.moko.network.exceptions
 
-import kotlinx.io.IOException
-
 open class ResponseException(
     val httpStatusCode: Int,
     responseMessage: String
-) : IOException(responseMessage) {
+) : Exception(responseMessage) {
 
     val isUnauthorized: Boolean
         get() = httpStatusCode == 401

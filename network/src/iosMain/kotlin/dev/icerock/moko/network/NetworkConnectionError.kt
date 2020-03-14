@@ -5,8 +5,9 @@
 package dev.icerock.moko.network
 
 import io.ktor.client.engine.ios.IosHttpRequestException
+import io.ktor.util.KtorExperimentalAPI
 
-@Suppress("EXPERIMENTAL_API_USAGE")
+@KtorExperimentalAPI
 actual fun Throwable.isNetworkConnectionError(): Boolean {
     return when (this) {
         is IosHttpRequestException -> true
