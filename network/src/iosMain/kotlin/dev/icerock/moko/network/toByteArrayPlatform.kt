@@ -4,7 +4,7 @@
 
 package dev.icerock.moko.network
 
-import kotlinx.io.charsets.Charset
+import io.ktor.utils.io.charsets.Charset
 import kotlinx.serialization.toUtf8Bytes
 
 actual fun String.toByteArrayPlatform(charset: Charset): ByteArray {

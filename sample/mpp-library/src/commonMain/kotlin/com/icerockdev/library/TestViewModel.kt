@@ -12,8 +12,12 @@ import dev.icerock.moko.network.LanguageProvider
 import dev.icerock.moko.network.features.LanguageFeature
 import dev.icerock.moko.network.generated.apis.PetApi
 import io.ktor.client.HttpClient
+import io.ktor.client.features.logging.LogLevel
+import io.ktor.client.features.logging.Logger
+import io.ktor.client.features.logging.Logging
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 
 class TestViewModel : ViewModel() {
     private val httpClient = HttpClient {
@@ -21,6 +25,14 @@ class TestViewModel : ViewModel() {
         install(LanguageFeature) {
             languageHeaderName = "X-Language"
             languageCodeProvider = LanguageProvider()
+        }
+        install(Logging) {
+            level = LogLevel.ALL
+            logger = object: Logger {
+                override fun log(message: String) {
+                    println(message)
+                }
+            }
         }
     }
     private val petApi = PetApi(
@@ -43,7 +55,7 @@ class TestViewModel : ViewModel() {
     private fun reloadPet() {
         viewModelScope.launch {
             try {
-                val pet = petApi.findPetsByTags(emptyList())
+                val pet = petApi.findPetsByStatus(listOf("available"))
 
                 _petInfo.value = pet.toString()
             } catch (error: Exception) {

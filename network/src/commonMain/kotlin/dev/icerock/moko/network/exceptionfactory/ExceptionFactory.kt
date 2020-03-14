@@ -4,8 +4,8 @@
 
 package dev.icerock.moko.network.exceptionfactory
 
-import kotlinx.io.IOException
+import dev.icerock.moko.network.exceptions.ResponseException
 
 interface ExceptionFactory {
-    fun createException(httpStatusCode: Int, responseBody: String?): IOException
+    fun createException(httpStatusCode: Int, responseBody: String?): ResponseException
 }

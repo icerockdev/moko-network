@@ -8,8 +8,8 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.charset
 import io.ktor.http.content.OutgoingContent
-import kotlinx.io.charsets.Charset
-import kotlinx.io.charsets.Charsets
+import io.ktor.utils.io.charsets.Charset
+import io.ktor.utils.io.charsets.Charsets
 
 /**
  * Свой вариант io.ktor.http.content.TextContent с кастомным преобразованием строки в набор байт, так

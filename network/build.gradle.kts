@@ -39,3 +39,13 @@ publishing {
         }
     }
 }
+
+// workaround while https://youtrack.jetbrains.com/issue/KT-36720 not implemented
+kotlin {
+    targets
+        .filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>()
+        .flatMap { it.compilations }
+        .forEach {
+            it.kotlinOptions.freeCompilerArgs += listOf("-module-name", "mokoNetwork")
+        }
+}

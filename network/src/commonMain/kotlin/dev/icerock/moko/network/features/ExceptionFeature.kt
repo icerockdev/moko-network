@@ -6,15 +6,14 @@ package dev.icerock.moko.network.features
 
 import dev.icerock.moko.network.exceptionfactory.ExceptionFactory
 import io.ktor.client.HttpClient
-import io.ktor.client.HttpClientConfig
 import io.ktor.client.features.HttpClientFeature
-import io.ktor.client.response.HttpResponsePipeline
+import io.ktor.client.statement.HttpResponsePipeline
 import io.ktor.http.isSuccess
 import io.ktor.util.AttributeKey
-import kotlinx.coroutines.io.ByteReadChannel
-import kotlinx.coroutines.io.readRemaining
-import kotlinx.io.charsets.Charset
-import kotlinx.io.core.readText
+import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.charsets.Charset
+import io.ktor.utils.io.core.readText
+import io.ktor.utils.io.readRemaining
 
 class ExceptionFeature(private val exceptionFactory: ExceptionFactory) {
 

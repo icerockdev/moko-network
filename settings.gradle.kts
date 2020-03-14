@@ -29,7 +29,7 @@ val libraryPublish: Boolean = properties.containsKey("libraryPublish")
 
 include(":network")
 include(":gradle-plugin")
-if(!libraryPublish) {
+if (!libraryPublish) {
     include(":sample:android-app")
     include(":sample:mpp-library")
 }

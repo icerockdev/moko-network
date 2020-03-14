@@ -5,23 +5,24 @@
 package dev.icerock.moko.network.features
 
 import io.ktor.client.HttpClient
-import io.ktor.client.HttpClientConfig
 import io.ktor.client.features.HttpClientFeature
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.request
 import io.ktor.client.request.takeFrom
-import io.ktor.client.response.HttpReceivePipeline
+import io.ktor.client.statement.HttpReceivePipeline
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import io.ktor.util.AttributeKey
 
 class RefreshTokenFeature(
-        private val updateTokenHandler: suspend () -> Boolean
+    private val updateTokenHandler: suspend () -> Boolean
 ) {
 
     class Config {
         var updateTokenHandler: (suspend () -> Boolean)? = null
 
         fun build() = RefreshTokenFeature(
-                updateTokenHandler ?: throw IllegalArgumentException("updateTokenHandler should be passed")
+            updateTokenHandler ?: throw IllegalArgumentException("updateTokenHandler should be passed")
         )
     }
 
@@ -35,7 +36,8 @@ class RefreshTokenFeature(
             scope.receivePipeline.intercept(HttpReceivePipeline.After) {
                 if (context.response.status == HttpStatusCode.Unauthorized && feature.updateTokenHandler()) {
                     val requestBuilder = HttpRequestBuilder().takeFrom(context.request)
-                    proceedWith(context.client.execute(requestBuilder).response)
+                    val result: HttpResponse = context.client.request(requestBuilder)
+                    proceedWith(result)
                 } else {
                     proceedWith(it)
                 }

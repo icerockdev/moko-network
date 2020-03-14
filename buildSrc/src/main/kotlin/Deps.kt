@@ -50,6 +50,11 @@ object Deps {
                 common = "io.ktor:ktor-client-core:${Versions.Libs.MultiPlatform.ktorClient}",
                 ios = "io.ktor:ktor-client-ios:${Versions.Libs.MultiPlatform.ktorClient}"
             )
+            val ktorClientLogging = MultiPlatformLibrary(
+                android = "io.ktor:ktor-client-logging-jvm:${Versions.Libs.MultiPlatform.ktorClientLogging}",
+                common = "io.ktor:ktor-client-logging:${Versions.Libs.MultiPlatform.ktorClientLogging}",
+                ios = "io.ktor:ktor-client-logging-native:${Versions.Libs.MultiPlatform.ktorClientLogging}"
+            )
             val mokoNetwork = MultiPlatformLibrary(
                 common = "dev.icerock.moko:network:${Versions.Libs.MultiPlatform.mokoNetwork}",
                 iosX64 = "dev.icerock.moko:network-iosx64:${Versions.Libs.MultiPlatform.mokoNetwork}",

@@ -16,5 +16,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build and publish local
-      run: ./gradlew -PlibraryPublish :gradle-plugin:publishPluginPublicationToMavenLocal :network:publishToMavenLocal
+    - name: Check plugin build
+      run: ./gradlew -PlibraryPublish :gradle-plugin:publishPluginPublicationToMavenLocal
+    - name: Check lib build
+      run: ./gradlew -PlibraryPublish :network:publishToMavenLocal
