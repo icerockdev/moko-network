@@ -1,5 +1,5 @@
 ![moko-network](img/logo.png)  
-[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://api.bintray.com/packages/icerockdev/moko/moko-network/images/download.svg) ](https://bintray.com/icerockdev/moko/moko-network/_latestVersion) ![kotlin-version](https://img.shields.io/badge/kotlin-1.3.61-orange)
+[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://api.bintray.com/packages/icerockdev/moko/moko-network/images/download.svg) ](https://bintray.com/icerockdev/moko/moko-network/_latestVersion) ![kotlin-version](https://img.shields.io/badge/kotlin-1.3.70-orange)
 
 # Mobile Kotlin network components
 This is a Kotlin MultiPlatform library that provide network components for iOS & Android. Library is
@@ -24,7 +24,7 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
 - **RefreshTokenFeature** feature to ktor-client that handle Unauthorized response from server, try to update token and repeat failed request in case, when token update was successful;
 
 ## Requirements
-- Gradle version 5.4.1+
+- Gradle version 5.6.4+
 - Android API 16+
 - iOS version 9.0+
 
@@ -38,7 +38,9 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
   - 0.4.0
   - 0.5.0
   - 0.5.1
-  
+- kotlin 1.3.70
+  - 0.6.0
+
 ## Installation
 root build.gradle  
 ```groovy
@@ -48,7 +50,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.5.1"
+        classpath "dev.icerock.moko:network-generator:0.6.0"
     }
 }
 
@@ -65,13 +67,8 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.5.1")
+    commonMainApi("dev.icerock.moko:network:0.6.0")
 }
-```
-
-settings.gradle  
-```groovy
-enableFeaturePreview("GRADLE_METADATA")
 ```
 
 ## Usage
@@ -84,8 +81,7 @@ More examples can be found in the [sample directory](sample).
 - In [network directory](network) contains `network` library;
 - In [gradle-plugin directory](gradle-plugin) contains gradle plugin with OpenAPI implementation generator;
 - In [sample directory](sample) contains samples on android, ios & mpp-library connected to apps;
-- For test changes locally use `:network:publishToMavenLocal` gradle task, after it samples will use locally published version.
-- For test changes of plugin locally use `:gradle-plugin:publishToMavenLocal` gradle task, after it samples will use locally published version.
+- For test changes locally use `./publishToMavenLocal.sh` script, after it samples will use locally published version.
 
 ## Contributing
 All development (both new features and bug fixes) is performed in `develop` branch. This way `master` sources always contain sources of the most recently released version. Please send PRs with bug fixes to `develop` branch. Fixes to documentation in markdown files are an exception to this rule. They are updated directly in `master`.
