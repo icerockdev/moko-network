@@ -19,6 +19,8 @@ class KtorCodegen : AbstractKotlinCodegen() {
         artifactId = "kotlin-ktor-client"
         packageName = "dev.icerock.moko.network.generated"
 
+        nonPublicApi = true
+
         typeMapping["array"] = "kotlin.collections.List"
         typeMapping["number"] = "kotlin.Double"
 
