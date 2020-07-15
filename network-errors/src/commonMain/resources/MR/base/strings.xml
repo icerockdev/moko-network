@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="networkConnectionErrorText">No network connection</string>
+	<string name="unauthorizedErrorText">Authorization error</string>
+	<string name="notFoundErrorText">The requested data was not found</string>
+	<string name="accessDeniedErrorText">Access denied</string>
+	<string name="internalServerErrorText">Internal server error</string>
+</resources>

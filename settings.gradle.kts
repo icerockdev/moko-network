@@ -28,6 +28,7 @@ val properties = startParameter.projectProperties
 val libraryPublish: Boolean = properties.containsKey("libraryPublish")
 
 include(":network")
+include(":network-errors")
 include(":gradle-plugin")
 if (!libraryPublish) {
     include(":sample:android-app")

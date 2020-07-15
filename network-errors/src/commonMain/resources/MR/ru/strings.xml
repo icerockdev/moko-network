@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="networkConnectionErrorText">Ошибка сетевого соединения</string>
+	<string name="unauthorizedErrorText">Ошибка авторизации</string>
+	<string name="notFoundErrorText">Запрашиваемые данные не найдены</string>
+	<string name="accessDeniedErrorText">Доступ запрещен</string>
+	<string name="internalServerErrorText">Внутренняя ошибка сервера</string>
+</resources>

@@ -12,6 +12,8 @@ object Deps {
             "org.jetbrains.kotlin:kotlin-serialization:${Versions.Plugins.kotlin}"
         const val mokoNetwork =
             "dev.icerock.moko:network-generator:${Versions.Plugins.mokoNetwork}"
+        const val mokoResources =
+            "dev.icerock.moko:resources-generator:${Versions.Plugins.mokoResources}"
     }
 
     object Libs {
@@ -65,6 +67,16 @@ object Deps {
                 iosX64 = "dev.icerock.moko:mvvm-iosx64:${Versions.Libs.MultiPlatform.mokoMvvm}",
                 iosArm64 = "dev.icerock.moko:mvvm-iosarm64:${Versions.Libs.MultiPlatform.mokoMvvm}"
             )
+            val mokoResources = MultiPlatformLibrary(
+                common = "dev.icerock.moko:resources:${Versions.Libs.MultiPlatform.mokoResources}",
+                iosX64 = "dev.icerock.moko:resources-iosx64:${Versions.Libs.MultiPlatform.mokoResources}",
+                iosArm64 = "dev.icerock.moko:resources-iosarm64:${Versions.Libs.MultiPlatform.mokoResources}"
+            )
+            val mokoErrors = MultiPlatformLibrary(
+                common = "dev.icerock.moko:errors:${Versions.Libs.MultiPlatform.mokoErrors}",
+                iosX64 = "dev.icerock.moko:errors-iosx64:${Versions.Libs.MultiPlatform.mokoErrors}",
+                iosArm64 = "dev.icerock.moko:errors-iosarm64:${Versions.Libs.MultiPlatform.mokoErrors}"
+            )
         }
 
         object Jvm {
@@ -77,6 +89,7 @@ object Deps {
         "com.android.application" to Plugins.android,
         "com.android.library" to Plugins.android,
         "org.jetbrains.kotlin.multiplatform" to Plugins.kotlin,
+        "dev.icerock.mobile.multiplatform-resources" to Plugins.mokoResources,
         "kotlin-kapt" to Plugins.kotlin,
         "kotlin-android" to Plugins.kotlin,
         "kotlinx-serialization" to Plugins.kotlinSerialization,
