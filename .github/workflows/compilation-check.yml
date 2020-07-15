@@ -21,4 +21,4 @@ jobs:
     - name: Check core build
       run: ./gradlew -PcorePublish :network:publishToMavenLocal
     - name: Check network errors build
-      run: ./gradlew -PlibraryPublish :network-errors:publishToMavenLocal
+      run: ./gradlew -PnetworkErrorsPublish :network-errors:publishToMavenLocal

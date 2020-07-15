@@ -24,8 +24,8 @@ pluginManagement {
 enableFeaturePreview("GRADLE_METADATA")
 
 val properties = startParameter.projectProperties
-// ./gradlew -PlibraryPublish :gradle-plugin:publishPluginPublicationToMavenLocal :network:publishToMavenLocal
-val libraryPublish: Boolean = properties.containsKey("libraryPublish")
+
+val networkErrorsPublish: Boolean = properties.containsKey("networkErrorsPublish")
 val corePublish: Boolean = properties.containsKey("corePublish")
 
 include(":network")
@@ -33,7 +33,7 @@ include(":gradle-plugin")
 if (!corePublish) {
     include(":network-errors")
 
-    if (!libraryPublish) {
+    if (!networkErrorsPublish) {
         include(":sample:android-app")
         include(":sample:mpp-library")
     }

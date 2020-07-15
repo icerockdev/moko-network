@@ -19,4 +19,4 @@ jobs:
       - name: Publish network lib
         run: ./gradlew -PcorePublish :network:publishAllPublicationsToBintrayRepository -DBINTRAY_USER=${{ secrets.BINTRAY_USER }} -DBINTRAY_KEY=${{ secrets.BINTRAY_KEY }}
       - name: Publish network-errors module
-        run: ./gradlew -PlibraryPublish :network-errors:publishAllPublicationsToBintrayRepository -DBINTRAY_USER=${{ secrets.BINTRAY_USER }} -DBINTRAY_KEY=${{ secrets.BINTRAY_KEY }}
+        run: ./gradlew -PnetworkErrorsPublish :network-errors:publishAllPublicationsToBintrayRepository -DBINTRAY_USER=${{ secrets.BINTRAY_USER }} -DBINTRAY_KEY=${{ secrets.BINTRAY_KEY }}
