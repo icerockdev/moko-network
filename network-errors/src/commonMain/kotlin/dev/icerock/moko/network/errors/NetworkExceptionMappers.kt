@@ -13,6 +13,9 @@ import dev.icerock.moko.resources.desc.CompositionStringDesc
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
 
+/**
+ * Registers all default exception mappers of the network module to [ExceptionMappersStorage].
+ */
 fun ExceptionMappersStorage.registerAllNetworkMappers(): ExceptionMappersStorage {
     return condition(
         condition = ::networkConnectionErrorCondition,
@@ -49,6 +52,9 @@ fun networkErrorExceptionStringDescMapper(exception: ErrorException): StringDesc
     }
 }
 
+/**
+ * Converts the validation [exception] to a combination of messages as one [CompositionStringDesc].
+ */
 fun validationExceptionStringDescMapper(exception: ValidationException): StringDesc {
     val errorMessages = exception.errors.map { it.message.desc() }
     return CompositionStringDesc(errorMessages, ". ")

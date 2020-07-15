@@ -17,6 +17,8 @@ jobs:
       with:
         java-version: 1.8
     - name: Check plugin build
-      run: ./gradlew -PlibraryPublish :gradle-plugin:publishPluginPublicationToMavenLocal
-    - name: Check lib build
-      run: ./gradlew -PlibraryPublish :network:publishToMavenLocal
+      run: ./gradlew -PcorePublish :gradle-plugin:publishPluginPublicationToMavenLocal
+    - name: Check core build
+      run: ./gradlew -PcorePublish :network:publishToMavenLocal
+    - name: Check network errors build
+      run: ./gradlew -PlibraryPublish :network-errors:publishToMavenLocal
