@@ -13,8 +13,10 @@ class TestViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        ExceptionStorageKt.doInitExceptionStorage()
         
-        viewModel = TestViewModel()
+        viewModel = TestViewModel(errorEventsDispatcher: EventsDispatcher())
+        viewModel.exceptionHandler.bind(viewController: self)
         
         viewModel.petInfo.addObserver { [weak self] info in
             self?.textView.text = info as? String

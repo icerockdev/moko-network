@@ -62,6 +62,11 @@ object Deps {
                 iosX64 = "dev.icerock.moko:network-iosx64:${Versions.Libs.MultiPlatform.mokoNetwork}",
                 iosArm64 = "dev.icerock.moko:network-iosarm64:${Versions.Libs.MultiPlatform.mokoNetwork}"
             )
+            val mokoNetworkErrors = MultiPlatformLibrary(
+                common = "dev.icerock.moko:network-errors:${Versions.Libs.MultiPlatform.mokoNetwork}",
+                iosX64 = "dev.icerock.moko:network-errors-iosx64:${Versions.Libs.MultiPlatform.mokoNetwork}",
+                iosArm64 = "dev.icerock.moko:network-errors-iosarm64:${Versions.Libs.MultiPlatform.mokoNetwork}"
+            )
             val mokoMvvm = MultiPlatformLibrary(
                 common = "dev.icerock.moko:mvvm:${Versions.Libs.MultiPlatform.mokoMvvm}",
                 iosX64 = "dev.icerock.moko:mvvm-iosx64:${Versions.Libs.MultiPlatform.mokoMvvm}",

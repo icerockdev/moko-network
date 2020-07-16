@@ -7,22 +7,34 @@ package com.icerockdev.app
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.icerockdev.app.databinding.ActivityMainBinding
 import com.icerockdev.library.TestViewModel
-import dev.icerock.moko.mvvm.getViewModel
+import com.icerockdev.library.initExceptionStorage
+import dev.icerock.moko.mvvm.MvvmActivity
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : MvvmActivity<ActivityMainBinding, TestViewModel>() {
+    override val layoutId: Int = R.layout.activity_main
+    override val viewModelClass: Class<TestViewModel> = TestViewModel::class.java
+    override val viewModelVariableId: Int = BR.viewModel
+
+    override fun viewModelFactory(): ViewModelProvider.Factory {
+        return createViewModelFactory {
+            TestViewModel(eventsDispatcherOnMain())
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        initExceptionStorage()
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        viewModel.exceptionHandler.bind(this, this)
 
         val textView: TextView = findViewById(R.id.textView)
         val refreshButton: Button = findViewById(R.id.refreshButton)
-
-        val viewModel = getViewModel { TestViewModel() }
 
         viewModel.petInfo.ld().observe(this, Observer { url ->
             textView.text = url
