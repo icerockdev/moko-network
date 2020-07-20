@@ -6,6 +6,7 @@ package dev.icerock.moko.network.features
 
 import io.ktor.client.HttpClient
 import io.ktor.client.features.HttpClientFeature
+import io.ktor.client.request.HttpRequest
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
 import io.ktor.client.request.takeFrom
@@ -17,16 +18,16 @@ import kotlinx.coroutines.sync.Mutex
 
 class RefreshTokenFeature(
     private val updateTokenHandler: suspend () -> Boolean,
-    private val getCurrentToken: () -> String
+    private val isCredentialsActual: (HttpRequest) -> Boolean
 ) {
 
     class Config {
         var updateTokenHandler: (suspend () -> Boolean)? = null
-        var getCurrentToken: (() -> String)? = null
+        var isCredentialsActual: ((HttpRequest) -> Boolean)? = null
 
         fun build() = RefreshTokenFeature(
             updateTokenHandler ?: throw IllegalArgumentException("updateTokenHandler should be passed"),
-            getCurrentToken ?: throw IllegalArgumentException("getCurrentToken should be passed")
+            isCredentialsActual ?: throw IllegalArgumentException("isCredentialsActual should be passed")
         )
     }
 
@@ -39,36 +40,36 @@ class RefreshTokenFeature(
         override fun prepare(block: Config.() -> Unit) = Config().apply(block).build()
 
         override fun install(feature: RefreshTokenFeature, scope: HttpClient) {
-            scope.receivePipeline.intercept(HttpReceivePipeline.After) {
-                if (context.response.status == HttpStatusCode.Unauthorized) {
-                    val currentToken = feature.getCurrentToken()
+            scope.receivePipeline.intercept(HttpReceivePipeline.After) { subject ->
+                if (context.response.status != HttpStatusCode.Unauthorized) {
+                    proceedWith(subject)
+                    return@intercept
+                }
 
-                    refreshTokenHttpFeatureMutex.lock()
+                refreshTokenHttpFeatureMutex.lock()
 
-                    // If the local current token is already changed, then the feature will
-                    // repeat the previous request
-                    if (currentToken != feature.getCurrentToken()) {
-                        refreshTokenHttpFeatureMutex.unlock()
-                        val requestBuilder = HttpRequestBuilder().takeFrom(context.request)
-                        val result: HttpResponse = context.client.request(requestBuilder)
-                        proceedWith(result)
-                    } else {
-                        // If the local current token has not been changed, then will be called
-                        // update callback and repeat the previous request if update was successful
-                        if(feature.updateTokenHandler.invoke()) {
-                            refreshTokenHttpFeatureMutex.unlock()
-                            val requestBuilder = HttpRequestBuilder().takeFrom(context.request)
-                            val result: HttpResponse = context.client.request(requestBuilder)
-                            proceedWith(result)
-                        }
-                        // If the token update wasn't successful
-                        else {
-                            refreshTokenHttpFeatureMutex.unlock()
-                            proceedWith(it)
-                        }
-                    }
+                // If token of the request isn't actual, then token has already been updated and
+                // let's just to try repeat request
+                if (!feature.isCredentialsActual(context.request)) {
+                    refreshTokenHttpFeatureMutex.unlock()
+                    val requestBuilder = HttpRequestBuilder().takeFrom(context.request)
+                    val result: HttpResponse = context.client.request(requestBuilder)
+                    proceedWith(result)
+                    return@intercept
+                }
+
+                // Else if token of the request is actual (same as in the storage), then need to send
+                // refresh request.
+                if (feature.updateTokenHandler.invoke()) {
+                    // If the request refresh was successful, then let's just to try repeat request
+                    refreshTokenHttpFeatureMutex.unlock()
+                    val requestBuilder = HttpRequestBuilder().takeFrom(context.request)
+                    val result: HttpResponse = context.client.request(requestBuilder)
+                    proceedWith(result)
                 } else {
-                    proceedWith(it)
+                    // If the request refresh was unsuccessful
+                    refreshTokenHttpFeatureMutex.unlock()
+                    proceedWith(subject)
                 }
             }
         }
