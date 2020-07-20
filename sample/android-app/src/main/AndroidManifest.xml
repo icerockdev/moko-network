@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".App"
         android:label="moko-network test app"
         android:theme="@style/Theme.AppCompat.DayNight"
         tools:ignore="GoogleAppIndexingWarning">

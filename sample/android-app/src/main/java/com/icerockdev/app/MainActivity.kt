@@ -11,10 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.icerockdev.app.databinding.ActivityMainBinding
 import com.icerockdev.library.TestViewModel
-import com.icerockdev.library.initExceptionStorage
 import dev.icerock.moko.mvvm.MvvmActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
-import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 
 class MainActivity : MvvmActivity<ActivityMainBinding, TestViewModel>() {
     override val layoutId: Int = R.layout.activity_main
@@ -22,13 +20,10 @@ class MainActivity : MvvmActivity<ActivityMainBinding, TestViewModel>() {
     override val viewModelVariableId: Int = BR.viewModel
 
     override fun viewModelFactory(): ViewModelProvider.Factory {
-        return createViewModelFactory {
-            TestViewModel(eventsDispatcherOnMain())
-        }
+        return createViewModelFactory { TestViewModel() }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        initExceptionStorage()
         super.onCreate(savedInstanceState)
 
         viewModel.exceptionHandler.bind(this, this)

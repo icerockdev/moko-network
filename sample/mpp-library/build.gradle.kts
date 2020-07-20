@@ -23,7 +23,6 @@ android {
 setupFramework(
     exports = listOf(
         Deps.Libs.MultiPlatform.mokoNetwork,
-        Deps.Libs.MultiPlatform.mokoNetworkErrors,
         Deps.Libs.MultiPlatform.mokoMvvm
     )
 )
@@ -34,10 +33,11 @@ dependencies {
     mppLibrary(Deps.Libs.MultiPlatform.ktorClient)
     mppLibrary(Deps.Libs.MultiPlatform.ktorClientLogging)
     mppLibrary(Deps.Libs.MultiPlatform.serialization)
-    mppLibrary(Deps.Libs.MultiPlatform.mokoNetwork)
+
     mppLibrary(Deps.Libs.MultiPlatform.mokoResources)
-    mppLibrary(Deps.Libs.MultiPlatform.mokoNetworkErrors)
     mppLibrary(Deps.Libs.MultiPlatform.mokoMvvm)
+    mppLibrary(Deps.Libs.MultiPlatform.mokoNetwork)
+    mppLibrary(Deps.Libs.MultiPlatform.mokoNetworkErrors)
 
     androidLibrary(Deps.Libs.Android.lifecycle)
 }

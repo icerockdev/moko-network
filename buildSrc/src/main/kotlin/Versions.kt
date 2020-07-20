@@ -37,7 +37,7 @@ object Versions {
             const val mokoNetwork = Versions.mokoNetwork
             const val mokoMvvm = "0.7.0"
             const val mokoResources = Versions.mokoResources
-            const val mokoErrors = "0.1.0"
+            const val mokoErrors = "0.2.0"
         }
 
         object Jvm {

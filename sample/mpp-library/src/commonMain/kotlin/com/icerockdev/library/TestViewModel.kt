@@ -4,12 +4,9 @@
 
 package com.icerockdev.library
 
-import dev.icerock.moko.errors.ErrorEventListener
 import dev.icerock.moko.errors.handler.ExceptionHandler
 import dev.icerock.moko.errors.mappers.ExceptionMappersStorage
-import dev.icerock.moko.errors.mappers.throwableToStringDesc
 import dev.icerock.moko.errors.presenters.AlertErrorPresenter
-import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.livedata.readOnly
@@ -23,17 +20,12 @@ import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 
-class TestViewModel(
-    errorEventsDispatcher: EventsDispatcher<ErrorEventListener>
-) : ViewModel() {
+class TestViewModel : ViewModel() {
 
     val exceptionHandler = ExceptionHandler(
-        errorEventsDispatcher = errorEventsDispatcher,
-        errorPresenter = AlertErrorPresenter(
-            exceptionMapper = ExceptionMappersStorage::throwableToStringDesc
-        )
+        errorPresenter = AlertErrorPresenter(),
+        exceptionMapper = ExceptionMappersStorage.throwableMapper()
     )
 
     private val httpClient = HttpClient {
