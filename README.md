@@ -67,12 +67,76 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.6.0")
+    commonMainApi("dev.icerock.moko:network:0.6.0") 
 }
 ```
 
 ## Usage
-TODO
+
+1. E.g. put an OpenAPI Specification file to `src/swagger.json` path of the project Gradle module.
+
+2. Setup the project `build.gradle`:
+
+```kotlin
+openApiGenerate {
+    inputSpec.set(file("src/swagger.json").path)
+    generatorName.set("kotlin-ktor-client")
+}
+```
+
+3. Then run `openApiGenerate` Gradle task and after completion you will get all generated classes in
+`build/generate-resources/` directory.
+
+4. To import all generated classes of model put:
+
+```kotlin
+import dev.icerock.moko.network.generated.models.*
+``` 
+
+```kotlin
+import dev.icerock.moko.network.generated.apis.*
+```
+
+5. Then you can use generated API's in your application in the common sourceset:
+
+```kotlin
+import dev.icerock.moko.network.generated.apis.*
+
+class TestViewModel : ViewModel() {
+    // ..
+    
+    private val petApi = PetApi(
+        basePath = "https://petstore.swagger.io/v2/", // Base API URL
+        httpClient = ktorHttpClient, // Reference to Ktor HTTP client object
+        json = kotlinxJsonParser // Reference to kotlinx.serialization.json parser object
+    )
+
+    fun apiRequest() {
+        viewModelScope.launch {
+            try {
+                val pet = petApi.findPetsByStatus(listOf("available"))
+
+                // ...
+            } catch (error: Exception) {
+                // ...
+            }
+        }
+    }
+}
+```
+
+#### moko-network-errors
+
+There is module **moko-network-errors** for [moko-errors](https://github.com/icerockdev/moko-errors)
+library that contains built-in mappers for mapping **moko-network** exception classes into 
+`StringDesc` objects (there are built-in resources for text in English and Russian).
+
+To use the **moko-network-errors** module just call the `registerAllNetworkMappers` extension of 
+`ExceptionMappersStorage` object:
+
+```kotlin
+ExceptionMappersStorage.registerAllNetworkMappers()
+```
 
 ## Samples
 More examples can be found in the [sample directory](sample).
@@ -80,6 +144,7 @@ More examples can be found in the [sample directory](sample).
 ## Set Up Locally 
 - In [network directory](network) contains `network` library;
 - In [gradle-plugin directory](gradle-plugin) contains gradle plugin with OpenAPI implementation generator;
+- In [network-errors directory](network-errors) contains `network-errors` module;
 - In [sample directory](sample) contains samples on android, ios & mpp-library connected to apps;
 - For test changes locally use `./publishToMavenLocal.sh` script, after it samples will use locally published version.
 
