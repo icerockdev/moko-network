@@ -62,7 +62,7 @@ class TestViewModel : ViewModel() {
     private fun reloadPet() {
         viewModelScope.launch {
             exceptionHandler.handle {
-                val pet = petApi.findPetsByStatus(listOf("available"))
+                val pet = petApi.findPetsByTags(listOf("dog"))
                 _petInfo.value = pet.toString()
             }.execute()
         }
