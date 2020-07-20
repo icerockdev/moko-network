@@ -40,6 +40,8 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
   - 0.5.1
 - kotlin 1.3.70
   - 0.6.0
+- kotlin 1.3.72
+  - 0.7.0
 
 ## Installation
 root build.gradle  
@@ -50,7 +52,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.6.0"
+        classpath "dev.icerock.moko:network-generator:0.7.0"
     }
 }
 
@@ -67,7 +69,7 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.6.0") 
+    commonMainApi("dev.icerock.moko:network:0.7.0") 
 }
 ```
 
@@ -135,8 +137,24 @@ To use the **moko-network-errors** module just call the `registerAllNetworkMappe
 `ExceptionMappersStorage` object:
 
 ```kotlin
-ExceptionMappersStorage.registerAllNetworkMappers()
+fun initExceptionMappersStorage() {
+    ExceptionMappersStorage.registerAllNetworkMappers()
+}
 ```
+
+And then you can use `ExceptionHandler` to automatically handle exceptions for network requests: 
+
+```kotlin
+viewModelScope.launch {
+    exceptionHandler.handle {
+        val pet = petApi.findPetsByStatus(listOf("available"))
+
+        // ...
+    }.execute()
+}
+```
+
+For more information about exception handling see [moko-errors](https://github.com/icerockdev/moko-errors).
 
 ## Samples
 More examples can be found in the [sample directory](sample).
