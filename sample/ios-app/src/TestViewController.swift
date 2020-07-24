@@ -15,6 +15,7 @@ class TestViewController: UIViewController {
         super.viewDidLoad()
         
         viewModel = TestViewModel()
+        viewModel.exceptionHandler.bind(viewController: self)
         
         viewModel.petInfo.addObserver { [weak self] info in
             self?.textView.text = info as? String
