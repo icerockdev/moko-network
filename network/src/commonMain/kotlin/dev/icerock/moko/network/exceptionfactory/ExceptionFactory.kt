@@ -5,7 +5,13 @@
 package dev.icerock.moko.network.exceptionfactory
 
 import dev.icerock.moko.network.exceptions.ResponseException
+import io.ktor.client.request.HttpRequest
+import io.ktor.client.statement.HttpResponse
 
 interface ExceptionFactory {
-    fun createException(httpStatusCode: Int, responseBody: String?): ResponseException
+    fun createException(
+        request: HttpRequest,
+        response: HttpResponse,
+        responseBody: String?
+    ): ResponseException
 }

@@ -5,20 +5,31 @@
 package dev.icerock.moko.network.exceptionfactory
 
 import dev.icerock.moko.network.exceptions.ResponseException
+import io.ktor.client.request.HttpRequest
+import io.ktor.client.statement.HttpResponse
 
 class HttpExceptionFactory(
     private val defaultParser: HttpExceptionParser,
     private val customParsers: Map<Int, HttpExceptionParser>
 ) : ExceptionFactory {
-    override fun createException(httpStatusCode: Int, responseBody: String?): ResponseException {
-        val parser = customParsers[httpStatusCode] ?: defaultParser
 
-        val exception = parser.parseException(httpStatusCode, responseBody)
+    override fun createException(
+        request: HttpRequest,
+        response: HttpResponse,
+        responseBody: String?
+    ): ResponseException {
+        val parser = customParsers[response.status.value] ?: defaultParser
 
-        return exception ?: ResponseException(httpStatusCode, responseBody.orEmpty())
+        val exception = parser.parseException(request, response, responseBody)
+
+        return exception ?: ResponseException(request, response, responseBody.orEmpty())
     }
 
     interface HttpExceptionParser {
-        fun parseException(httpCode: Int, responseBody: String?): ResponseException?
+        fun parseException(
+            request: HttpRequest,
+            response: HttpResponse,
+            responseBody: String?
+        ): ResponseException?
     }
 }

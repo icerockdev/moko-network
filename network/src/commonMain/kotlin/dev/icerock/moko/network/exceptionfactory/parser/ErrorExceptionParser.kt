@@ -7,10 +7,17 @@ package dev.icerock.moko.network.exceptionfactory.parser
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptions.ErrorException
 import dev.icerock.moko.network.exceptions.ResponseException
+import io.ktor.client.request.HttpRequest
+import io.ktor.client.statement.HttpResponse
 import kotlinx.serialization.json.Json
 
 class ErrorExceptionParser(private val json: Json) : HttpExceptionFactory.HttpExceptionParser {
-    override fun parseException(httpCode: Int, responseBody: String?): ResponseException? {
+
+    override fun parseException(
+        request: HttpRequest,
+        response: HttpResponse,
+        responseBody: String?
+    ): ResponseException? {
         try {
             val body = responseBody.orEmpty()
             val jsonRoot = json.parseJson(body)
@@ -20,7 +27,7 @@ class ErrorExceptionParser(private val json: Json) : HttpExceptionFactory.HttpEx
             }
 
             var message: String? = null
-            var code = httpCode
+            var code = response.status.value
 
             if (jsonObject.containsKey(JSON_MESSAGE_KEY)) {
                 message = jsonObject.getPrimitiveOrNull(JSON_MESSAGE_KEY)?.contentOrNull
@@ -31,7 +38,7 @@ class ErrorExceptionParser(private val json: Json) : HttpExceptionFactory.HttpEx
                     code = newCode
                 }
             }
-            return ErrorException(httpCode, code, message)
+            return ErrorException(request, response, code, message)
         } catch (e: Exception) {
             return null
         }

@@ -4,10 +4,14 @@
 
 package dev.icerock.moko.network.exceptions
 
+import io.ktor.client.request.HttpRequest
+import io.ktor.client.statement.HttpResponse
+
 class ValidationException(
-    httpStatusCode: Int,
+    request: HttpRequest,
+    response: HttpResponse,
     message: String,
     val errors: List<Error>
-) : ResponseException(httpStatusCode, message) {
+) : ResponseException(request, response, message) {
     data class Error(val field: String, val message: String)
 }
