@@ -40,8 +40,9 @@ class ExceptionFeature(private val exceptionFactory: ExceptionFactory) {
                     val packet = body.readRemaining()
                     val responseString = packet.readText(charset = Charset.forName("UTF-8"))
                     throw feature.exceptionFactory.createException(
-                        response.status.value,
-                        responseString
+                        request = context.request,
+                        response = context.response,
+                        responseBody = responseString
                     )
                 }
                 proceedWith(subject)

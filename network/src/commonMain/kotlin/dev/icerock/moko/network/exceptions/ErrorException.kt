@@ -4,11 +4,15 @@
 
 package dev.icerock.moko.network.exceptions
 
+import io.ktor.client.request.HttpRequest
+import io.ktor.client.statement.HttpResponse
+
 class ErrorException(
-    httpStatusCode: Int,
+    request: HttpRequest,
+    response: HttpResponse,
     val code: Int,
     val description: String?
-) : ResponseException(httpStatusCode, description.orEmpty()) {
+) : ResponseException(request, response, description.orEmpty()) {
     override val message: String?
         get() = description ?: super.message
 }
