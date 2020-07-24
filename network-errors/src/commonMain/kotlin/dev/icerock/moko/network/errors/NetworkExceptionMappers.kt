@@ -23,14 +23,15 @@ fun ExceptionMappersStorage.registerAllNetworkMappers(
     unauthorizedErrorText: StringResource = MR.strings.unauthorizedErrorText,
     notFoundErrorText: StringResource = MR.strings.notFoundErrorText,
     accessDeniedErrorText: StringResource = MR.strings.accessDeniedErrorText,
-    internalServerErrorText: StringResource = MR.strings.internalServerErrorText
+    internalServerErrorText: StringResource = MR.strings.internalServerErrorText,
+    serializationErrorText: StringResource = MR.strings.serializationErrorText
 ): ExceptionMappersStorage {
     return condition<StringDesc>(
         condition = { it.isNetworkConnectionError() },
         mapper = { networkConnectionErrorText.desc() }
     ).condition<StringDesc>(
         condition = { it is SerializationException },
-        mapper = { MR.strings.serializationErrorText.desc() }
+        mapper = { serializationErrorText.desc() }
     ).register<ErrorException, StringDesc> {
         getNetworkErrorExceptionStringDescMapper(
             errorException = it,
