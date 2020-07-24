@@ -11,13 +11,15 @@ object Versions {
 
     const val kotlin = "1.3.70"
 
-    private const val mokoNetwork = "0.6.0"
+    private const val mokoNetwork = "0.7.0"
+    private const val mokoResources = "0.11.0"
 
     object Plugins {
         const val android = "3.6.1"
 
         const val kotlin = Versions.kotlin
         const val mokoNetwork = Versions.mokoNetwork
+        const val mokoResources = Versions.mokoResources
     }
 
     object Libs {
@@ -33,7 +35,9 @@ object Versions {
             const val ktorClient = "1.3.2"
             const val ktorClientLogging = ktorClient
             const val mokoNetwork = Versions.mokoNetwork
-            const val mokoMvvm = "0.6.0"
+            const val mokoMvvm = "0.7.0"
+            const val mokoResources = Versions.mokoResources
+            const val mokoErrors = "0.2.1"
         }
 
         object Jvm {

@@ -8,11 +8,18 @@ import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptions.ErrorException
 import dev.icerock.moko.network.exceptions.ResponseException
 import dev.icerock.moko.network.exceptions.ValidationException
+import io.ktor.client.request.HttpRequest
+import io.ktor.client.statement.HttpResponse
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonException
 
 class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.HttpExceptionParser {
-    override fun parseException(httpCode: Int, responseBody: String?): ResponseException? {
+
+    override fun parseException(
+        request: HttpRequest,
+        response: HttpResponse,
+        responseBody: String?
+    ): ResponseException? {
         try {
             val body = responseBody.orEmpty()
             val jsonRoot = json.parseJson(body)
@@ -20,9 +27,10 @@ class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.H
                 val error = jsonRoot.jsonObject.getObject(JSON_ERROR_KEY)
 
                 return ErrorException(
-                    httpCode,
-                    error.getPrimitive(JSON_CODE_KEY).int,
-                    error.getPrimitive(JSON_MESSAGE_KEY).content
+                    request = request,
+                    response = response,
+                    code = error.getPrimitive(JSON_CODE_KEY).int,
+                    description = error.getPrimitive(JSON_MESSAGE_KEY).content
                 )
             } catch (e: JsonException) {
                 val errorsJson = jsonRoot.jsonArray
@@ -53,7 +61,7 @@ class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.H
                     }
                 }
 
-                return ValidationException(httpCode, responseBody.orEmpty(), errors)
+                return ValidationException(request, response, responseBody.orEmpty(), errors)
             }
         } catch (e: Exception) {
             return null

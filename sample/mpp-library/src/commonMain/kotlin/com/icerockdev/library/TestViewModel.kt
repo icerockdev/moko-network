@@ -4,6 +4,9 @@
 
 package com.icerockdev.library
 
+import dev.icerock.moko.errors.handler.ExceptionHandler
+import dev.icerock.moko.errors.mappers.ExceptionMappersStorage
+import dev.icerock.moko.errors.presenters.AlertErrorPresenter
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.livedata.readOnly
@@ -17,11 +20,15 @@ import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 
 class TestViewModel : ViewModel() {
-    private val httpClient = HttpClient {
 
+    val exceptionHandler = ExceptionHandler(
+        errorPresenter = AlertErrorPresenter(),
+        exceptionMapper = ExceptionMappersStorage.throwableMapper()
+    )
+
+    private val httpClient = HttpClient {
         install(LanguageFeature) {
             languageHeaderName = "X-Language"
             languageCodeProvider = LanguageProvider()
@@ -54,13 +61,10 @@ class TestViewModel : ViewModel() {
 
     private fun reloadPet() {
         viewModelScope.launch {
-            try {
-                val pet = petApi.findPetsByStatus(listOf("available"))
-
+            exceptionHandler.handle {
+                val pet = petApi.findPetsByTags(listOf("dog"))
                 _petInfo.value = pet.toString()
-            } catch (error: Exception) {
-                println("can't load $error")
-            }
+            }.execute()
         }
     }
 }

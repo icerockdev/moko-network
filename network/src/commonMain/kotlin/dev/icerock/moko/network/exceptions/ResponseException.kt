@@ -4,10 +4,17 @@
 
 package dev.icerock.moko.network.exceptions
 
+import io.ktor.client.request.HttpRequest
+import io.ktor.client.statement.HttpResponse
+
 open class ResponseException(
-    val httpStatusCode: Int,
+    val request: HttpRequest,
+    val response: HttpResponse,
     responseMessage: String
-) : Exception(responseMessage) {
+) : Exception("Request: ${request.url}; Response: $responseMessage [$response.status.value]") {
+
+    val httpStatusCode: Int
+        get() = response.status.value
 
     val isUnauthorized: Boolean
         get() = httpStatusCode == 401
