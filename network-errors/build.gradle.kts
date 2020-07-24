@@ -24,6 +24,7 @@ android {
 
 dependencies {
     mppLibrary(Deps.Libs.MultiPlatform.kotlinStdLib)
+    mppLibrary(Deps.Libs.MultiPlatform.serialization)
     mppLibrary(Deps.Libs.MultiPlatform.mokoNetwork)
     mppLibrary(Deps.Libs.MultiPlatform.mokoErrors)
     mppLibrary(Deps.Libs.MultiPlatform.mokoResources)

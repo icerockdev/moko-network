@@ -7,7 +7,6 @@ plugins {
     id("org.jetbrains.kotlin.multiplatform")
     id("kotlinx-serialization")
     id("dev.icerock.mobile.multiplatform")
-    id("dev.icerock.mobile.multiplatform-resources")
     id("dev.icerock.mobile.multiplatform-network-generator")
 }
 
@@ -34,16 +33,11 @@ dependencies {
     mppLibrary(Deps.Libs.MultiPlatform.ktorClientLogging)
     mppLibrary(Deps.Libs.MultiPlatform.serialization)
 
-    mppLibrary(Deps.Libs.MultiPlatform.mokoResources)
     mppLibrary(Deps.Libs.MultiPlatform.mokoMvvm)
     mppLibrary(Deps.Libs.MultiPlatform.mokoNetwork)
     mppLibrary(Deps.Libs.MultiPlatform.mokoNetworkErrors)
 
     androidLibrary(Deps.Libs.Android.lifecycle)
-}
-
-multiplatformResources {
-    multiplatformResourcesPackage = "dev.icerock.lib"
 }
 
 openApiGenerate {

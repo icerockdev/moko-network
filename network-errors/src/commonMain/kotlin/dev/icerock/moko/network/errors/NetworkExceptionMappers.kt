@@ -13,6 +13,7 @@ import dev.icerock.moko.resources.desc.CompositionStringDesc
 import dev.icerock.moko.resources.desc.ResourceFormatted
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
+import kotlinx.serialization.SerializationException
 
 /**
  * Registers all default exception mappers of the network module to [ExceptionMappersStorage].
@@ -27,6 +28,9 @@ fun ExceptionMappersStorage.registerAllNetworkMappers(
     return condition<StringDesc>(
         condition = { it.isNetworkConnectionError() },
         mapper = { networkConnectionErrorText.desc() }
+    ).condition<StringDesc>(
+        condition = { it is SerializationException },
+        mapper = { MR.strings.serializationErrorText.desc() }
     ).register<ErrorException, StringDesc> {
         getNetworkErrorExceptionStringDescMapper(
             errorException = it,

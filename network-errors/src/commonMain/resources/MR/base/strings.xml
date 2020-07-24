@@ -5,4 +5,5 @@
 	<string name="notFoundErrorText">The requested data was not found</string>
 	<string name="accessDeniedErrorText">Access denied</string>
 	<string name="internalServerErrorText">Internal server error (%d)</string>
+	<string name="serializationErrorText">Invalid server data received</string>
 </resources>

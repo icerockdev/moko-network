@@ -5,4 +5,5 @@
 	<string name="notFoundErrorText">Запрашиваемые данные не найдены</string>
 	<string name="accessDeniedErrorText">Доступ запрещен</string>
 	<string name="internalServerErrorText">Внутренняя ошибка сервера (%d)</string>
+	<string name="serializationErrorText">Получены некорректные данные сервера</string>
 </resources>
