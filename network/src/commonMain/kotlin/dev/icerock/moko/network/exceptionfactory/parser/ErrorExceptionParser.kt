@@ -10,6 +10,10 @@ import dev.icerock.moko.network.exceptions.ResponseException
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.statement.HttpResponse
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 class ErrorExceptionParser(private val json: Json) : HttpExceptionFactory.HttpExceptionParser {
 
@@ -20,20 +24,20 @@ class ErrorExceptionParser(private val json: Json) : HttpExceptionFactory.HttpEx
     ): ResponseException? {
         try {
             val body = responseBody.orEmpty()
-            val jsonRoot = json.parseJson(body)
+            val jsonRoot = json.parseToJsonElement(body)
             var jsonObject = jsonRoot.jsonObject
             if (jsonObject.containsKey(JSON_ERROR_KEY)) {
-                jsonObject = jsonObject.getObject(JSON_ERROR_KEY)
+                jsonObject = jsonObject.getValue(JSON_ERROR_KEY).jsonObject
             }
 
             var message: String? = null
             var code = response.status.value
 
             if (jsonObject.containsKey(JSON_MESSAGE_KEY)) {
-                message = jsonObject.getPrimitiveOrNull(JSON_MESSAGE_KEY)?.contentOrNull
+                message = jsonObject[JSON_MESSAGE_KEY]?.jsonPrimitive?.contentOrNull
             }
             if (jsonObject.containsKey(JSON_CODE_KEY)) {
-                val newCode = jsonObject.getPrimitiveOrNull(JSON_CODE_KEY)?.intOrNull
+                val newCode = jsonObject[JSON_CODE_KEY]?.jsonPrimitive?.intOrNull
                 if (newCode != null) {
                     code = newCode
                 }

@@ -34,8 +34,8 @@ class TestViewModel : ViewModel() {
             languageCodeProvider = LanguageProvider()
         }
         install(Logging) {
-            level = LogLevel.ALL
-            logger = object: Logger {
+            level = LogLevel.INFO
+            logger = object : Logger {
                 override fun log(message: String) {
                     println(message)
                 }
@@ -45,7 +45,9 @@ class TestViewModel : ViewModel() {
     private val petApi = PetApi(
         basePath = "https://petstore.swagger.io/v2/",
         httpClient = httpClient,
-        json = Json.nonstrict
+        json = Json {
+            ignoreUnknownKeys = true
+        }
     )
 
     private val _petInfo = MutableLiveData<String?>(null)
@@ -62,7 +64,7 @@ class TestViewModel : ViewModel() {
     private fun reloadPet() {
         viewModelScope.launch {
             exceptionHandler.handle {
-                val pet = petApi.findPetsByTags(listOf("dog"))
+                val pet = petApi.findPetsByStatus(listOf("available"))
                 _petInfo.value = pet.toString()
             }.execute()
         }

@@ -3,33 +3,30 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.multiplatform")
-    id("dev.icerock.mobile.multiplatform")
-    id("dev.icerock.mobile.multiplatform-resources")
-    id("maven-publish")
+    plugin(Deps.Plugins.androidLibrary)
+    plugin(Deps.Plugins.kotlinMultiplatform)
+    plugin(Deps.Plugins.mobileMultiplatform)
+    plugin(Deps.Plugins.mokoResources)
+    plugin(Deps.Plugins.mavenPublish)
 }
 
 group = "dev.icerock.moko"
-version = Versions.Libs.MultiPlatform.mokoNetwork
-
-android {
-    compileSdkVersion(Versions.Android.compileSdk)
-
-    defaultConfig {
-        minSdkVersion(Versions.Android.minSdk)
-        targetSdkVersion(Versions.Android.targetSdk)
-    }
-}
+version = Deps.mokoNetworkVersion
 
 dependencies {
-    mppLibrary(Deps.Libs.MultiPlatform.kotlinStdLib)
-    mppLibrary(Deps.Libs.MultiPlatform.serialization)
-    mppLibrary(Deps.Libs.MultiPlatform.mokoNetwork)
-    mppLibrary(Deps.Libs.MultiPlatform.mokoErrors)
-    mppLibrary(Deps.Libs.MultiPlatform.mokoResources)
+    commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
 
-    androidLibrary(Deps.Libs.Android.appCompat)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoErrors)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoResources)
+
+    commonMainImplementation(project(":network"))
+
+    androidMainImplementation(Deps.Libs.Android.appCompat)
+
+    // temporary fix of https://youtrack.jetbrains.com/issue/KT-41083
+    commonMainImplementation("dev.icerock.moko:mvvm:0.8.0")
+    commonMainImplementation("dev.icerock.moko:parcelize:0.4.0")
+    commonMainImplementation("dev.icerock.moko:graphics:0.4.0")
 }
 
 multiplatformResources {

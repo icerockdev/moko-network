@@ -14,10 +14,13 @@ repositories {
     google()
 }
 
+group = "dev.icerock.moko"
+version = Deps.mokoNetworkVersion
+
 dependencies {
     implementation(Deps.Libs.Jvm.openApiGenerator)
 
-    compileOnly(Deps.Plugins.kotlin)
+    compileOnly(Deps.Plugins.kotlinMultiplatform.module!!)
 }
 
 kotlinDslPluginOptions {
@@ -31,16 +34,6 @@ publishing {
         credentials {
             username = System.getProperty("BINTRAY_USER")
             password = System.getProperty("BINTRAY_KEY")
-        }
-    }
-
-    publications {
-        register("plugin", MavenPublication::class) {
-            groupId = "dev.icerock.moko"
-            artifactId = "network-generator"
-            version = Versions.Libs.MultiPlatform.mokoNetwork
-
-            from(components["java"])
         }
     }
 }

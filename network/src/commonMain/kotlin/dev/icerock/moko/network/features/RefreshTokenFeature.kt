@@ -53,7 +53,7 @@ class RefreshTokenFeature(
                 if (!feature.isCredentialsActual(context.request)) {
                     refreshTokenHttpFeatureMutex.unlock()
                     val requestBuilder = HttpRequestBuilder().takeFrom(context.request)
-                    val result: HttpResponse = context.client.request(requestBuilder)
+                    val result: HttpResponse = context.client!!.request(requestBuilder)
                     proceedWith(result)
                     return@intercept
                 }
@@ -64,7 +64,7 @@ class RefreshTokenFeature(
                     // If the request refresh was successful, then let's just to try repeat request
                     refreshTokenHttpFeatureMutex.unlock()
                     val requestBuilder = HttpRequestBuilder().takeFrom(context.request)
-                    val result: HttpResponse = context.client.request(requestBuilder)
+                    val result: HttpResponse = context.client!!.request(requestBuilder)
                     proceedWith(result)
                 } else {
                     // If the request refresh was unsuccessful

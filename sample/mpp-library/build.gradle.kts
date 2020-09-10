@@ -3,41 +3,30 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.multiplatform")
-    id("kotlinx-serialization")
-    id("dev.icerock.mobile.multiplatform")
-    id("dev.icerock.mobile.multiplatform-network-generator")
+    plugin(Deps.Plugins.androidLibrary)
+    plugin(Deps.Plugins.kotlinMultiplatform)
+    plugin(Deps.Plugins.kotlinSerialization)
+    plugin(Deps.Plugins.mobileMultiplatform)
+    plugin(Deps.Plugins.mokoNetwork)
+    plugin(Deps.Plugins.mokoResources)
+    plugin(Deps.Plugins.iosFramework)
 }
-
-android {
-    compileSdkVersion(Versions.Android.compileSdk)
-
-    defaultConfig {
-        minSdkVersion(Versions.Android.minSdk)
-        targetSdkVersion(Versions.Android.targetSdk)
-    }
-}
-
-setupFramework(
-    exports = listOf(
-        Deps.Libs.MultiPlatform.mokoNetwork,
-        Deps.Libs.MultiPlatform.mokoMvvm
-    )
-)
 
 dependencies {
-    mppLibrary(Deps.Libs.MultiPlatform.kotlinStdLib)
-    mppLibrary(Deps.Libs.MultiPlatform.coroutines)
-    mppLibrary(Deps.Libs.MultiPlatform.ktorClient)
-    mppLibrary(Deps.Libs.MultiPlatform.ktorClientLogging)
-    mppLibrary(Deps.Libs.MultiPlatform.serialization)
+    commonMainImplementation(Deps.Libs.MultiPlatform.coroutines)
+    commonMainImplementation(Deps.Libs.MultiPlatform.ktorClient)
+    commonMainImplementation(Deps.Libs.MultiPlatform.ktorClientLogging)
+    commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
 
-    mppLibrary(Deps.Libs.MultiPlatform.mokoMvvm)
-    mppLibrary(Deps.Libs.MultiPlatform.mokoNetwork)
-    mppLibrary(Deps.Libs.MultiPlatform.mokoNetworkErrors)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoMvvm)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoNetwork)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoNetworkErrors)
 
-    androidLibrary(Deps.Libs.Android.lifecycle)
+    androidMainImplementation(Deps.Libs.Android.lifecycle)
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.icerockdev.library"
 }
 
 openApiGenerate {
