@@ -16,10 +16,6 @@ version = Deps.mokoNetworkVersion
 dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
 
-    commonMainApi(Deps.Libs.MultiPlatform.coroutines)
-    commonMainApi(Deps.Libs.MultiPlatform.ktorClient)
-    commonMainApi(Deps.Libs.MultiPlatform.ktorClientLogging)
-
     commonMainApi(Deps.Libs.MultiPlatform.mokoErrors)
     commonMainApi(Deps.Libs.MultiPlatform.mokoResources)
 
@@ -31,6 +27,10 @@ dependencies {
     commonMainImplementation("dev.icerock.moko:mvvm:0.8.0")
     commonMainImplementation("dev.icerock.moko:parcelize:0.4.0")
     commonMainImplementation("dev.icerock.moko:graphics:0.4.0")
+
+    // temporary fix of https://youtrack.jetbrains.com/issue/KT-41821
+    commonMainImplementation("io.ktor:ktor-utils:1.4.0")
+    commonMainImplementation("org.jetbrains.kotlinx:atomicfu:0.14.4")
 }
 
 multiplatformResources {
