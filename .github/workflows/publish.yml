@@ -15,8 +15,6 @@ jobs:
         with:
           java-version: 1.8
       - name: Publish plugin
-        run: ./gradlew -PcorePublish :gradle-plugin:publishPluginPublicationToBintrayRepository -DBINTRAY_USER=${{ secrets.BINTRAY_USER }} -DBINTRAY_KEY=${{ secrets.BINTRAY_KEY }}
-      - name: Publish network lib
-        run: ./gradlew -PcorePublish :network:publishAllPublicationsToBintrayRepository -DBINTRAY_USER=${{ secrets.BINTRAY_USER }} -DBINTRAY_KEY=${{ secrets.BINTRAY_KEY }}
-      - name: Publish network-errors module
-        run: ./gradlew -PnetworkErrorsPublish :network-errors:publishAllPublicationsToBintrayRepository -DBINTRAY_USER=${{ secrets.BINTRAY_USER }} -DBINTRAY_KEY=${{ secrets.BINTRAY_KEY }}
+        run: ./gradlew -p plugins publishAllPublicationsToBintrayRepository -DBINTRAY_USER=${{ secrets.BINTRAY_USER }} -DBINTRAY_KEY=${{ secrets.BINTRAY_KEY }}
+      - name: Publish runtime
+        run: ./gradlew publishAllPublicationsToBintrayRepository -DBINTRAY_USER=${{ secrets.BINTRAY_USER }} -DBINTRAY_KEY=${{ secrets.BINTRAY_KEY }}
