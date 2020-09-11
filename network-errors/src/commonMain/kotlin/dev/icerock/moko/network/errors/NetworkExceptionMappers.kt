@@ -63,10 +63,12 @@ private fun getNetworkErrorExceptionStringDescMapper(
         errorException.isNotFound -> notFoundErrorText.desc()
         errorException.isAccessDenied -> accessDeniedErrorText.desc()
         httpStatusCode >= HttpStatusCode.InternalServerError.value &&
-                httpStatusCode <= INTERNAL_SERVER_ERROR_CODE_MAX -> StringDesc.ResourceFormatted(
-            internalServerErrorText,
-            httpStatusCode
-        )
+                httpStatusCode <= INTERNAL_SERVER_ERROR_CODE_MAX -> {
+            StringDesc.ResourceFormatted(
+                internalServerErrorText,
+                httpStatusCode
+            )
+        }
         else -> errorException.description?.desc() ?: ExceptionMappersStorage.getFallbackValue()
     }
 }
