@@ -4,6 +4,7 @@
 
 package com.icerockdev.library
 
+import dev.icerock.moko.errors.MR
 import dev.icerock.moko.errors.handler.ExceptionHandler
 import dev.icerock.moko.errors.mappers.ExceptionMappersStorage
 import dev.icerock.moko.errors.presenters.AlertErrorPresenter
@@ -14,6 +15,7 @@ import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.icerock.moko.network.LanguageProvider
 import dev.icerock.moko.network.features.LanguageFeature
 import dev.icerock.moko.network.generated.apis.PetApi
+import dev.icerock.moko.resources.desc.desc
 import io.ktor.client.HttpClient
 import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logger
@@ -24,7 +26,11 @@ import kotlinx.serialization.json.Json
 class TestViewModel : ViewModel() {
 
     val exceptionHandler = ExceptionHandler(
-        errorPresenter = AlertErrorPresenter(),
+        errorPresenter = AlertErrorPresenter(
+            // temporary fix https://youtrack.jetbrains.com/issue/KT-41823
+            alertTitle = MR.strings.moko_errors_presenters_alertDialogTitle.desc(),
+            positiveButtonText = MR.strings.moko_errors_presenters_alertPositiveButton.desc()
+        ),
         exceptionMapper = ExceptionMappersStorage.throwableMapper()
     )
 
