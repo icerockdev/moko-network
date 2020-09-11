@@ -16,6 +16,10 @@ version = Deps.mokoNetworkVersion
 dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
 
+    commonMainApi(Deps.Libs.MultiPlatform.coroutines)
+    commonMainApi(Deps.Libs.MultiPlatform.ktorClient)
+    commonMainApi(Deps.Libs.MultiPlatform.ktorClientLogging)
+
     commonMainApi(Deps.Libs.MultiPlatform.mokoErrors)
     commonMainApi(Deps.Libs.MultiPlatform.mokoResources)
 

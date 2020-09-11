@@ -4,7 +4,7 @@
 
 
 object Deps {
-    private const val kotlinVersion = "1.4.0"
+    private const val kotlinVersion = "1.4.10"
 
     private const val lifecycleVersion = "2.2.0"
     private const val glideVersion = "4.9.0"
