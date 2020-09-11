@@ -13,6 +13,6 @@ actual fun String.formatToDate(parseFormat: String): GMTDate {
     formatter.dateFormat = parseFormat
     return GMTDate(
         formatter.dateFromString(this)?.timeIntervalSince1970?.toLong()
-            ?: throw Exception("Failed, to parse $this for format $parseFormat")
+            ?: throw IllegalArgumentException("Failed, to parse $this for format $parseFormat")
     )
 }

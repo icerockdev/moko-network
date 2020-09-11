@@ -13,11 +13,15 @@ import dev.icerock.moko.resources.desc.CompositionStringDesc
 import dev.icerock.moko.resources.desc.ResourceFormatted
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
+import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.SerializationException
+
+private const val INTERNAL_SERVER_ERROR_CODE_MAX = 599
 
 /**
  * Registers all default exception mappers of the network module to [ExceptionMappersStorage].
  */
+@Suppress("LongParameterList")
 fun ExceptionMappersStorage.registerAllNetworkMappers(
     networkConnectionErrorText: StringResource = MR.strings.networkConnectionErrorText,
     unauthorizedErrorText: StringResource = MR.strings.unauthorizedErrorText,
@@ -58,10 +62,13 @@ private fun getNetworkErrorExceptionStringDescMapper(
         errorException.isUnauthorized -> unauthorizedErrorText.desc()
         errorException.isNotFound -> notFoundErrorText.desc()
         errorException.isAccessDenied -> accessDeniedErrorText.desc()
-        httpStatusCode >= 500 && httpStatusCode < 600 -> StringDesc.ResourceFormatted(
-            internalServerErrorText,
-            httpStatusCode
-        )
+        httpStatusCode >= HttpStatusCode.InternalServerError.value &&
+                httpStatusCode <= INTERNAL_SERVER_ERROR_CODE_MAX -> {
+            StringDesc.ResourceFormatted(
+                internalServerErrorText,
+                httpStatusCode
+            )
+        }
         else -> errorException.description?.desc() ?: ExceptionMappersStorage.getFallbackValue()
     }
 }

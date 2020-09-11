@@ -11,46 +11,52 @@ import dev.icerock.moko.network.exceptions.ValidationException
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.statement.HttpResponse
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonException
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.HttpExceptionParser {
 
+    @Suppress("ReturnCount", "NestedBlockDepth")
     override fun parseException(
         request: HttpRequest,
         response: HttpResponse,
         responseBody: String?
     ): ResponseException? {
+        @Suppress("TooGenericExceptionCaught")
         try {
             val body = responseBody.orEmpty()
-            val jsonRoot = json.parseJson(body)
+            val jsonRoot = json.parseToJsonElement(body)
             try {
-                val error = jsonRoot.jsonObject.getObject(JSON_ERROR_KEY)
+                val error = jsonRoot.jsonObject.getValue(JSON_ERROR_KEY).jsonObject
 
                 return ErrorException(
                     request = request,
                     response = response,
-                    code = error.getPrimitive(JSON_CODE_KEY).int,
-                    description = error.getPrimitive(JSON_MESSAGE_KEY).content
+                    code = error.getValue(JSON_CODE_KEY).jsonPrimitive.int,
+                    description = error.getValue(JSON_MESSAGE_KEY).jsonPrimitive.content
                 )
-            } catch (e: JsonException) {
+            } catch (e: NoSuchElementException) {
                 val errorsJson = jsonRoot.jsonArray
 
                 val errors = ArrayList<ValidationException.Error>(errorsJson.size)
 
+                @Suppress("LoopWithTooManyJumpStatements")
                 for (i in (0..errors.size)) {
                     try {
-                        val jsonObject = errorsJson.getObject(i)
+                        val jsonObject = errorsJson[i].jsonObject
 
                         val message: String
                         val field: String
 
                         if (jsonObject.containsKey(JSON_MESSAGE_KEY)) {
-                            message = jsonObject.getPrimitive(JSON_MESSAGE_KEY).content
+                            message = jsonObject.getValue(JSON_MESSAGE_KEY).jsonPrimitive.content
                         } else {
                             continue
                         }
                         if (jsonObject.containsKey(JSON_FIELD_KEY)) {
-                            field = jsonObject.getPrimitive(JSON_FIELD_KEY).content
+                            field = jsonObject.getValue(JSON_FIELD_KEY).jsonPrimitive.content
                         } else {
                             continue
                         }

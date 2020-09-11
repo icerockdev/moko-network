@@ -5,7 +5,6 @@
 package dev.icerock.moko.network.features
 
 import io.ktor.client.HttpClient
-import io.ktor.client.HttpClientConfig
 import io.ktor.client.features.HttpClientFeature
 import io.ktor.client.request.HttpRequestPipeline
 import io.ktor.client.request.header
@@ -20,7 +19,8 @@ class LanguageFeature private constructor(
         var languageCodeProvider: LanguageCodeProvider? = null
         fun build() = LanguageFeature(
             languageHeaderName ?: throw IllegalArgumentException("HeaderName should be contain"),
-            languageCodeProvider ?: throw IllegalArgumentException("LanguageCodeProvider should be contain")
+            languageCodeProvider
+                ?: throw IllegalArgumentException("LanguageCodeProvider should be contain")
         )
     }
 
