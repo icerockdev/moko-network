@@ -41,7 +41,7 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
 - kotlin 1.3.70
   - 0.6.0
   - 0.7.0
-- kotlin 1.4.0
+- kotlin 1.4.10
   - 0.8.0
 
 ## Installation
