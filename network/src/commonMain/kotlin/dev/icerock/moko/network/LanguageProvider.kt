@@ -6,4 +6,5 @@ package dev.icerock.moko.network
 
 import dev.icerock.moko.network.features.LanguageFeature
 
-expect class LanguageProvider(): LanguageFeature.LanguageCodeProvider
+@Suppress("EmptyDefaultConstructor")
+expect class LanguageProvider() : LanguageFeature.LanguageCodeProvider

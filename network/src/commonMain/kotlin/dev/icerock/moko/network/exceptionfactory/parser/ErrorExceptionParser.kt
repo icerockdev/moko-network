@@ -22,6 +22,7 @@ class ErrorExceptionParser(private val json: Json) : HttpExceptionFactory.HttpEx
         response: HttpResponse,
         responseBody: String?
     ): ResponseException? {
+        @Suppress("TooGenericExceptionCaught")
         try {
             val body = responseBody.orEmpty()
             val jsonRoot = json.parseToJsonElement(body)

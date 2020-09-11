@@ -6,6 +6,7 @@ package dev.icerock.moko.network.exceptions
 
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpStatusCode
 
 open class ResponseException(
     val request: HttpRequest,
@@ -17,11 +18,11 @@ open class ResponseException(
         get() = response.status.value
 
     val isUnauthorized: Boolean
-        get() = httpStatusCode == 401
+        get() = httpStatusCode == HttpStatusCode.Unauthorized.value
 
     val isAccessDenied: Boolean
-        get() = httpStatusCode == 403
+        get() = httpStatusCode == HttpStatusCode.Forbidden.value
 
     val isNotFound: Boolean
-        get() = httpStatusCode == 404
+        get() = httpStatusCode == HttpStatusCode.NotFound.value
 }

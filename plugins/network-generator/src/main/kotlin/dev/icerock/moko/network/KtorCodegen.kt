@@ -10,7 +10,6 @@ import org.openapitools.codegen.CodegenOperation
 import org.openapitools.codegen.CodegenType
 import org.openapitools.codegen.languages.AbstractKotlinCodegen
 
-
 class KtorCodegen : AbstractKotlinCodegen() {
     /**
      * Constructs an instance of `KtorCodegen`.
@@ -29,7 +28,8 @@ class KtorCodegen : AbstractKotlinCodegen() {
         typeMapping["Date"] = "kotlin.String"
         typeMapping["DateTime"] = "kotlin.String"
 
-        //TODO: Support files via ByteArray / LargeTextContent
+        @Suppress("ForbiddenComment")
+        // TODO: Support files via ByteArray / LargeTextContent
         typeMapping["File"] = "kotlin.String"
         typeMapping["file"] = "kotlin.String"
 

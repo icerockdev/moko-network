@@ -18,11 +18,13 @@ import kotlinx.serialization.json.jsonPrimitive
 
 class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.HttpExceptionParser {
 
+    @Suppress("ReturnCount", "NestedBlockDepth")
     override fun parseException(
         request: HttpRequest,
         response: HttpResponse,
         responseBody: String?
     ): ResponseException? {
+        @Suppress("TooGenericExceptionCaught")
         try {
             val body = responseBody.orEmpty()
             val jsonRoot = json.parseToJsonElement(body)
@@ -40,6 +42,7 @@ class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.H
 
                 val errors = ArrayList<ValidationException.Error>(errorsJson.size)
 
+                @Suppress("LoopWithTooManyJumpStatements")
                 for (i in (0..errors.size)) {
                     try {
                         val jsonObject = errorsJson[i].jsonObject

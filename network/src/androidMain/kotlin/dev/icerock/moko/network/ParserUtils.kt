@@ -6,7 +6,8 @@ package dev.icerock.moko.network
 
 import io.ktor.util.date.GMTDate
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.TimeZone
 
 actual fun String.formatToDate(parseFormat: String): GMTDate {
     val date = SimpleDateFormat(parseFormat, Locale.ROOT).apply {

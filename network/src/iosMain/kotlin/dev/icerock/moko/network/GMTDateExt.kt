@@ -11,6 +11,7 @@ import platform.Foundation.NSLocale
 import platform.Foundation.currentLocale
 import platform.Foundation.timeIntervalSince1970
 
+private const val MILLISECONDS_IN_SECONDS = 1000
 
 actual fun String.toDate(format: String): GMTDate {
     val formatter = NSDateFormatter()
@@ -18,7 +19,7 @@ actual fun String.toDate(format: String): GMTDate {
     formatter.setDateFormat(format)
     formatter.setLocale(locale)
     val date: NSDate = formatter.dateFromString(this)!!
-    val timestamp: Long = (date.timeIntervalSince1970 * 1000).toLong()
+    val timestamp: Long = (date.timeIntervalSince1970 * MILLISECONDS_IN_SECONDS).toLong()
     return GMTDate(timestamp)
 }
 
@@ -27,8 +28,8 @@ actual fun GMTDate.toString(format: String): String {
     val locale = NSLocale.currentLocale()
     formatter.setDateFormat(format)
     formatter.setLocale(locale)
-    val timestamp =
-        (this.timestamp.toDouble() / 1000) - (NSDate().timeIntervalSince1970 - NSDate().timeIntervalSinceReferenceDate)
+    val timestamp = (this.timestamp.toDouble() / MILLISECONDS_IN_SECONDS) -
+            (NSDate().timeIntervalSince1970 - NSDate().timeIntervalSinceReferenceDate)
     val date: NSDate = NSDate(timestamp)
     return formatter.stringFromDate(date)
 }

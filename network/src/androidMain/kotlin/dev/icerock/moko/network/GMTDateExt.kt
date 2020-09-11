@@ -5,10 +5,12 @@
 package dev.icerock.moko.network
 
 import io.ktor.util.date.GMTDate
-
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
-actual fun String.toDate(format: String) = GMTDate(SimpleDateFormat(format, Locale.getDefault()).parse(this).time)
+actual fun String.toDate(format: String) =
+    GMTDate(SimpleDateFormat(format, Locale.getDefault()).parse(this).time)
 
-actual fun GMTDate.toString(format: String): String = SimpleDateFormat(format, Locale.getDefault()).format(Date(timestamp))
+actual fun GMTDate.toString(format: String): String =
+    SimpleDateFormat(format, Locale.getDefault()).format(Date(timestamp))
