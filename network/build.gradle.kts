@@ -3,30 +3,35 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.multiplatform")
-    id("dev.icerock.mobile.multiplatform")
-    id("maven-publish")
+    plugin(Deps.Plugins.androidLibrary)
+    plugin(Deps.Plugins.kotlinMultiplatform)
+    plugin(Deps.Plugins.mobileMultiplatform)
+    plugin(Deps.Plugins.mavenPublish)
 }
 
 group = "dev.icerock.moko"
-version = Versions.Libs.MultiPlatform.mokoNetwork
+version = Deps.mokoNetworkVersion
 
-android {
-    compileSdkVersion(Versions.Android.compileSdk)
+kotlin {
+    sourceSets {
+        val iosArm64Main by getting
+        val iosX64Main by getting
 
-    defaultConfig {
-        minSdkVersion(Versions.Android.minSdk)
-        targetSdkVersion(Versions.Android.targetSdk)
+        iosArm64Main.dependsOn(iosX64Main)
     }
 }
 
 dependencies {
-    mppLibrary(Deps.Libs.MultiPlatform.kotlinStdLib)
-    mppLibrary(Deps.Libs.MultiPlatform.serialization)
-    mppLibrary(Deps.Libs.MultiPlatform.ktorClient)
+    commonMainImplementation(Deps.Libs.MultiPlatform.coroutines) {
+        isForce = true
+    }
 
-    androidLibrary(Deps.Libs.Android.appCompat)
+    commonMainApi(Deps.Libs.MultiPlatform.kotlinSerialization)
+    commonMainApi(Deps.Libs.MultiPlatform.ktorClient)
+    androidMainApi(Deps.Libs.Android.ktorClientOkHttp)
+    iosMainApi(Deps.Libs.Ios.ktorClientIos)
+
+    androidMainImplementation(Deps.Libs.Android.appCompat)
 }
 
 publishing {
@@ -38,14 +43,4 @@ publishing {
             password = System.getProperty("BINTRAY_KEY")
         }
     }
-}
-
-// workaround while https://youtrack.jetbrains.com/issue/KT-36720 not implemented
-kotlin {
-    targets
-        .filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>()
-        .flatMap { it.compilations }
-        .forEach {
-            it.kotlinOptions.freeCompilerArgs += listOf("-module-name", "mokoNetwork")
-        }
 }

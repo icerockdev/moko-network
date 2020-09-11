@@ -5,7 +5,6 @@
 package dev.icerock.moko.network.features
 
 import io.ktor.client.HttpClient
-import io.ktor.client.HttpClientConfig
 import io.ktor.client.features.HttpClientFeature
 import io.ktor.client.request.HttpRequestPipeline
 import io.ktor.client.request.header

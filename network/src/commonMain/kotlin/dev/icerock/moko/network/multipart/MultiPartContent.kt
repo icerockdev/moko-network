@@ -20,6 +20,7 @@ import kotlin.random.Random
 
 // based on https://github.com/ktorio/ktor-samples/blob/master/other/client-multipart/src/MultipartApp.kt
 data class MultiPartContent(val parts: List<Part>) : OutgoingContent.WriteChannelContent() {
+    @Suppress("MagicNumber")
     private val boundary = buildString {
         repeat(32) {
             append(Random.nextInt().toString(16))

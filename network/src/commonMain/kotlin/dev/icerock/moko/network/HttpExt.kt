@@ -41,7 +41,7 @@ suspend inline fun <reified Value : Any> HttpClient.createRequest(
         if (e.cause is ResponseException) {
             throw e.cause
         } else {
-            throw  e
+            throw e
         }
     }
 }

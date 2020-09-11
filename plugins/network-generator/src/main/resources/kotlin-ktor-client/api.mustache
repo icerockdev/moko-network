@@ -13,9 +13,9 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.builtins.list
-import dev.icerock.moko.network.LargeTextContent
+import kotlinx.serialization.builtins.ListSerializer
 import io.ktor.client.call.ReceivePipelineException
+import io.ktor.http.content.TextContent
 
 {{#operations}}
 {{#nonPublicApi}}internal {{/nonPublicApi}}class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpClient: HttpClient, json: Json) {
@@ -42,6 +42,7 @@ import io.ktor.client.call.ReceivePipelineException
                 return@let startingPath + encodedPath.substring(1)
             }
             {{#hasQueryParams}}
+            @Suppress("UNNECESSARY_SAFE_CALL")
             with(parameters) {
                 {{#queryParams}}
                 {{#isContainer}}
@@ -55,16 +56,17 @@ import io.ktor.client.call.ReceivePipelineException
             {{/hasQueryParams}}
         }
         {{#bodyParams}}
+        @Suppress("SENSELESS_COMPARISON")
         if({{paramName}} != null) {
-            builder.body = LargeTextContent(
+            builder.body = TextContent(
         {{#dataType}}
             {{#isListContainer}}
                 {{#items}}
-                _json.stringify({{dataType}}.serializer().list,
+                _json.encodeToString({{dataType}}.serializer().let { ListSerializer(it) },
                 {{/items}}
             {{/isListContainer}}
             {{^isListContainer}}
-                _json.stringify({{dataType}}.serializer(),
+                _json.encodeToString({{dataType}}.serializer(),
             {{/isListContainer}}
                 {{paramName}}),
         {{/dataType}}
@@ -90,7 +92,7 @@ import io.ktor.client.call.ReceivePipelineException
             {{^returnTypeIsPrimitive}}
             //not primitive type
             val result: String = _httpClient.request(builder)
-            return _json.parse({{returnBaseType}}.serializer(){{#isListContainer}}.list{{/isListContainer}}, result)
+            return _json.decodeFromString({{returnBaseType}}.serializer(){{#isListContainer}}.let { ListSerializer(it) }{{/isListContainer}}, result)
             {{/returnTypeIsPrimitive}}
             {{#returnTypeIsPrimitive}}
             //primitive type
