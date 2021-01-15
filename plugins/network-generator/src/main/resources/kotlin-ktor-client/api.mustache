@@ -14,6 +14,8 @@ import io.ktor.http.Parameters
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import io.ktor.client.call.ReceivePipelineException
 import io.ktor.http.content.TextContent
 
@@ -62,12 +64,19 @@ import io.ktor.http.content.TextContent
         {{#dataType}}
             {{#isListContainer}}
                 {{#items}}
-                _json.encodeToString({{dataType}}.serializer().let { ListSerializer(it) },
+                _json.encodeToString(ListSerializer({{dataType}}.serializer()),
                 {{/items}}
             {{/isListContainer}}
-            {{^isListContainer}}
+            {{#isMapContainer}}
+                _json.encodeToString(
+                    MapSerializer(
+                        keySerializer = String.serializer(),
+                        valueSerializer = {{baseType}}.serializer()
+                    ),
+            {{/isMapContainer}}
+            {{^isListContainer}}{{^isMapContainer}}
                 _json.encodeToString({{dataType}}.serializer(),
-            {{/isListContainer}}
+            {{/isMapContainer}}{{/isListContainer}}
                 {{paramName}}),
         {{/dataType}}
                 ContentType.Application.Json.withoutParameters()

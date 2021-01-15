@@ -34,6 +34,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         typeMapping["file"] = "kotlin.String"
 
         typeMapping["UUID"] = "kotlin.String"
+        typeMapping["URI"] = "kotlin.String"
 
         embeddedTemplateDir = "kotlin-ktor-client"
 
@@ -43,6 +44,8 @@ class KtorCodegen : AbstractKotlinCodegen() {
         apiDocTemplateFiles["api_doc.mustache"] = ".md"
         apiPackage = "$packageName.apis"
         modelPackage = "$packageName.models"
+
+        this.useOneOfInterfaces = true
     }
 
     override fun getTag(): CodegenType {
