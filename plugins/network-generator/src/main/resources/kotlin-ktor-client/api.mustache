@@ -33,7 +33,7 @@ import io.ktor.http.content.TextContent
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
-    suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}} {
+    suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}} {
         val builder = HttpRequestBuilder()
 
         builder.method = HttpMethod.{{httpMethod}}
