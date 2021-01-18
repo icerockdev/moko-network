@@ -31,10 +31,7 @@ paths:
     post:
       operationId: profile_activity_create2
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UnitActivityArray2'
+        $ref: '#/components/requestBodies/UnitActivityArray2'
       responses:
         '201':
           description: ''
@@ -78,6 +75,13 @@ components:
                   title: Функциональное направление
                   type: string
                   format: uuid
+    UnitActivityArray2:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/UnitActivityArray2Item'
   responses:
     ValidationError:
       description: Validation Error
@@ -207,18 +211,16 @@ components:
           type: string
           format: uuid
           nullable: true
-    UnitActivityArray2:
-      type: array
-      items:
-        type: object
-        properties:
-          is_main_activity:
-            type: boolean
-          activity_rid:
-            title: Основное направление
-            type: string
-            format: uuid
-          functional_activity_rid:
-            title: Функциональное направление
-            type: string
-            format: uuid
+    UnitActivityArray2Item:
+      type: object
+      properties:
+        is_main_activity:
+          type: boolean
+        activity_rid:
+          title: Основное направление
+          type: string
+          format: uuid
+        functional_activity_rid:
+          title: Функциональное направление
+          type: string
+          format: uuid

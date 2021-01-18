@@ -62,21 +62,21 @@ import io.ktor.http.content.TextContent
         if({{paramName}} != null) {
             builder.body = TextContent(
         {{#dataType}}
-            {{#isListContainer}}
+            {{#isArray}}
                 {{#items}}
                 _json.encodeToString(ListSerializer({{dataType}}.serializer()),
                 {{/items}}
-            {{/isListContainer}}
-            {{#isMapContainer}}
+            {{/isArray}}
+            {{#isMap}}
                 _json.encodeToString(
                     MapSerializer(
                         keySerializer = String.serializer(),
                         valueSerializer = {{baseType}}.serializer()
                     ),
-            {{/isMapContainer}}
-            {{^isListContainer}}{{^isMapContainer}}
+            {{/isMap}}
+            {{^isArray}}{{^isMap}}
                 _json.encodeToString({{dataType}}.serializer(),
-            {{/isMapContainer}}{{/isListContainer}}
+            {{/isMap}}{{/isArray}}
                 {{paramName}}),
         {{/dataType}}
                 ContentType.Application.Json.withoutParameters()
@@ -101,7 +101,7 @@ import io.ktor.http.content.TextContent
             {{^returnTypeIsPrimitive}}
             //not primitive type
             val result: String = _httpClient.request(builder)
-            return _json.decodeFromString({{returnBaseType}}.serializer(){{#isListContainer}}.let { ListSerializer(it) }{{/isListContainer}}, result)
+            return _json.decodeFromString({{returnBaseType}}.serializer(){{#isArray}}.let { ListSerializer(it) }{{/isArray}}, result)
             {{/returnTypeIsPrimitive}}
             {{#returnTypeIsPrimitive}}
             //primitive type
