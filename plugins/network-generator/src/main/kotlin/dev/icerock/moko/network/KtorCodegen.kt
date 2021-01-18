@@ -7,6 +7,7 @@ package dev.icerock.moko.network
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.MediaType
+import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.servers.Server
@@ -15,6 +16,7 @@ import org.openapitools.codegen.CodegenOperation
 import org.openapitools.codegen.CodegenParameter
 import org.openapitools.codegen.CodegenType
 import org.openapitools.codegen.languages.AbstractKotlinCodegen
+import org.openapitools.codegen.utils.ModelUtils
 
 class KtorCodegen : AbstractKotlinCodegen() {
     /**
@@ -73,18 +75,35 @@ class KtorCodegen : AbstractKotlinCodegen() {
         openAPI.components?.requestBodies?.forEach { (requestBodyName, requestBody) ->
             val jsonContent: MediaType? = requestBody.content["application/json"]
             val jsonSchema = jsonContent?.schema
-            if (jsonContent != null && jsonSchema is ArraySchema && jsonSchema.items.`$ref` == null) {
-                // Create new name for component scheme of array items
-                val newArrayItemSchemaName = "${requestBodyName}Item"
 
-                // Add array items scheme to components
-                schemas[newArrayItemSchemaName] = jsonSchema.items
+            if (jsonContent != null) {
 
-                // Replace old requestBody item scheme to ref
-                val objectSchema = Schema<Any>().apply {
-                    `$ref` = "#/components/schemas/$newArrayItemSchemaName"
+                when {
+                    jsonSchema is ArraySchema && jsonSchema.items.`$ref` == null -> {
+                        // Create new name for component scheme of array items
+                        val newArrayItemSchemaName = "${requestBodyName}Item"
+
+                        // Add array items scheme to components
+                        schemas[newArrayItemSchemaName] = jsonSchema.items
+
+                        // Replace old requestBody item scheme to ref
+                        val objectSchema = Schema<Any>().apply {
+                            `$ref` = "#/components/schemas/$newArrayItemSchemaName"
+                        }
+                        jsonSchema.items = objectSchema
+                    }
+                    jsonSchema is ObjectSchema && jsonSchema.`$ref` == null  -> {
+                        // Create new name for component scheme
+                        val newBodySchemaName = "${requestBodyName}Object"
+                        // Add new scheme to components
+                        schemas[newBodySchemaName] = jsonSchema
+                        // Replace old requestBody item scheme to ref
+                        val objectSchema = Schema<Any>().apply {
+                            `$ref` = "#/components/schemas/$newBodySchemaName"
+                        }
+                        jsonContent.schema = objectSchema
+                    }
                 }
-                jsonSchema.items = objectSchema
             }
         }
 
