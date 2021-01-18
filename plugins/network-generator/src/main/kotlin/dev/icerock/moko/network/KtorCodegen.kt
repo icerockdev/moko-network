@@ -4,11 +4,18 @@
 
 package dev.icerock.moko.network
 
+import io.swagger.models.Scheme
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.media.MediaType
+import io.swagger.v3.oas.models.media.Schema
+import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.servers.Server
 import org.openapitools.codegen.CodegenConstants
 import org.openapitools.codegen.CodegenOperation
+import org.openapitools.codegen.CodegenParameter
 import org.openapitools.codegen.CodegenType
 import org.openapitools.codegen.languages.AbstractKotlinCodegen
+import org.openapitools.codegen.utils.ModelUtils
 
 class KtorCodegen : AbstractKotlinCodegen() {
     /**
@@ -45,7 +52,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         apiPackage = "$packageName.apis"
         modelPackage = "$packageName.models"
 
-        this.useOneOfInterfaces = true
+//        this.useOneOfInterfaces = true
     }
 
     override fun getTag(): CodegenType {
@@ -60,10 +67,49 @@ class KtorCodegen : AbstractKotlinCodegen() {
         return "Generates a kotlin ktor client."
     }
 
+    override fun preprocessOpenAPI(openAPI: OpenAPI) {
+        super.preprocessOpenAPI(openAPI)
+//
+//        openAPI.paths.forEach { (_, pathItem) ->
+//            val operations = with(pathItem) {
+//                listOfNotNull(
+//                    get,
+//                    put,
+//                    post,
+//                    delete,
+//                    options,
+//                    head,
+//                    patch,
+//                    trace
+//                )
+//            }
+//            operations.forEach { operation ->
+//                operation.requestBody = ModelUtils.getReferencedRequestBody(openAPI, operation.requestBody)
+//            }
+//        }
+
+//        val schemas: MutableMap<String, Schema<*>> = openAPI.components.schemas.toMutableMap()
+//
+//        openAPI.components?.requestBodies?.forEach { (requestBodyName, requestBody) ->
+//            val jsonContent: MediaType? = requestBody.content["application/json"]
+//            if (jsonContent != null) {
+//                schemas[requestBodyName] = jsonContent.schema
+//            }
+//        }
+//
+//        openAPI.components.schemas = schemas
+    }
+
+    override fun processOpenAPI(openAPI: OpenAPI) {
+        super.processOpenAPI(openAPI)
+
+
+    }
+
     override fun fromOperation(
         path: String,
         httpMethod: String,
-        operation: io.swagger.v3.oas.models.Operation?,
+        operation: io.swagger.v3.oas.models.Operation,
         servers: List<Server>?
     ): CodegenOperation {
         val codegenOperation = super.fromOperation(path, httpMethod, operation, servers)
@@ -80,6 +126,14 @@ class KtorCodegen : AbstractKotlinCodegen() {
             codegenOperation.returnType = null
         }
         return codegenOperation
+    }
+
+    override fun fromRequestBody(
+        body: RequestBody?,
+        imports: MutableSet<String>?,
+        bodyParameterName: String?
+    ): CodegenParameter {
+        return super.fromRequestBody(body, imports, bodyParameterName)
     }
 
     private fun String.firstCapitalized(): String {

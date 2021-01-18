@@ -13,7 +13,7 @@ object Deps {
     private const val testRunnerVersion = "1.2.0"
     private const val testExtJunitVersion = "1.1.1"
 
-    private const val openApiGeneratorVersion = "4.3.0"
+    private const val openApiGeneratorVersion = "5.0.0"
     private const val kotlinxSerializationVersion = "1.0.0-RC"
     private const val coroutinesVersion = "1.4.2-native-mt"
     private const val ktorClientVersion = "1.4.0"
