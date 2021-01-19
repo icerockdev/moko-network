@@ -9,14 +9,11 @@ import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
-import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.servers.Server
 import org.openapitools.codegen.CodegenConstants
 import org.openapitools.codegen.CodegenOperation
-import org.openapitools.codegen.CodegenParameter
 import org.openapitools.codegen.CodegenType
 import org.openapitools.codegen.languages.AbstractKotlinCodegen
-import org.openapitools.codegen.utils.ModelUtils
 
 class KtorCodegen : AbstractKotlinCodegen() {
     /**
@@ -52,8 +49,6 @@ class KtorCodegen : AbstractKotlinCodegen() {
         apiDocTemplateFiles["api_doc.mustache"] = ".md"
         apiPackage = "$packageName.apis"
         modelPackage = "$packageName.models"
-
-//        this.useOneOfInterfaces = true
     }
 
     override fun getTag(): CodegenType {
@@ -71,47 +66,39 @@ class KtorCodegen : AbstractKotlinCodegen() {
     override fun preprocessOpenAPI(openAPI: OpenAPI) {
         super.preprocessOpenAPI(openAPI)
         val schemas: MutableMap<String, Schema<*>> = openAPI.components.schemas.toMutableMap()
-
         openAPI.components?.requestBodies?.forEach { (requestBodyName, requestBody) ->
             val jsonContent: MediaType? = requestBody.content["application/json"]
             val jsonSchema = jsonContent?.schema
 
-            if (jsonContent != null) {
+            if (jsonContent == null) return@forEach
 
-                when {
-                    jsonSchema is ArraySchema && jsonSchema.items.`$ref` == null -> {
-                        // Create new name for component scheme of array items
-                        val newArrayItemSchemaName = "${requestBodyName}Item"
-
-                        // Add array items scheme to components
-                        schemas[newArrayItemSchemaName] = jsonSchema.items
-
-                        // Replace old requestBody item scheme to ref
-                        val objectSchema = Schema<Any>().apply {
-                            `$ref` = "#/components/schemas/$newArrayItemSchemaName"
-                        }
-                        jsonSchema.items = objectSchema
+            when {
+                jsonSchema is ArraySchema && jsonSchema.items.`$ref` == null -> {
+                    // Create new name for component scheme of array items
+                    val newArrayItemSchemaName = "${requestBodyName}Item"
+                    // Add array items scheme to components
+                    schemas[newArrayItemSchemaName] = jsonSchema.items
+                    // Replace old requestBody item scheme to ref
+                    val objectSchema = Schema<Any>().apply {
+                        `$ref` = "#/components/schemas/$newArrayItemSchemaName"
                     }
-                    jsonSchema is ObjectSchema && jsonSchema.`$ref` == null  -> {
-                        // Create new name for component scheme
-                        val newBodySchemaName = "${requestBodyName}Object"
-                        // Add new scheme to components
-                        schemas[newBodySchemaName] = jsonSchema
-                        // Replace old requestBody item scheme to ref
-                        val objectSchema = Schema<Any>().apply {
-                            `$ref` = "#/components/schemas/$newBodySchemaName"
-                        }
-                        jsonContent.schema = objectSchema
+                    jsonSchema.items = objectSchema
+                }
+                jsonSchema is ObjectSchema && jsonSchema.`$ref` == null -> {
+                    // Create new name for component scheme
+                    val newBodySchemaName = "${requestBodyName}Object"
+                    // Add new scheme to components
+                    schemas[newBodySchemaName] = jsonSchema
+                    // Replace old requestBody item scheme to ref
+                    val objectSchema = Schema<Any>().apply {
+                        `$ref` = "#/components/schemas/$newBodySchemaName"
                     }
+                    jsonContent.schema = objectSchema
                 }
             }
         }
 
         openAPI.components.schemas = schemas
-    }
-
-    override fun processOpenAPI(openAPI: OpenAPI) {
-        super.processOpenAPI(openAPI)
     }
 
     override fun fromOperation(
@@ -134,14 +121,6 @@ class KtorCodegen : AbstractKotlinCodegen() {
             codegenOperation.returnType = null
         }
         return codegenOperation
-    }
-
-    override fun fromRequestBody(
-        body: RequestBody?,
-        imports: MutableSet<String>?,
-        bodyParameterName: String?
-    ): CodegenParameter {
-        return super.fromRequestBody(body, imports, bodyParameterName)
     }
 
     private fun String.firstCapitalized(): String {
