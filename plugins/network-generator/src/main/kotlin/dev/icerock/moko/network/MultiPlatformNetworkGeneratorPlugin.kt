@@ -23,21 +23,31 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
 
             mokoNetworkExtension.specs.forEach { spec ->
 
-                val generatedDir = "${target.buildDir}/generate-resources/main/src/main/kotlin/${spec.name}"
+                val generatedDir =
+                    "${target.buildDir}/generate-resources/main/src/main/kotlin/${spec.name}"
 
                 extensions.findByType(KotlinMultiplatformExtension::class.java)?.run {
-                    val sourceSet = sourceSets.getByName(KotlinSourceSet.COMMON_MAIN_SOURCE_SET_NAME)
+                    val sourceSet =
+                        sourceSets.getByName(KotlinSourceSet.COMMON_MAIN_SOURCE_SET_NAME)
                     val sources = generatedDir
                     sourceSet.kotlin.srcDir(sources)
                 }
 
-                val generateTask =tasks.create("${spec.name}OpenApiGenerate", org.openapitools.generator.gradle.plugin.tasks.GenerateTask::class.java) {
+                val generateTask = tasks.create(
+                    "${spec.name}OpenApiGenerate",
+                    org.openapitools.generator.gradle.plugin.tasks.GenerateTask::class.java
+                ) {
                     group = "openapi"
 
                     inputSpec.set(spec.inputSpec?.path)
                     packageName.set(spec.packageName)
 
-                    additionalProperties.set(mutableMapOf("nonPublicApi" to "${spec.isInternal}", "openApiClasses" to "${spec.isOpen}"))
+                    additionalProperties.set(
+                        mutableMapOf(
+                            "nonPublicApi" to "${spec.isInternal}",
+                            "openApiClasses" to "${spec.isOpen}"
+                        )
+                    )
 
                     outputDir.set(generatedDir)
                     generatorName.set("kotlin-ktor-client")
