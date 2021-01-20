@@ -4,6 +4,7 @@
 
 package dev.icerock.moko.network
 
+import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.servers.Server
 import org.openapitools.codegen.CodegenConstants
 import org.openapitools.codegen.CodegenOperation
@@ -55,6 +56,12 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
     override fun getHelp(): String {
         return "Generates a kotlin ktor client."
+    }
+
+    override fun preprocessOpenAPI(openAPI: OpenAPI) {
+        super.preprocessOpenAPI(openAPI)
+
+        PathOperationsFilter.filterPaths(openAPI.paths)
     }
 
     override fun fromOperation(
