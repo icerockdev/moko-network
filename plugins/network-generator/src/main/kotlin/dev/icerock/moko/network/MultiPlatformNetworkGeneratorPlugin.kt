@@ -37,6 +37,8 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
                     inputSpec.set(spec.inputSpec?.path)
                     packageName.set(spec.packageName)
 
+                    additionalProperties.set(mutableMapOf("nonPublicApi" to "${spec.isInternal}", "openApiClasses" to "${spec.isOpen}"))
+
                     outputDir.set(generatedDir)
                     generatorName.set("kotlin-ktor-client")
                     spec.configureTask?.invoke(this)

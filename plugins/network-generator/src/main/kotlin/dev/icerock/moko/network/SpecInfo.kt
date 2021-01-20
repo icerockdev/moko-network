@@ -10,5 +10,7 @@ import java.io.File
 open class SpecInfo(val name: String) {
     var inputSpec: File? = null
     var packageName: String? = null
+    var isInternal = true
+    var isOpen = false
     var configureTask: (GenerateTask.() -> Unit)? = null
 }

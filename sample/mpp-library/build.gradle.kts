@@ -39,6 +39,8 @@ mokoNetwork {
     spec("news") {
         inputSpec = file("wrong file")
         packageName = "news"
+        isInternal = false
+        isOpen = true
         configureTask = {
             inputSpec.set(file("src/newsApi.yaml").path)
         }
