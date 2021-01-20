@@ -65,6 +65,8 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
     override fun preprocessOpenAPI(openAPI: OpenAPI) {
         super.preprocessOpenAPI(openAPI)
+        PathOperationsFilter.filterPaths(openAPI.paths)
+
         val schemas: MutableMap<String, Schema<*>> = openAPI.components.schemas.toMutableMap()
         openAPI.components?.requestBodies?.forEach { (requestBodyName, requestBody) ->
             val jsonContent: MediaType? = requestBody.content["application/json"]
@@ -104,7 +106,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
     override fun fromOperation(
         path: String,
         httpMethod: String,
-        operation: io.swagger.v3.oas.models.Operation,
+        operation: io.swagger.v3.oas.models.Operation?,
         servers: List<Server>?
     ): CodegenOperation {
         val codegenOperation = super.fromOperation(path, httpMethod, operation, servers)
