@@ -33,7 +33,7 @@ multiplatformResources {
 }
 
 openApiGenerate {
-    inputSpec.set(file("src/profile_openapi.yaml").path)
+    inputSpec.set(file("src/swagger.json").path)
     generatorName.set("kotlin-ktor-client")
 }
 
