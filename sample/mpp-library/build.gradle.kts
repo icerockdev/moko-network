@@ -32,7 +32,15 @@ multiplatformResources {
     multiplatformResourcesPackage = "com.icerockdev.library"
 }
 
-openApiGenerate {
-    inputSpec.set(file("src/swagger.json").path)
-    generatorName.set("kotlin-ktor-client")
+mokoNetwork {
+    spec("pets") {
+        inputSpec = file("src/swagger.json")
+    }
+    spec("news") {
+        inputSpec = file("wrong file")
+        packageName = "news"
+        configureTask = {
+            inputSpec.set(file("src/newsApi.yaml").path)
+        }
+    }
 }
