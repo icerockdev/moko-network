@@ -7,9 +7,11 @@ package dev.icerock.moko.network
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
-import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
 
@@ -19,19 +21,26 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
 
         target.afterEvaluate {
 
-            val multiplatformExtension = extensions.findByType(KotlinMultiplatformExtension::class.java)
-            val sourceSet = multiplatformExtension?.sourceSets?.getByName(KotlinSourceSet.COMMON_MAIN_SOURCE_SET_NAME)
+            val multiplatformExtension =
+                extensions.findByType(KotlinMultiplatformExtension::class.java)
+            val sourceSet =
+                multiplatformExtension?.sourceSets?.getByName(KotlinSourceSet.COMMON_MAIN_SOURCE_SET_NAME)
+
+            if (mokoNetworkExtension.specs.isEmpty()) return@afterEvaluate
+
+            val openApiGenerateTask = tasks.create("openApiGenerate") {
+                group = "moko-network"
+            }
 
             mokoNetworkExtension.specs.forEach { spec ->
+                val generatedDir = "${target.buildDir}/generated/moko-network/${spec.name}"
+                val generatedSourcesDir = "$generatedDir/src/main/kotlin"
 
-                val generatedDir =
-                    "${target.buildDir}/generate-resources/main/src/${spec.name}"
+                sourceSet?.kotlin?.srcDir(generatedSourcesDir)
 
-                sourceSet?.kotlin?.srcDir(generatedDir)
-
-                val generateTask = tasks.create(
+                val generateTask: GenerateTask = tasks.create(
                     "${spec.name}OpenApiGenerate",
-                    org.openapitools.generator.gradle.plugin.tasks.GenerateTask::class.java
+                    GenerateTask::class.java
                 ) {
                     group = "moko-network"
 
@@ -50,16 +59,21 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
                     spec.configureTask?.invoke(this)
                 }
 
+                openApiGenerateTask.dependsOn(generateTask)
+
+                // removing required because generate task not delete files that not exist in
+                // new version of specification
                 val removeGeneratedCodeTask =
-                    tasks.create("${spec.name}RemoveGeneratedOpenApiCode", Delete::class) {
+                    tasks.create("${spec.name}RemoveGeneratedOpenApiCode", Delete::class.java) {
                         delete(file(generatedDir))
                     }
 
                 generateTask.dependsOn(removeGeneratedCodeTask)
+            }
 
-                tasks.findByName("preBuild")?.dependsOn(generateTask)
-                tasks.findByName("compileKotlinIosX64")?.dependsOn(generateTask)
-                tasks.findByName("compileKotlinIosArm64")?.dependsOn(generateTask)
+            tasks.findByName("preBuild")?.dependsOn(openApiGenerateTask)
+            tasks.withType<KotlinNativeCompile>().all {
+                dependsOn(openApiGenerateTask)
             }
         }
     }
