@@ -14,6 +14,7 @@ import dev.icerock.moko.mvvm.livedata.readOnly
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.icerock.moko.network.LanguageProvider
 import dev.icerock.moko.network.features.LanguageFeature
+import dev.icerock.moko.network.features.TokenFeature
 import dev.icerock.moko.network.generated.apis.PetApi
 import dev.icerock.moko.resources.desc.desc
 import io.ktor.client.HttpClient
@@ -22,6 +23,7 @@ import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import news.apis.NewsApi
 
 class TestViewModel : ViewModel() {
 
@@ -47,9 +49,24 @@ class TestViewModel : ViewModel() {
                 }
             }
         }
+
+        install(TokenFeature) {
+            tokenHeaderName = "Authorization"
+            tokenProvider = object : TokenFeature.TokenProvider {
+                override fun getToken(): String? = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
+            }
+        }
     }
     private val petApi = PetApi(
         basePath = "https://petstore.swagger.io/v2/",
+        httpClient = httpClient,
+        json = Json {
+            ignoreUnknownKeys = true
+        }
+    )
+
+    private val newApi = NewsApi(
+        basePath = "https://newsapi.org/v2/",
         httpClient = httpClient,
         json = Json {
             ignoreUnknownKeys = true
@@ -61,6 +78,7 @@ class TestViewModel : ViewModel() {
 
     init {
         reloadPet()
+        loadNews()
     }
 
     fun onRefreshPressed() {
@@ -73,6 +91,24 @@ class TestViewModel : ViewModel() {
                 val pet = petApi.findPetsByStatus(listOf("available"))
                 _petInfo.value = pet.toString()
             }.execute()
+        }
+    }
+
+    @Suppress("TooGenericExceptionCaught")
+    private fun loadNews() {
+        viewModelScope.launch {
+            try {
+                val response = newApi.topHeadlinesGet(
+                    country = "ru",
+                    category = null,
+                    q = null,
+                    pageSize = null,
+                    page = null
+                )
+                println(response)
+            } catch (exception: Throwable) {
+                println("error to get news $exception")
+            }
         }
     }
 }
