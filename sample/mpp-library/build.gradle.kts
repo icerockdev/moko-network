@@ -41,12 +41,8 @@ mokoNetwork {
         packageName = "news"
         isInternal = false
         isOpen = true
-        configureTask = {
+        configureTask {
             inputSpec.set(file("src/newsApi.yaml").path)
         }
     }
-}
-
-openApiValidate {
-    inputSpec.set(file("src/profile_openapi.yaml").path)
 }

@@ -9,8 +9,10 @@ import java.io.File
 
 open class SpecInfo(val name: String) {
     var inputSpec: File? = null
-    var packageName: String? = null
+    var packageName: String? = "dev.icerock.moko.network.generated"
     var isInternal = true
     var isOpen = false
-    var configureTask: (GenerateTask.() -> Unit)? = null
+    internal var configureTask: (GenerateTask.() -> Unit)? = null
+
+    fun configureTask(block: GenerateTask.() -> Unit) { configureTask = block }
 }

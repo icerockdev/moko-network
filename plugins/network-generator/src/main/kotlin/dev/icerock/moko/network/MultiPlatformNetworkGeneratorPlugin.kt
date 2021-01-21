@@ -10,10 +10,8 @@ import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.create
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-import org.openapitools.generator.gradle.plugin.OpenApiGeneratorPlugin
 
 class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
-    private val openApiGenerator = OpenApiGeneratorPlugin()
 
     override fun apply(target: Project) {
 
@@ -21,23 +19,21 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
 
         target.afterEvaluate {
 
+            val multiplatformExtension = extensions.findByType(KotlinMultiplatformExtension::class.java)
+            val sourceSet = multiplatformExtension?.sourceSets?.getByName(KotlinSourceSet.COMMON_MAIN_SOURCE_SET_NAME)
+
             mokoNetworkExtension.specs.forEach { spec ->
 
                 val generatedDir =
-                    "${target.buildDir}/generate-resources/main/src/main/kotlin/${spec.name}"
+                    "${target.buildDir}/generate-resources/main/src/${spec.name}"
 
-                extensions.findByType(KotlinMultiplatformExtension::class.java)?.run {
-                    val sourceSet =
-                        sourceSets.getByName(KotlinSourceSet.COMMON_MAIN_SOURCE_SET_NAME)
-                    val sources = generatedDir
-                    sourceSet.kotlin.srcDir(sources)
-                }
+                sourceSet?.kotlin?.srcDir(generatedDir)
 
                 val generateTask = tasks.create(
                     "${spec.name}OpenApiGenerate",
                     org.openapitools.generator.gradle.plugin.tasks.GenerateTask::class.java
                 ) {
-                    group = "openapi"
+                    group = "moko-network"
 
                     inputSpec.set(spec.inputSpec?.path)
                     packageName.set(spec.packageName)
@@ -55,7 +51,7 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
                 }
 
                 val removeGeneratedCodeTask =
-                    tasks.create("${spec.name}removeGeneratedOpenApiCode", Delete::class) {
+                    tasks.create("${spec.name}RemoveGeneratedOpenApiCode", Delete::class) {
                         delete(file(generatedDir))
                     }
 
