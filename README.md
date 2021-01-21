@@ -1,5 +1,5 @@
 ![moko-network](img/logo.png)  
-[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://api.bintray.com/packages/icerockdev/moko/moko-network/images/download.svg) ](https://bintray.com/icerockdev/moko/moko-network/_latestVersion) ![kotlin-version](https://img.shields.io/badge/kotlin-1.4.0-orange)
+[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://api.bintray.com/packages/icerockdev/moko/moko-network/images/download.svg) ](https://bintray.com/icerockdev/moko/moko-network/_latestVersion) ![kotlin-version](https://img.shields.io/badge/kotlin-1.4.21-orange)
 
 # Mobile Kotlin network components
 This is a Kotlin MultiPlatform library that provide network components for iOS & Android. Library is
@@ -43,6 +43,8 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
   - 0.7.0
 - kotlin 1.4.10
   - 0.8.0
+- kotlin 1.4.21
+  - 0.9.0
 
 ## Installation
 root build.gradle  
@@ -53,7 +55,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.8.0"
+        classpath "dev.icerock.moko:network-generator:0.9.0"
     }
 }
 
@@ -70,7 +72,7 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.8.0") 
+    commonMainApi("dev.icerock.moko:network:0.9.0") 
 }
 ```
 
@@ -80,15 +82,25 @@ dependencies {
 
 2. Setup the project `build.gradle`:
 
-```kotlin
-openApiGenerate {
-    inputSpec.set(file("src/swagger.json").path)
-    generatorName.set("kotlin-ktor-client")
+```groovy
+mokoNetwork {
+    spec("pets") {
+        inputSpec = file("src/swagger.json")
+    }
+    spec("news") {
+        inputSpec = file("src/newsApi.yaml")
+        packageName = "news"
+        isInternal = false
+        isOpen = true
+        configureTask {
+            // here can be configuration of https://github.com/OpenAPITools/openapi-generator GenerateTask
+        }
+    }
 }
 ```
 
 3. Then run `openApiGenerate` Gradle task and after completion you will get all generated classes in
-`build/generate-resources/` directory.
+`build/generated/moko-network` directory.
 
 4. To import all generated classes of model put:
 
@@ -127,6 +139,18 @@ class TestViewModel : ViewModel() {
     }
 }
 ```
+
+#### Deprecated usage
+Old way with `OpenApi Generator Plugin` available by:
+```groovy
+apply plugin: "dev.icerock.mobile.multiplatform-network-generator-deprecated"
+
+openApiGenerate {
+    inputSpec.set(file("src/swagger.json").path)
+    generatorName.set("kotlin-ktor-client")
+}
+```
+but this way limited to one spec in one time.
 
 #### moko-network-errors
 
