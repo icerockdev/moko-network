@@ -36,3 +36,7 @@ openApiGenerate {
     inputSpec.set(file("src/swagger.json").path)
     generatorName.set("kotlin-ktor-client")
 }
+
+openApiValidate {
+    inputSpec.set(file("src/profile_openapi.yaml").path)
+}
