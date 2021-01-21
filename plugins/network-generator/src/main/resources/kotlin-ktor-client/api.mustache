@@ -20,7 +20,7 @@ import io.ktor.client.call.ReceivePipelineException
 import io.ktor.http.content.TextContent
 
 {{#operations}}
-{{#openApiClasses}}open {{/openApiClasses}}{{#nonPublicApi}}internal {{/nonPublicApi}}class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpClient: HttpClient, json: Json) {
+{{#nonPublicApi}}internal {{/nonPublicApi}}{{#openApiClasses}}open {{/openApiClasses}}class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpClient: HttpClient, json: Json) {
     private val _basePath = basePath
     private val _httpClient = httpClient
     private val _json = json
