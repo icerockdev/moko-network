@@ -90,7 +90,7 @@ mokoNetwork {
     spec("news") {
         inputSpec = file("src/newsApi.yaml")
         packageName = "news"
-        isInternal = false
+        apiVisibility = ApiVisibility.PUBLIC
         isOpen = true
         configureTask {
             // here can be configuration of https://github.com/OpenAPITools/openapi-generator GenerateTask

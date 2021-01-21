@@ -7,7 +7,7 @@ import kotlinx.serialization.SerialName
 {{/vars}}
  */
 @Serializable
-{{#nonPublicApi}}internal {{/nonPublicApi}}data class {{classname}} (
+{{#publicApi}}public {{/publicApi}}{{#nonPublicApi}}internal {{/nonPublicApi}}data class {{classname}} (
 {{#requiredVars}}
 {{>data_class_req_var}}{{^-last}},
 {{/-last}}{{/requiredVars}}{{#hasRequired}}{{#hasOptional}},
@@ -20,7 +20,7 @@ import kotlinx.serialization.SerialName
     * Values: {{#allowableValues}}{{#enumVars}}{{{value}}}{{^-last}},{{/-last}}{{/enumVars}}{{/allowableValues}}
     */
     @Serializable
-    enum class {{nameInCamelCase}} {
+    {{#publicApi}}public {{/publicApi}}enum class {{nameInCamelCase}} {
     {{#allowableValues}}{{#enumVars}}
         @SerialName({{^isString}}"{{/isString}}{{{value}}}{{^isString}}"{{/isString}})
         {{name}}{{^-last}},{{/-last}}{{#-last}};{{/-last}}

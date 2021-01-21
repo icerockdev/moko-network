@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 * Values: {{#allowableValues}}{{#enumVars}}{{{value}}}{{^-last}},{{/-last}}{{/enumVars}}{{/allowableValues}}
 */
 @Serializable
-{{#nonPublicApi}}internal {{/nonPublicApi}}enum class {{classname}}() {
+{{#publicApi}}public {{/publicApi}}{{#nonPublicApi}}internal {{/nonPublicApi}}enum class {{classname}}() {
 {{#allowableValues}}{{#enumVars}}
     @SerialName({{^isString}}"{{/isString}}{{{value}}}{{^isString}}"{{/isString}})
     {{name}}{{^-last}},{{/-last}}{{#-last}};{{/-last}}

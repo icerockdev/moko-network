@@ -4,6 +4,7 @@
 
 package dev.icerock.moko.network
 
+import dev.icerock.moko.network.SpecInfo.ApiVisibility
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
@@ -49,7 +50,8 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
 
                     additionalProperties.set(
                         mutableMapOf(
-                            "nonPublicApi" to "${spec.isInternal}",
+                            "publicApi" to "${spec.apiVisibility == ApiVisibility.PUBLIC}",
+                            "nonPublicApi" to "${spec.apiVisibility == ApiVisibility.INTERNAL}",
                             "openApiClasses" to "${spec.isOpen}"
                         )
                     )
