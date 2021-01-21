@@ -4,7 +4,7 @@
 
 
 object Deps {
-    private const val kotlinVersion = "1.4.10"
+    private const val kotlinVersion = "1.4.21"
 
     private const val lifecycleVersion = "2.2.0"
     private const val glideVersion = "4.9.0"
@@ -13,19 +13,19 @@ object Deps {
     private const val testRunnerVersion = "1.2.0"
     private const val testExtJunitVersion = "1.1.1"
 
-    private const val openApiGeneratorVersion = "4.2.2"
+    private const val openApiGeneratorVersion = "5.0.0"
     private const val kotlinxSerializationVersion = "1.0.0-RC"
-    private const val coroutinesVersion = "1.3.9-native-mt"
+    private const val coroutinesVersion = "1.4.2-native-mt"
     private const val ktorClientVersion = "1.4.0"
 
     private const val detektVersion = "1.12.0"
 
-    private const val mokoGraphicsVersion = "0.4.0"
-    private const val mokoParcelizeVersion = "0.4.0"
-    private const val mokoResourcesVersion = "0.13.1"
-    private const val mokoMvvmVersion = "0.8.0"
+    private const val mokoGraphicsVersion = "0.5.0"
+    private const val mokoParcelizeVersion = "0.5.0"
+    private const val mokoResourcesVersion = "0.13.2"
+    private const val mokoMvvmVersion = "0.8.1"
     private const val mokoErrorsVersion = "0.3.0"
-    const val mokoNetworkVersion = "0.8.0"
+    const val mokoNetworkVersion = "0.9.0"
 
     object Android {
         const val compileSdk = 28
