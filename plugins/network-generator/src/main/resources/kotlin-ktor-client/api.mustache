@@ -14,6 +14,8 @@ import io.ktor.http.Parameters
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import io.ktor.client.call.ReceivePipelineException
 import io.ktor.http.content.TextContent
 
@@ -31,7 +33,7 @@ import io.ktor.http.content.TextContent
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
-    {{#openApiClasses}}open {{/openApiClasses}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}} {
+    {{#openApiClasses}}open {{/openApiClasses}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}} {
         val builder = HttpRequestBuilder()
 
         builder.method = HttpMethod.{{httpMethod}}
@@ -60,14 +62,21 @@ import io.ktor.http.content.TextContent
         if({{paramName}} != null) {
             builder.body = TextContent(
         {{#dataType}}
-            {{#isListContainer}}
+            {{#isArray}}
                 {{#items}}
-                _json.encodeToString({{dataType}}.serializer().let { ListSerializer(it) },
+                _json.encodeToString(ListSerializer({{dataType}}.serializer()),
                 {{/items}}
-            {{/isListContainer}}
-            {{^isListContainer}}
+            {{/isArray}}
+            {{#isMap}}
+                _json.encodeToString(
+                    MapSerializer(
+                        keySerializer = String.serializer(),
+                        valueSerializer = {{baseType}}.serializer()
+                    ),
+            {{/isMap}}
+            {{^isArray}}{{^isMap}}
                 _json.encodeToString({{dataType}}.serializer(),
-            {{/isListContainer}}
+            {{/isMap}}{{/isArray}}
                 {{paramName}}),
         {{/dataType}}
                 ContentType.Application.Json.withoutParameters()
@@ -92,7 +101,7 @@ import io.ktor.http.content.TextContent
             {{^returnTypeIsPrimitive}}
             //not primitive type
             val result: String = _httpClient.request(builder)
-            return _json.decodeFromString({{returnBaseType}}.serializer(){{#isListContainer}}.let { ListSerializer(it) }{{/isListContainer}}, result)
+            return _json.decodeFromString({{returnBaseType}}.serializer(){{#isArray}}.let { ListSerializer(it) }{{/isArray}}, result)
             {{/returnTypeIsPrimitive}}
             {{#returnTypeIsPrimitive}}
             //primitive type

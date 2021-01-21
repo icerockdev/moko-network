@@ -1,0 +1,226 @@
+openapi: 3.0.0
+info:
+  title: API
+  version: v1
+tags:
+  - name: profile
+    description: Профиль пользователя
+paths:
+  '/profile/{user_id}/{unit_id}/activity/':
+    post:
+      operationId: profile_activity_create
+      requestBody:
+        $ref: '#/components/requestBodies/UnitActivityArray'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnitActivity'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+      tags:
+        - profile
+    parameters:
+      - $ref: '#/components/parameters/userIdParam'
+      - $ref: '#/components/parameters/unitIdParam'
+  '/profile/{user_id}/{unit_id}/activity2/':
+    post:
+      operationId: profile_activity_create2
+      requestBody:
+        $ref: '#/components/requestBodies/UnitActivityArray2'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnitActivity'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+      tags:
+        - profile
+    parameters:
+      - $ref: '#/components/parameters/userIdParam'
+      - $ref: '#/components/parameters/unitIdParam'
+security:
+  - Bearer: []
+components:
+  securitySchemes:
+    Bearer:
+      in: header
+      name: Authorization
+      type: apiKey
+  requestBodies:
+    UnitActivityArray:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                is_main_activity:
+                  type: boolean
+                activity_rid:
+                  title: Основное направление
+                  type: string
+                  format: uuid
+                functional_activity_rid:
+                  title: Функциональное направление
+                  type: string
+                  format: uuid
+    UnitActivityArray2:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/UnitActivityArray2Item'
+  responses:
+    ValidationError:
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            description: Ошибка валидации
+            properties:
+              detail:
+                description: Описание ошибки
+                type: string
+            type: object
+  parameters:
+    userIdParam:
+      in: path
+      name: user_id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: e0520e34-01b3-4ddb-b08a-2735a7dfde56
+      description: 'Идентификатор пользователя из keycloak'
+    unitIdParam:
+      in: path
+      name: unit_id
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      description: 'Идентификатор модели оргструктуры'
+  schemas:
+    Unit:
+      type: object
+      properties:
+        name:
+          maxLength: 255
+          minLength: 1
+          title: Название
+          type: string
+        name_rid:
+          format: uuid
+          type: string
+          description: UUID из сервиса справочников
+        division:
+          maxLength: 255
+          minLength: 1
+          title: Дивизион
+          type: string
+        organization:
+          maxLength: 255
+          minLength: 1
+          title: Организация
+          type: string
+        organization_unit:
+          maxLength: 255
+          minLength: 1
+          title: Организацинная еденица
+          type: string
+        position:
+          maxLength: 255
+          minLength: 1
+          title: Должность
+          type: string
+        user:
+          format: uuid
+          title: Сотрудник
+          type: string
+          nullable: true
+        work_town:
+          description: Город работы
+          minLength: 1
+          title: Work town
+          type: string
+          nullable: true
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitActivity'
+        employee_number:
+          type: string
+          description: Табельный номер
+        remote_employee:
+          type: boolean
+          description: Внешний сотрудник
+          default: false
+        organization_rid:
+          type: string
+          format: uuid
+          description: UUID из сервиса справочников
+        organization_unit_rid:
+          type: string
+          format: uuid
+          description: UUID из сервиса справочников
+        division_rid:
+          type: string
+          format: uuid
+          description: UUID из сервиса справочников
+        position_rid:
+          type: string
+          format: uuid
+          description: UUID из сервиса справочников
+      required:
+        - division
+        - organization
+        - organization_unit
+        - position
+    UnitActivity:
+      title: UnitActivity
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        is_main_activity:
+          type: boolean
+        activity:
+          type: string
+        functional_activity:
+          type: string
+          nullable: true
+        activity_rid:
+          title: Основное направление
+          type: string
+          format: uuid
+        functional_activity_rid:
+          title: Функциональное направление
+          type: string
+          format: uuid
+          nullable: true
+    UnitActivityArray2Item:
+      type: object
+      properties:
+        is_main_activity:
+          type: boolean
+        activity_rid:
+          title: Основное направление
+          type: string
+          format: uuid
+        functional_activity_rid:
+          title: Функциональное направление
+          type: string
+          format: uuid

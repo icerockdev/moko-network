@@ -46,3 +46,7 @@ mokoNetwork {
         }
     }
 }
+
+openApiValidate {
+    inputSpec.set(file("src/profile_openapi.yaml").path)
+}
