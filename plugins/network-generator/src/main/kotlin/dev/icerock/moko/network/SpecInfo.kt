@@ -12,6 +12,7 @@ open class SpecInfo(val name: String) {
     var packageName: String? = "dev.icerock.moko.network.generated"
     var isInternal = true
     var isOpen = false
+    var filterTags: List<String> = listOf()
     internal var configureTask: (GenerateTask.() -> Unit)? = null
 
     fun configureTask(block: GenerateTask.() -> Unit) { configureTask = block }
