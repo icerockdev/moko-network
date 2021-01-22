@@ -15,6 +15,10 @@ object PathOperationsFilter {
         pathOperationsFilterSet.add(tag)
     }
 
+    fun addAllTagsToFilter(tags: Collection<String>) {
+        pathOperationsFilterSet.addAll(tags)
+    }
+
     internal fun filterPaths(paths: Paths?) {
         paths?.forEach { (_, pathItem) ->
             with(pathItem) {

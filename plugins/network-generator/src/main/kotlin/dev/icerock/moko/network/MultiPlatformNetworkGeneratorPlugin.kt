@@ -46,7 +46,7 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
 
                     inputSpec.set(spec.inputSpec?.path)
                     packageName.set(spec.packageName)
-                    spec.filterTags.forEach(PathOperationsFilter::addTagToFilter)
+                    PathOperationsFilter.addAllTagsToFilter(spec.filterTags)
 
                     additionalProperties.set(
                         mutableMapOf(
