@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
+@Suppress("ForbiddenComment")
 class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
