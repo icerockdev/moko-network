@@ -46,7 +46,6 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
 
                     inputSpec.set(spec.inputSpec?.path)
                     packageName.set(spec.packageName)
-                    PathOperationsFilter.addAllTagsToFilter(spec.filterTags)
 
                     additionalProperties.set(
                         mutableMapOf(
@@ -58,6 +57,13 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
                     outputDir.set(generatedDir)
                     generatorName.set("kotlin-ktor-client")
                     spec.configureTask?.invoke(this)
+
+                    doFirst {
+                        PathOperationsFilter.addAllTagsToFilter(spec.filterTags)
+                    }
+                    doLast {
+                        PathOperationsFilter.clearAllTags()
+                    }
                 }
 
                 openApiGenerateTask.dependsOn(generateTask)
