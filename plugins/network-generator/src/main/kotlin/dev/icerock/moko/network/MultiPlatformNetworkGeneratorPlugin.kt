@@ -47,23 +47,18 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
                     inputSpec.set(spec.inputSpec?.path)
                     packageName.set(spec.packageName)
 
+                    val excludedTags = spec.filterTags.joinToString(",")
                     additionalProperties.set(
                         mutableMapOf(
                             "nonPublicApi" to "${spec.isInternal}",
-                            "openApiClasses" to "${spec.isOpen}"
+                            "openApiClasses" to "${spec.isOpen}",
+                            KtorCodegen.ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS to excludedTags
                         )
                     )
 
                     outputDir.set(generatedDir)
                     generatorName.set("kotlin-ktor-client")
                     spec.configureTask?.invoke(this)
-
-                    doFirst {
-                        PathOperationsFilter.addAllTagsToFilter(spec.filterTags)
-                    }
-                    doLast {
-                        PathOperationsFilter.clearAllTags()
-                    }
                 }
 
                 openApiGenerateTask.dependsOn(generateTask)
