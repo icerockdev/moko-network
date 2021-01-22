@@ -23,9 +23,9 @@ object Deps {
     private const val mokoGraphicsVersion = "0.5.0"
     private const val mokoParcelizeVersion = "0.5.0"
     private const val mokoResourcesVersion = "0.13.2"
-    private const val mokoMvvmVersion = "0.8.1"
-    private const val mokoErrorsVersion = "0.3.0"
-    const val mokoNetworkVersion = "0.9.0"
+    private const val mokoMvvmVersion = "0.9.0"
+    private const val mokoErrorsVersion = "0.3.1"
+    const val mokoNetworkVersion = "0.9.1"
 
     object Android {
         const val compileSdk = 28
@@ -81,6 +81,8 @@ object Deps {
             val ktorClientOkHttp =
                 "io.ktor:ktor-client-okhttp:$ktorClientVersion"
 
+            const val mokoMvvmDataBinding = "dev.icerock.moko:mvvm-databinding:$mokoMvvmVersion"
+
             object Tests {
                 const val espressoCore =
                     "androidx.test.espresso:espresso-core:$espressoCoreVersion"
@@ -114,8 +116,10 @@ object Deps {
                 "dev.icerock.moko:parcelize:$mokoParcelizeVersion"
             const val mokoGraphics =
                 "dev.icerock.moko:graphics:$mokoGraphicsVersion"
-            const val mokoMvvm =
-                "dev.icerock.moko:mvvm:$mokoMvvmVersion"
+            const val mokoMvvmCore =
+                "dev.icerock.moko:mvvm-core:$mokoMvvmVersion"
+            const val mokoMvvmLiveData =
+                "dev.icerock.moko:mvvm-livedata:$mokoMvvmVersion"
             const val mokoErrors =
                 "dev.icerock.moko:errors:$mokoErrorsVersion"
             const val mokoNetwork =
