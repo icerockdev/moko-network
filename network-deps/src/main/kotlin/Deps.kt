@@ -18,7 +18,7 @@ object Deps {
     private const val coroutinesVersion = "1.4.2-native-mt"
     private const val ktorClientVersion = "1.4.0"
 
-    private const val detektVersion = "1.12.0"
+    private const val detektVersion = "1.15.0"
 
     private const val mokoGraphicsVersion = "0.5.0"
     private const val mokoParcelizeVersion = "0.5.0"

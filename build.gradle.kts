@@ -3,7 +3,7 @@
  */
 
 plugins {
-    plugin(Deps.Plugins.detekt) apply false
+    id("io.gitlab.arturbosch.detekt") version("1.15.0") apply(false)
 }
 
 buildscript {
@@ -17,9 +17,10 @@ buildscript {
         maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
     }
     dependencies {
-        plugin(Deps.Plugins.mokoResources)
-        plugin(Deps.Plugins.mokoNetwork)
-        plugin(Deps.Plugins.kotlinSerialization)
+        classpath("dev.icerock.moko:resources-generator:0.13.2")
+        classpath("dev.icerock.moko:network-generator:0.9.1")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.21")
+        classpath("gradle:network-deps:1")
     }
 }
 
