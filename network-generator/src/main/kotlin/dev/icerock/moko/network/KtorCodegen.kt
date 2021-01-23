@@ -25,8 +25,6 @@ class KtorCodegen : AbstractKotlinCodegen() {
         artifactId = "kotlin-ktor-client"
         packageName = "dev.icerock.moko.network.generated"
 
-        nonPublicApi = true
-
         typeMapping["array"] = "kotlin.collections.List"
         typeMapping["number"] = "kotlin.Double"
 
@@ -51,6 +49,20 @@ class KtorCodegen : AbstractKotlinCodegen() {
         apiDocTemplateFiles["api_doc.mustache"] = ".md"
         apiPackage = "$packageName.apis"
         modelPackage = "$packageName.models"
+    }
+
+    override fun processOpts() {
+        super.processOpts()
+
+        val isOpenProp = additionalProperties[ADDITIONAL_OPTIONS_KEY_IS_OPEN]
+        if (isOpenProp is String) {
+            additionalProperties[ADDITIONAL_OPTIONS_KEY_IS_OPEN] = isOpenProp == "true"
+        }
+        val isInternalProp = additionalProperties[ADDITIONAL_OPTIONS_KEY_IS_INTERNAL]
+        if (isInternalProp is String) {
+            nonPublicApi = isInternalProp == "true"
+            additionalProperties[ADDITIONAL_OPTIONS_KEY_IS_INTERNAL] = nonPublicApi
+        }
     }
 
     override fun getTag(): CodegenType {
@@ -174,5 +186,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
     companion object {
         const val ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS = "excludedTags"
+        const val ADDITIONAL_OPTIONS_KEY_IS_OPEN = "isOpen"
+        const val ADDITIONAL_OPTIONS_KEY_IS_INTERNAL = "nonPublicApi"
     }
 }
