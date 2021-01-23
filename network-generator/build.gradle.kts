@@ -28,8 +28,6 @@ dependencies {
     "detektPlugins"(Deps.Libs.Detekt.detektFormatting)
 }
 
-println("$group:$name:$version")
-
 publishing {
     repositories.maven("https://api.bintray.com/maven/icerockdev/plugins/moko-network-generator/;publish=1") {
         name = "bintray"

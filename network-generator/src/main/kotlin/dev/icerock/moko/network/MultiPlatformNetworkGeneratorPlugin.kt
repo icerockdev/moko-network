@@ -4,14 +4,13 @@
 
 package dev.icerock.moko.network
 
+import dev.icerock.moko.network.tasks.GenerateTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
-import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 @Suppress("ForbiddenComment")
 class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
@@ -31,7 +30,7 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
         if (extension.specs.isEmpty()) return
 
         val openApiGenerateTask = tasks.create("openApiGenerate") {
-            group = "moko-network"
+            it.group = "moko-network"
         }
 
         extension.specs.forEach { spec ->
@@ -43,31 +42,7 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
             val generateTask: GenerateTask = tasks.create(
                 "${spec.name}OpenApiGenerate",
                 GenerateTask::class.java
-            ) { task ->
-                task.group = "moko-network"
-
-                task.inputSpec.set(spec.inputSpec?.path)
-                task.packageName.set(spec.packageName)
-
-                val excludedTags = spec.filterTags.joinToString(",")
-                task.additionalProperties.set(
-                    mutableMapOf(
-                        "nonPublicApi" to "${spec.isInternal}",
-                        KtorCodegen.ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS to excludedTags
-                    ).also {
-                        // Temporary hotfix for #59
-                        // TODO: remove hotfix after approving pull-request in openapi-generator
-                        // https://github.com/OpenAPITools/openapi-generator/pull/8507
-                        if (spec.isOpen) {
-                            it["openApiClasses"] = "open "
-                        }
-                    }
-                )
-
-                task.outputDir.set(generatedDir)
-                task.generatorName.set("kotlin-ktor-client")
-                spec.configureTask?.invoke(task)
-            }
+            ) { it.configure(spec, generatedDir) }
 
             openApiGenerateTask.dependsOn(generateTask)
 
@@ -76,6 +51,7 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
             val removeGeneratedCodeTask =
                 tasks.create("${spec.name}RemoveGeneratedOpenApiCode", Delete::class.java) {
                     delete(file(generatedDir))
+                    it.group = "moko-network"
                 }
 
             generateTask.dependsOn(removeGeneratedCodeTask)

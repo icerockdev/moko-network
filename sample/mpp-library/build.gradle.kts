@@ -37,6 +37,11 @@ mokoNetwork {
     spec("pets") {
         inputSpec = file("src/swagger.json")
     }
+    spec("profile") {
+        inputSpec = file("src/profile_openapi.yaml")
+        isInternal = false
+        isOpen = false
+    }
     spec("news") {
         inputSpec = file("wrong file")
         packageName = "news"
