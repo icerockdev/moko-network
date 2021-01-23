@@ -3,13 +3,13 @@
  */
 
 plugins {
-    plugin(Deps.Plugins.androidLibrary)
-    plugin(Deps.Plugins.kotlinMultiplatform)
-    plugin(Deps.Plugins.kotlinSerialization)
-    plugin(Deps.Plugins.mobileMultiplatform)
-    plugin(Deps.Plugins.mokoNetwork)
-    plugin(Deps.Plugins.mokoResources)
-    plugin(Deps.Plugins.iosFramework)
+    id("com.android.library")
+    id("org.jetbrains.kotlin.multiplatform")
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("dev.icerock.mobile.multiplatform")
+    id("dev.icerock.mobile.multiplatform-resources")
+    id("dev.icerock.mobile.multiplatform-network-generator")
+    id("dev.icerock.mobile.multiplatform.ios-framework")
 }
 
 dependencies {
@@ -18,7 +18,8 @@ dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.ktorClientLogging)
     commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
 
-    commonMainApi(Deps.Libs.MultiPlatform.mokoMvvm)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoMvvmCore)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoMvvmLiveData)
     commonMainApi(Deps.Libs.MultiPlatform.mokoNetwork)
     commonMainApi(Deps.Libs.MultiPlatform.mokoNetworkErrors)
 
@@ -35,6 +36,11 @@ multiplatformResources {
 mokoNetwork {
     spec("pets") {
         inputSpec = file("src/swagger.json")
+    }
+    spec("profile") {
+        inputSpec = file("src/profile_openapi.yaml")
+        isInternal = false
+        isOpen = false
     }
     spec("news") {
         inputSpec = file("wrong file")
