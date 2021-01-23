@@ -55,7 +55,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.9.0"
+        classpath "dev.icerock.moko:network-generator:0.9.1"
     }
 }
 
@@ -72,7 +72,7 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.9.0") 
+    commonMainApi("dev.icerock.moko:network:0.9.1")
 }
 ```
 

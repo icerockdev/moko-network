@@ -18,7 +18,8 @@ dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.ktorClientLogging)
     commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
 
-    commonMainApi(Deps.Libs.MultiPlatform.mokoMvvm)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoMvvmCore)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoMvvmLiveData)
     commonMainApi(Deps.Libs.MultiPlatform.mokoNetwork)
     commonMainApi(Deps.Libs.MultiPlatform.mokoNetworkErrors)
 

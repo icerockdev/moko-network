@@ -23,10 +23,9 @@ dependencies {
 
     androidMainImplementation(Deps.Libs.Android.appCompat)
 
-    // temporary fix of https://youtrack.jetbrains.com/issue/KT-41083
-    commonMainImplementation("dev.icerock.moko:mvvm:0.8.0")
-    commonMainImplementation("dev.icerock.moko:parcelize:0.4.0")
-    commonMainImplementation("dev.icerock.moko:graphics:0.4.0")
+    commonMainImplementation(Deps.Libs.MultiPlatform.mokoMvvmCore)
+    commonMainImplementation(Deps.Libs.MultiPlatform.mokoParcelize)
+    commonMainImplementation(Deps.Libs.MultiPlatform.mokoGraphics)
 
     // temporary fix of https://youtrack.jetbrains.com/issue/KT-41821
     commonMainImplementation("io.ktor:ktor-utils:1.4.0")
