@@ -48,9 +48,11 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
                     inputSpec.set(spec.inputSpec?.path)
                     packageName.set(spec.packageName)
 
+                    val excludedTags = spec.filterTags.joinToString(",")
                     additionalProperties.set(
                         mutableMapOf(
-                            "nonPublicApi" to "${spec.isInternal}"
+                            "nonPublicApi" to "${spec.isInternal}",
+                            KtorCodegen.ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS to excludedTags
                         ).also {
                             // Temporary hotfix for #59
                             // TODO: remove hotfix after approving pull-request in openapi-generator

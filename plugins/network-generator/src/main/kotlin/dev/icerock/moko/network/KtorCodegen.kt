@@ -5,6 +5,8 @@
 package dev.icerock.moko.network
 
 import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.Operation
+import io.swagger.v3.oas.models.Paths
 import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.media.ObjectSchema
@@ -65,7 +67,9 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
     override fun preprocessOpenAPI(openAPI: OpenAPI) {
         super.preprocessOpenAPI(openAPI)
-        PathOperationsFilter.filterPaths(openAPI.paths)
+        additionalProperties[ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS]
+            ?.let { (it as? String)?.split(",")?.toSet() }
+            ?.let { filterPaths(openAPI.paths, it) }
 
         val schemas: MutableMap<String, Schema<*>> = openAPI.components.schemas.toMutableMap()
         openAPI.components?.requestBodies?.forEach { (requestBodyName, requestBody) ->
@@ -131,5 +135,44 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
     override fun getEnumPropertyNaming(): CodegenConstants.ENUM_PROPERTY_NAMING_TYPE {
         return CodegenConstants.ENUM_PROPERTY_NAMING_TYPE.UPPERCASE
+    }
+
+    private fun filterPaths(paths: Paths?, pathOperationsFilterSet: Set<String>) {
+        paths?.forEach { (_, pathItem) ->
+            with(pathItem) {
+                if (get.needFilterOperation(pathOperationsFilterSet)) {
+                    get = null
+                }
+                if (put.needFilterOperation(pathOperationsFilterSet)) {
+                    put = null
+                }
+                if (post.needFilterOperation(pathOperationsFilterSet)) {
+                    post = null
+                }
+                if (delete.needFilterOperation(pathOperationsFilterSet)) {
+                    delete = null
+                }
+                if (options.needFilterOperation(pathOperationsFilterSet)) {
+                    options = null
+                }
+                if (head.needFilterOperation(pathOperationsFilterSet)) {
+                    head = null
+                }
+                if (patch.needFilterOperation(pathOperationsFilterSet)) {
+                    patch = null
+                }
+                if (trace.needFilterOperation(pathOperationsFilterSet)) {
+                    trace = null
+                }
+            }
+        }
+    }
+
+    private fun Operation?.needFilterOperation(filterTagNameSet: Set<String>): Boolean {
+        return this?.tags?.any(filterTagNameSet::contains) == true
+    }
+
+    companion object {
+        const val ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS = "excludedTags"
     }
 }
