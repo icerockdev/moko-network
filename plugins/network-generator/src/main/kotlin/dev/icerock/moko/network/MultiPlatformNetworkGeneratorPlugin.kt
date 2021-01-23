@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
+@Suppress("ForbiddenComment")
 class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
@@ -49,9 +50,15 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
 
                     additionalProperties.set(
                         mutableMapOf(
-                            "nonPublicApi" to "${spec.isInternal}",
-                            "openApiClasses" to "${spec.isOpen}"
-                        )
+                            "nonPublicApi" to "${spec.isInternal}"
+                        ).also {
+                            // Temporary hotfix for #59
+                            // TODO: remove hotfix after approving pull-request in openapi-generator
+                            // https://github.com/OpenAPITools/openapi-generator/pull/8507
+                            if (spec.isOpen) {
+                                it["openApiClasses"] = "open "
+                            }
+                        }
                     )
 
                     outputDir.set(generatedDir)
