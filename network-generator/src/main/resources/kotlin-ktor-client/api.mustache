@@ -20,7 +20,7 @@ import io.ktor.client.call.ReceivePipelineException
 import io.ktor.http.content.TextContent
 
 {{#operations}}
-{{#nonPublicApi}}internal {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpClient: HttpClient, json: Json) {
+{{#nonPublicApi}}internal {{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpClient: HttpClient, json: Json) {
     private val _basePath = basePath
     private val _httpClient = httpClient
     private val _json = json
@@ -33,7 +33,7 @@ import io.ktor.http.content.TextContent
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
-    {{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}} {
+    {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}} {
         val builder = HttpRequestBuilder()
 
         builder.method = HttpMethod.{{httpMethod}}
