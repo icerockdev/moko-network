@@ -17,8 +17,8 @@ buildscript {
         maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
     }
     dependencies {
-        classpath("dev.icerock.moko:resources-generator:0.13.2")
-        classpath("dev.icerock.moko:network-generator:0.9.1")
+        classpath("dev.icerock.moko:resources-generator:0.14.0")
+        classpath("dev.icerock.moko:network-generator:0.9.2")
         classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.21")
         classpath("gradle:network-deps:1")
     }

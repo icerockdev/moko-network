@@ -22,10 +22,10 @@ object Deps {
 
     private const val mokoGraphicsVersion = "0.5.0"
     private const val mokoParcelizeVersion = "0.5.0"
-    private const val mokoResourcesVersion = "0.13.2"
-    private const val mokoMvvmVersion = "0.9.0"
+    private const val mokoResourcesVersion = "0.14.0"
+    private const val mokoMvvmVersion = "0.9.1"
     private const val mokoErrorsVersion = "0.3.1"
-    const val mokoNetworkVersion = "0.9.1"
+    const val mokoNetworkVersion = "0.9.2"
 
     object Android {
         const val compileSdk = 28
