@@ -46,6 +46,7 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
 - kotlin 1.4.21
   - 0.9.0
   - 0.9.1
+  - 0.9.2
 
 ## Installation
 root build.gradle  
@@ -56,7 +57,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.9.1"
+        classpath "dev.icerock.moko:network-generator:0.9.2"
     }
 }
 
@@ -73,7 +74,7 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.9.1")
+    commonMainApi("dev.icerock.moko:network:0.9.2")
 }
 ```
 
