@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinNativeCompile
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
 
 @Suppress("ForbiddenComment")
 class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
