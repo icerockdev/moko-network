@@ -224,3 +224,12 @@ components:
           title: Функциональное направление
           type: string
           format: uuid
+    UserNotification:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+          readOnly: true
+        content:
+          type: object

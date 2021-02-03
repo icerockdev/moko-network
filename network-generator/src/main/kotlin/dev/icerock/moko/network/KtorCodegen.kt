@@ -40,6 +40,9 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
         typeMapping["UUID"] = "kotlin.String"
         typeMapping["URI"] = "kotlin.String"
+        typeMapping["object"] = "JsonObject"
+
+        importMapping["JsonObject"] = "kotlinx.serialization.json.JsonObject"
 
         embeddedTemplateDir = "kotlin-ktor-client"
 
@@ -122,7 +125,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
     override fun fromOperation(
         path: String,
         httpMethod: String,
-        operation: io.swagger.v3.oas.models.Operation?,
+        operation: Operation?,
         servers: List<Server>?
     ): CodegenOperation {
         val codegenOperation = super.fromOperation(path, httpMethod, operation, servers)
@@ -135,9 +138,6 @@ class KtorCodegen : AbstractKotlinCodegen() {
             currentPath = currentPath.substring(1)
         }
         codegenOperation.path = currentPath
-        if (codegenOperation.returnType != null && codegenOperation.returnType == "Any") {
-            codegenOperation.returnType = null
-        }
         return codegenOperation
     }
 
