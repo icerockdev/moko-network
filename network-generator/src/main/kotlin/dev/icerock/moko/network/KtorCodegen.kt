@@ -40,7 +40,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
         typeMapping["UUID"] = "kotlin.String"
         typeMapping["URI"] = "kotlin.String"
-        typeMapping["object"] = "kotlinx.serialization.json.JsonObject"
+        typeMapping["object"] = "JsonObject"
 
         importMapping["JsonObject"] = "kotlinx.serialization.json.JsonObject"
 
@@ -123,10 +123,10 @@ class KtorCodegen : AbstractKotlinCodegen() {
     }
 
     override fun fromOperation(
-            path: String,
-            httpMethod: String,
-            operation: Operation?,
-            servers: List<Server>?
+        path: String,
+        httpMethod: String,
+        operation: Operation?,
+        servers: List<Server>?
     ): CodegenOperation {
         val codegenOperation = super.fromOperation(path, httpMethod, operation, servers)
         codegenOperation.httpMethod = codegenOperation.httpMethod.firstCapitalized()
