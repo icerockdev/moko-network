@@ -19,7 +19,7 @@ buildscript {
     dependencies {
         classpath("dev.icerock.moko:resources-generator:0.14.0")
         classpath("dev.icerock.moko:network-generator:0.9.3")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.21")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.30")
         classpath("gradle:network-deps:1")
     }
 }
