@@ -48,12 +48,6 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
             ) { it.configure(spec, generatedDir) }
 
             openApiGenerateTask.dependsOn(generateTask)
-
-            // removing required because generate task not delete files that not exist in
-            // new version of specification
-            val removeGeneratedCodeTask = removeCodeTask(tasks, spec.name, generatedDir)
-
-            generateTask.dependsOn(removeGeneratedCodeTask)
         }
 
         tasks.matching { it.name == "preBuild" }
@@ -62,13 +56,5 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
             .all { it.dependsOn(openApiGenerateTask) }
         tasks.withType(AbstractKotlinNativeCompile::class.java)
             .all { it.dependsOn(openApiGenerateTask) }
-    }
-
-    private fun removeCodeTask(tasks: TaskContainer, name: String, directory: String): Task {
-        return tasks.create("${name}RemoveGeneratedOpenApiCode", Delete::class.java) { task ->
-            val dir = task.project.file(directory)
-            task.delete(dir)
-            task.group = "moko-network"
-        }
     }
 }
