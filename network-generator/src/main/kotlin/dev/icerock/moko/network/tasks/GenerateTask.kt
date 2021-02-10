@@ -29,5 +29,12 @@ open class GenerateTask : GenerateTask() {
         outputDir.set(generatedDir)
 
         specInfo.configureTask?.invoke(this)
+
+        doFirst {
+            // clean directory before generate new code
+            val cleanupDir = outputDir.get()
+            val dir = project.file(cleanupDir)
+            dir.deleteRecursively()
+        }
     }
 }
