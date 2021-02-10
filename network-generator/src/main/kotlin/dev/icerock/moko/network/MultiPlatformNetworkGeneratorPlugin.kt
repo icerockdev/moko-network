@@ -7,9 +7,6 @@ package dev.icerock.moko.network
 import dev.icerock.moko.network.tasks.GenerateTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
-import org.gradle.api.tasks.Delete
-import org.gradle.api.tasks.TaskContainer
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile
