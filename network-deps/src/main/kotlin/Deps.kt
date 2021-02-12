@@ -16,18 +16,18 @@ object Deps {
     private const val robolectricVersion = "4.3"
 
     private const val openApiGeneratorVersion = "5.0.0"
-    private const val kotlinxSerializationVersion = "1.0.0-RC"
+    private const val kotlinxSerializationVersion = "1.0.1"
     private const val coroutinesVersion = "1.4.2-native-mt"
-    private const val ktorClientVersion = "1.4.0"
+    private const val ktorClientVersion = "1.5.1"
 
     private const val detektVersion = "1.15.0"
 
     private const val mokoGraphicsVersion = "0.5.0"
     private const val mokoParcelizeVersion = "0.5.0"
-    private const val mokoResourcesVersion = "0.14.0"
+    private const val mokoResourcesVersion = "0.15.0"
     private const val mokoMvvmVersion = "0.9.1"
     private const val mokoErrorsVersion = "0.3.1"
-    const val mokoNetworkVersion = "0.9.3"
+    const val mokoNetworkVersion = "0.9.4"
 
     object Android {
         const val compileSdk = 30
@@ -105,7 +105,7 @@ object Deps {
 
         object MultiPlatform {
             const val kotlinSerialization =
-                "org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion"
+                "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion"
             const val coroutines =
                 "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
             const val ktorClient =
