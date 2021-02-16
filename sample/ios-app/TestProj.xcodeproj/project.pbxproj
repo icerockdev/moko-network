@@ -112,7 +112,7 @@
 				287627FB1F319065007FA12B /* Sources */,
 				287627FC1F319065007FA12B /* Frameworks */,
 				287627FD1F319065007FA12B /* Resources */,
-				07695594F733E91F16ACB8C4 /* [CP] Embed Pods Frameworks */,
+				1FC31D06B3AD6936D90914B7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -173,7 +173,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		07695594F733E91F16ACB8C4 /* [CP] Embed Pods Frameworks */ = {
+		1FC31D06B3AD6936D90914B7 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -250,6 +250,7 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CURRENT_PROJECT_VERSION = 0;
 				DEFINES_MODULE = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -260,6 +261,7 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CURRENT_PROJECT_VERSION = 0;
 				DEFINES_MODULE = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

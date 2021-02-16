@@ -15,18 +15,33 @@ class TestViewController: UIViewController {
         super.viewDidLoad()
         
         viewModel = TestViewModel()
-        viewModel.exceptionHandler.bind(viewController: self)
+//        viewModel.exceptionHandler.bind(viewController: self)
         
-        viewModel.petInfo.addObserver { [weak self] info in
-            self?.textView.text = info as String?
-        }
+//        viewModel.petInfo.addObserver { [weak self] info in
+//            self?.textView.text = info as String?
+//        }
     }
     
     @IBAction func onRefreshPressed() {
         viewModel.onRefreshPressed()
     }
-    
-    deinit {
-        viewModel.onCleared()
+
+    @IBAction func onCustomScopePressed() {
+        viewModel.onSimpleRequestWithCustomScopePressed()
     }
+
+    @IBAction func onSimpleRequest() {
+        viewModel.onSimpleRequestPressed()
+    }
+    
+    override func didMove(toParentViewController parent: UIViewController?) {
+        if parent == nil {
+            viewModel.onCleared()
+            viewModel = nil
+        }
+    }
+    
+//    deinit {
+//        viewModel.onCleared()
+//    }
 }

@@ -21,11 +21,17 @@ import io.ktor.client.HttpClient
 import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
+import io.ktor.client.request.get
+import io.ktor.client.request.url
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import news.apis.NewsApi
 
 class TestViewModel : ViewModel() {
+    private val customScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 
     val exceptionHandler = ExceptionHandler(
         errorPresenter = AlertErrorPresenter(
@@ -36,79 +42,105 @@ class TestViewModel : ViewModel() {
         exceptionMapper = ExceptionMappersStorage.throwableMapper()
     )
 
-    private val httpClient = HttpClient {
-        install(LanguageFeature) {
-            languageHeaderName = "X-Language"
-            languageCodeProvider = LanguageProvider()
-        }
-        install(Logging) {
-            level = LogLevel.INFO
-            logger = object : Logger {
-                override fun log(message: String) {
-                    println(message)
-                }
-            }
-        }
-
-        install(TokenFeature) {
-            tokenHeaderName = "Authorization"
-            tokenProvider = object : TokenFeature.TokenProvider {
-                override fun getToken(): String? = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
-            }
-        }
-    }
-    private val petApi = PetApi(
-        basePath = "https://petstore.swagger.io/v2/",
-        httpClient = httpClient,
-        json = Json {
-            ignoreUnknownKeys = true
-        }
-    )
-
-    private val newApi = NewsApi(
-        basePath = "https://newsapi.org/v2/",
-        httpClient = httpClient,
-        json = Json {
-            ignoreUnknownKeys = true
-        }
-    )
+//    private val httpClient = HttpClient {
+//        install(LanguageFeature) {
+//            languageHeaderName = "X-Language"
+//            languageCodeProvider = LanguageProvider()
+//        }
+//        install(Logging) {
+//            level = LogLevel.INFO
+//            logger = object : Logger {
+//                override fun log(message: String) {
+//                    println(message)
+//                }
+//            }
+//        }
+//
+//        install(TokenFeature) {
+//            tokenHeaderName = "Authorization"
+//            tokenProvider = object : TokenFeature.TokenProvider {
+//                override fun getToken(): String? = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
+//            }
+//        }
+//    }
+//    private val petApi = PetApi(
+//        basePath = "https://petstore.swagger.io/v2/",
+//        httpClient = httpClient,
+//        json = Json {
+//            ignoreUnknownKeys = true
+//        }
+//    )
+//
+//    private val newApi = NewsApi(
+//        basePath = "https://newsapi.org/v2/",
+//        httpClient = httpClient,
+//        json = Json {
+//            ignoreUnknownKeys = true
+//        }
+//    )
 
     private val _petInfo = MutableLiveData<String?>(null)
     val petInfo: LiveData<String?> = _petInfo.readOnly()
 
     init {
-        reloadPet()
-        loadNews()
+//        reloadPet()
+//        loadNews()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        customScope.cancel()
+
+//        httpClient.close()
     }
 
     fun onRefreshPressed() {
         reloadPet()
     }
 
+    fun onSimpleRequestPressed() {
+//        viewModelScope.launch {
+//            val resp: String = httpClient.get {
+//                url("https://petstore.swagger.io/v2/pet/findByStatus?status=available")
+//            }
+//            println(resp)
+//        }
+    }
+
+    fun onSimpleRequestWithCustomScopePressed() {
+//        customScope.launch {
+//            val resp: String = httpClient.get {
+//                url("https://petstore.swagger.io/v2/pet/findByStatus?status=available")
+//            }
+//            println(resp)
+//        }
+    }
+
     private fun reloadPet() {
-        viewModelScope.launch {
-            exceptionHandler.handle {
-                val pet = petApi.findPetsByStatus(listOf("available"))
-                _petInfo.value = pet.toString()
-            }.execute()
-        }
+//        viewModelScope.launch {
+//            exceptionHandler.handle {
+//                val pet = petApi.findPetsByStatus(listOf("available"))
+//                _petInfo.value = pet.toString()
+//            }.execute()
+//        }
     }
 
     @Suppress("TooGenericExceptionCaught")
     private fun loadNews() {
-        viewModelScope.launch {
-            try {
-                val response = newApi.topHeadlinesGet(
-                    country = "ru",
-                    category = null,
-                    q = null,
-                    pageSize = null,
-                    page = null
-                )
-                println(response)
-            } catch (exception: Throwable) {
-                println("error to get news $exception")
-            }
-        }
+//        viewModelScope.launch {
+//            try {
+//                val response = newApi.topHeadlinesGet(
+//                    country = "ru",
+//                    category = null,
+//                    q = null,
+//                    pageSize = null,
+//                    page = null
+//                )
+//                println(response)
+//            } catch (exception: Throwable) {
+//                println("error to get news $exception")
+//            }
+//        }
     }
 }

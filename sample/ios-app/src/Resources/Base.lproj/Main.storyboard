@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zIh-nI-gcX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zIh-nI-gcX">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,12 +16,44 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="TTy-86-aNs" kind="relationship" relationship="rootViewController" id="y6u-Ao-rTD"/>
+                        <segue destination="bdk-vB-MQ6" kind="relationship" relationship="rootViewController" id="Ljh-pJ-Jsr"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dpF-aw-Lyj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-5158" y="-1482"/>
+        </scene>
+        <!--Start-->
+        <scene sceneID="Pbj-UM-5Il">
+            <objects>
+                <viewController id="bdk-vB-MQ6" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bEa-mh-wpy"/>
+                        <viewControllerLayoutGuide type="bottom" id="JBq-hb-YUt"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="DX8-a8-ftA">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Otn-u6-jMQ">
+                                <rect key="frame" x="121.5" y="269" width="77" height="30"/>
+                                <state key="normal" title="TestScreen"/>
+                                <connections>
+                                    <segue destination="TTy-86-aNs" kind="show" id="J7l-2b-mCs"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Otn-u6-jMQ" firstAttribute="centerX" secondItem="DX8-a8-ftA" secondAttribute="centerX" id="BfH-go-kkO"/>
+                            <constraint firstItem="Otn-u6-jMQ" firstAttribute="centerY" secondItem="DX8-a8-ftA" secondAttribute="centerY" id="LUg-t8-kz9"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Start" id="Yk4-iw-0yH"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HoA-Nq-ckT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4249" y="-1482"/>
         </scene>
         <!--Test-->
         <scene sceneID="B5V-K5-FDE">
@@ -34,7 +67,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4P3-zK-HqS">
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4P3-zK-HqS">
                                 <rect key="frame" x="133.5" y="538" width="53" height="30"/>
                                 <state key="normal" title="Refresh"/>
                                 <connections>
@@ -42,21 +75,39 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="8qa-Wn-6Ga">
-                                <rect key="frame" x="16" y="44" width="288" height="494"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <rect key="frame" x="16" y="44" width="288" height="410"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bv8-QA-Te6">
+                                <rect key="frame" x="109.5" y="462" width="101" height="30"/>
+                                <state key="normal" title="Custom Scope"/>
+                                <connections>
+                                    <action selector="onCustomScopePressed" destination="TTy-86-aNs" eventType="touchUpInside" id="gPW-bP-PtC"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dbI-Fx-eVg">
+                                <rect key="frame" x="106.5" y="500" width="107" height="30"/>
+                                <state key="normal" title="Simple Request"/>
+                                <connections>
+                                    <action selector="onSimpleRequest" destination="TTy-86-aNs" eventType="touchUpInside" id="ed4-j8-JFq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="dbI-Fx-eVg" firstAttribute="top" secondItem="bv8-QA-Te6" secondAttribute="bottom" constant="8" id="1fU-wF-2lT"/>
+                            <constraint firstItem="4P3-zK-HqS" firstAttribute="top" secondItem="dbI-Fx-eVg" secondAttribute="bottom" constant="8" id="93r-dN-PXB"/>
                             <constraint firstItem="4P3-zK-HqS" firstAttribute="centerX" secondItem="KxK-oh-5KO" secondAttribute="centerX" id="BdP-u5-seY"/>
                             <constraint firstItem="8qa-Wn-6Ga" firstAttribute="leading" secondItem="KxK-oh-5KO" secondAttribute="leadingMargin" id="DPi-WY-Mc8"/>
                             <constraint firstItem="8qa-Wn-6Ga" firstAttribute="top" secondItem="gcA-zH-akF" secondAttribute="bottom" id="EUh-F3-1XI"/>
-                            <constraint firstItem="4P3-zK-HqS" firstAttribute="top" secondItem="8qa-Wn-6Ga" secondAttribute="bottom" id="IQM-Zf-ccc"/>
                             <constraint firstAttribute="trailingMargin" secondItem="8qa-Wn-6Ga" secondAttribute="trailing" id="MEr-qh-O94"/>
+                            <constraint firstItem="dbI-Fx-eVg" firstAttribute="centerX" secondItem="KxK-oh-5KO" secondAttribute="centerX" id="Thr-7N-olf"/>
+                            <constraint firstItem="bv8-QA-Te6" firstAttribute="centerX" secondItem="KxK-oh-5KO" secondAttribute="centerX" id="bBQ-v8-2Cs"/>
+                            <constraint firstItem="bv8-QA-Te6" firstAttribute="top" secondItem="8qa-Wn-6Ga" secondAttribute="bottom" constant="8" id="jy9-AI-XDm"/>
                             <constraint firstItem="gTY-6T-yQv" firstAttribute="top" secondItem="4P3-zK-HqS" secondAttribute="bottom" id="vGU-Q9-vhy"/>
                         </constraints>
                     </view>
@@ -67,7 +118,15 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jxh-nl-GiI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4297.5" y="-1482.0422535211267"/>
+            <point key="canvasLocation" x="-3281" y="-1482"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
