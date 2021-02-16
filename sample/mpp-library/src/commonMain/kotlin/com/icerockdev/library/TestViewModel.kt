@@ -31,8 +31,8 @@ import kotlinx.serialization.json.Json
 import news.apis.NewsApi
 
 class TestViewModel : ViewModel() {
-    private val customScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
-
+//    private val customScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+//
     val exceptionHandler = ExceptionHandler(
         errorPresenter = AlertErrorPresenter(
             // temporary fix https://youtrack.jetbrains.com/issue/KT-41823
@@ -43,41 +43,41 @@ class TestViewModel : ViewModel() {
     )
 
     private val httpClient = HttpClient {
-        install(LanguageFeature) {
-            languageHeaderName = "X-Language"
-            languageCodeProvider = LanguageProvider()
-        }
-        install(Logging) {
-            level = LogLevel.INFO
-            logger = object : Logger {
-                override fun log(message: String) {
-                    println(message)
-                }
-            }
-        }
-
-        install(TokenFeature) {
-            tokenHeaderName = "Authorization"
-            tokenProvider = object : TokenFeature.TokenProvider {
-                override fun getToken(): String? = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
-            }
-        }
+//        install(LanguageFeature) {
+//            languageHeaderName = "X-Language"
+//            languageCodeProvider = LanguageProvider()
+//        }
+//        install(Logging) {
+//            level = LogLevel.INFO
+//            logger = object : Logger {
+//                override fun log(message: String) {
+//                    println(message)
+//                }
+//            }
+//        }
+//
+//        install(TokenFeature) {
+//            tokenHeaderName = "Authorization"
+//            tokenProvider = object : TokenFeature.TokenProvider {
+//                override fun getToken(): String? = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
+//            }
+//        }
     }
-    private val petApi = PetApi(
-        basePath = "https://petstore.swagger.io/v2/",
-        httpClient = httpClient,
-        json = Json {
-            ignoreUnknownKeys = true
-        }
-    )
-
-    private val newApi = NewsApi(
-        basePath = "https://newsapi.org/v2/",
-        httpClient = httpClient,
-        json = Json {
-            ignoreUnknownKeys = true
-        }
-    )
+//    private val petApi = PetApi(
+//        basePath = "https://petstore.swagger.io/v2/",
+//        httpClient = httpClient,
+//        json = Json {
+//            ignoreUnknownKeys = true
+//        }
+//    )
+//
+//    private val newApi = NewsApi(
+//        basePath = "https://newsapi.org/v2/",
+//        httpClient = httpClient,
+//        json = Json {
+//            ignoreUnknownKeys = true
+//        }
+//    )
 
     private val _petInfo = MutableLiveData<String?>(null)
     val petInfo: LiveData<String?> = _petInfo.readOnly()
@@ -85,13 +85,18 @@ class TestViewModel : ViewModel() {
     init {
 //        reloadPet()
 //        loadNews()
+//        _petInfo.value = buildString {
+//            for(i in 0 .. 10000) {
+//                append("XA")
+//            }
+//        }
     }
 
     override fun onCleared() {
         super.onCleared()
 
-        customScope.cancel()
-
+//        customScope.cancel()
+//
         httpClient.close()
     }
 
@@ -100,12 +105,12 @@ class TestViewModel : ViewModel() {
     }
 
     fun onSimpleRequestPressed() {
-//        viewModelScope.launch {
-//            val resp: String = httpClient.get {
-//                url("https://petstore.swagger.io/v2/pet/findByStatus?status=available")
-//            }
-//            println(resp)
-//        }
+        viewModelScope.launch {
+            val resp: String = httpClient.get {
+                url("https://petstore.swagger.io/v2/pet/findByStatus?status=available")
+            }
+            println(resp)
+        }
     }
 
     fun onSimpleRequestWithCustomScopePressed() {
