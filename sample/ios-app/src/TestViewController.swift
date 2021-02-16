@@ -15,11 +15,11 @@ class TestViewController: UIViewController {
         super.viewDidLoad()
         
         viewModel = TestViewModel()
-//        viewModel.exceptionHandler.bind(viewController: self)
+        viewModel.exceptionHandler.bind(viewController: self)
         
-//        viewModel.petInfo.addObserver { [weak self] info in
-//            self?.textView.text = info as String?
-//        }
+        viewModel.petInfo.addObserver { [weak self] info in
+            self?.textView.text = info as String?
+        }
     }
     
     @IBAction func onRefreshPressed() {
@@ -44,4 +44,13 @@ class TestViewController: UIViewController {
 //    deinit {
 //        viewModel.onCleared()
 //    }
+}
+
+
+class StartViewController: UIViewController {
+    
+    @IBAction func onCollectPressed() {
+        GarbageCollectorKt.cycles()
+        GarbageCollectorKt.collect()
+    }
 }

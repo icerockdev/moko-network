@@ -26,7 +26,7 @@
         <!--Start-->
         <scene sceneID="Pbj-UM-5Il">
             <objects>
-                <viewController id="bdk-vB-MQ6" sceneMemberID="viewController">
+                <viewController id="bdk-vB-MQ6" customClass="StartViewController" customModule="mokoSampleNetwork" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bEa-mh-wpy"/>
                         <viewControllerLayoutGuide type="bottom" id="JBq-hb-YUt"/>
@@ -42,11 +42,20 @@
                                     <segue destination="TTy-86-aNs" kind="show" id="J7l-2b-mCs"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YCE-Fi-sEQ">
+                                <rect key="frame" x="135.5" y="315" width="49" height="30"/>
+                                <state key="normal" title="Collect"/>
+                                <connections>
+                                    <action selector="onCollectPressed" destination="bdk-vB-MQ6" eventType="touchUpInside" id="bCS-gI-pxM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Otn-u6-jMQ" firstAttribute="centerX" secondItem="DX8-a8-ftA" secondAttribute="centerX" id="BfH-go-kkO"/>
+                            <constraint firstItem="YCE-Fi-sEQ" firstAttribute="top" secondItem="Otn-u6-jMQ" secondAttribute="bottom" constant="16" id="BzC-Lk-moJ"/>
                             <constraint firstItem="Otn-u6-jMQ" firstAttribute="centerY" secondItem="DX8-a8-ftA" secondAttribute="centerY" id="LUg-t8-kz9"/>
+                            <constraint firstItem="YCE-Fi-sEQ" firstAttribute="centerX" secondItem="DX8-a8-ftA" secondAttribute="centerX" id="giU-JY-mna"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Start" id="Yk4-iw-0yH"/>

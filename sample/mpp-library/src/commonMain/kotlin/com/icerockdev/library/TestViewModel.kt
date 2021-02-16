@@ -42,42 +42,42 @@ class TestViewModel : ViewModel() {
         exceptionMapper = ExceptionMappersStorage.throwableMapper()
     )
 
-//    private val httpClient = HttpClient {
-//        install(LanguageFeature) {
-//            languageHeaderName = "X-Language"
-//            languageCodeProvider = LanguageProvider()
-//        }
-//        install(Logging) {
-//            level = LogLevel.INFO
-//            logger = object : Logger {
-//                override fun log(message: String) {
-//                    println(message)
-//                }
-//            }
-//        }
-//
-//        install(TokenFeature) {
-//            tokenHeaderName = "Authorization"
-//            tokenProvider = object : TokenFeature.TokenProvider {
-//                override fun getToken(): String? = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
-//            }
-//        }
-//    }
-//    private val petApi = PetApi(
-//        basePath = "https://petstore.swagger.io/v2/",
-//        httpClient = httpClient,
-//        json = Json {
-//            ignoreUnknownKeys = true
-//        }
-//    )
-//
-//    private val newApi = NewsApi(
-//        basePath = "https://newsapi.org/v2/",
-//        httpClient = httpClient,
-//        json = Json {
-//            ignoreUnknownKeys = true
-//        }
-//    )
+    private val httpClient = HttpClient {
+        install(LanguageFeature) {
+            languageHeaderName = "X-Language"
+            languageCodeProvider = LanguageProvider()
+        }
+        install(Logging) {
+            level = LogLevel.INFO
+            logger = object : Logger {
+                override fun log(message: String) {
+                    println(message)
+                }
+            }
+        }
+
+        install(TokenFeature) {
+            tokenHeaderName = "Authorization"
+            tokenProvider = object : TokenFeature.TokenProvider {
+                override fun getToken(): String? = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
+            }
+        }
+    }
+    private val petApi = PetApi(
+        basePath = "https://petstore.swagger.io/v2/",
+        httpClient = httpClient,
+        json = Json {
+            ignoreUnknownKeys = true
+        }
+    )
+
+    private val newApi = NewsApi(
+        basePath = "https://newsapi.org/v2/",
+        httpClient = httpClient,
+        json = Json {
+            ignoreUnknownKeys = true
+        }
+    )
 
     private val _petInfo = MutableLiveData<String?>(null)
     val petInfo: LiveData<String?> = _petInfo.readOnly()
@@ -92,7 +92,7 @@ class TestViewModel : ViewModel() {
 
         customScope.cancel()
 
-//        httpClient.close()
+        httpClient.close()
     }
 
     fun onRefreshPressed() {
