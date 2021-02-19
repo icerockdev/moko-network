@@ -24,9 +24,6 @@ dependencies {
     commonMainApi(Deps.Libs.MultiPlatform.mokoNetworkErrors)
 
     androidMainImplementation(Deps.Libs.Android.lifecycle)
-
-    // temporary fix of https://youtrack.jetbrains.com/issue/KT-41821
-    commonMainImplementation("org.jetbrains.kotlinx:atomicfu:0.14.4")
 }
 
 multiplatformResources {
