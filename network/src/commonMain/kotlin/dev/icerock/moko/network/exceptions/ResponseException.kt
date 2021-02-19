@@ -11,7 +11,7 @@ import io.ktor.http.HttpStatusCode
 open class ResponseException(
     val request: HttpRequest,
     val response: HttpResponse,
-    responseMessage: String
+    val responseMessage: String
 ) : Exception("Request: ${request.url}; Response: $responseMessage [$response.status.value]") {
 
     val httpStatusCode: Int

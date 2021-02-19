@@ -2,4 +2,4 @@
     /* {{{description}}} */
 {{/description}}
     @SerialName("{{{baseName}}}")
-    val {{{name}}}: {{#isEnum}}{{classname}}.{{nameInCamelCase}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{/isEnum}}
+    val {{{name}}}: {{#isEnum}}{{classname}}.{{nameInCamelCase}}{{#isNullable}}?{{/isNullable}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{#isNullable}}?{{/isNullable}}{{/isEnum}}
