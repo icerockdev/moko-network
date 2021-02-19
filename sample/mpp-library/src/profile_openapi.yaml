@@ -57,6 +57,35 @@ components:
       name: Authorization
       type: apiKey
   requestBodies:
+    Car:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              car_number:
+                minLength: 1
+                title: Car number
+                type: string
+                nullable: true
+              car_rid:
+                format: uuid
+                title: Car rid
+                type: string
+              car_pid:
+                format: uuid
+                title: Car rid
+                type: string
+                nullable: false
+              car_sid:
+                format: uuid
+                title: Car rid
+                type: string
+            required:
+              - car_number
+              - car_rid
+              - car_pid
+      required: true
     UnitActivityArray:
       content:
         application/json:
