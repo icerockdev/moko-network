@@ -13,6 +13,7 @@ import platform.Foundation.timeIntervalSince1970
 
 private const val MILLISECONDS_IN_SECONDS = 1000
 
+@Suppress("TooGenericExceptionCaught")
 actual fun String.toDate(format: String): GMTDate {
     val formatter = NSDateFormatter()
     val locale = NSLocale.currentLocale()
