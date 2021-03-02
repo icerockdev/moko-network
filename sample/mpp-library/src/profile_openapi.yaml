@@ -262,3 +262,15 @@ components:
           readOnly: true
         content:
           type: object
+        userInfo:
+          oneOf:
+            - $ref: "#/components/schemas/UserInfo"
+            - description: Info
+              type: string
+              format: date
+    UserInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true

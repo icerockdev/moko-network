@@ -18,6 +18,9 @@ import org.openapitools.codegen.CodegenType
 import org.openapitools.codegen.languages.AbstractKotlinCodegen
 
 class KtorCodegen : AbstractKotlinCodegen() {
+
+    private val oneOfOperatorProcessor = OneOfOperatorProcessor(ONE_OF_REPLACE_TYPE_NAME)
+
     /**
      * Constructs an instance of `KtorCodegen`.
      */
@@ -41,8 +44,10 @@ class KtorCodegen : AbstractKotlinCodegen() {
         typeMapping["UUID"] = "kotlin.String"
         typeMapping["URI"] = "kotlin.String"
         typeMapping["object"] = "JsonObject"
+        typeMapping[ONE_OF_REPLACE_TYPE_NAME] = "JsonElement"
 
         importMapping["JsonObject"] = "kotlinx.serialization.json.JsonObject"
+        importMapping["JsonElement"] = "kotlinx.serialization.json.JsonElement"
 
         embeddedTemplateDir = "kotlin-ktor-client"
 
@@ -87,6 +92,9 @@ class KtorCodegen : AbstractKotlinCodegen() {
             ?.let { filterPaths(openAPI.paths, it) }
 
         val schemas: MutableMap<String, Schema<*>> = openAPI.components.schemas.toMutableMap()
+
+        oneOfOperatorProcessor.replaceOneOfOperatorsToType(openAPI)
+
         openAPI.components?.requestBodies?.forEach { (requestBodyName, requestBody) ->
             val jsonContent: MediaType? = requestBody.content["application/json"]
             val jsonSchema = jsonContent?.schema
@@ -188,5 +196,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         const val ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS = "excludedTags"
         const val ADDITIONAL_OPTIONS_KEY_IS_OPEN = "isOpen"
         const val ADDITIONAL_OPTIONS_KEY_IS_INTERNAL = "nonPublicApi"
+
+        private const val ONE_OF_REPLACE_TYPE_NAME = "oneOfElement"
     }
 }
