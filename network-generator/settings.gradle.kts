@@ -4,7 +4,7 @@
 
 pluginManagement {
     repositories {
-        jcenter()
+        mavenCentral()
         google()
 
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin") }
@@ -16,7 +16,7 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        jcenter()
+        mavenCentral()
         google()
     }
 }

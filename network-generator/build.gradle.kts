@@ -3,7 +3,7 @@
  */
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version("1.4.21")
+    id("org.jetbrains.kotlin.jvm") version("1.4.31")
     id("org.gradle.maven-publish")
     id("io.gitlab.arturbosch.detekt") version("1.15.0")
 }
