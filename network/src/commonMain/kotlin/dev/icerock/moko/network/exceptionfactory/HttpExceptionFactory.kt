@@ -25,7 +25,7 @@ class HttpExceptionFactory(
         return exception ?: ResponseException(request, response, responseBody.orEmpty())
     }
 
-    interface HttpExceptionParser {
+    fun interface HttpExceptionParser {
         fun parseException(
             request: HttpRequest,
             response: HttpResponse,
