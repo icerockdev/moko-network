@@ -11,6 +11,8 @@ import dev.icerock.moko.network.exceptions.ValidationException
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.statement.HttpResponse
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -28,7 +30,7 @@ class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.H
         try {
             val body = responseBody.orEmpty()
             val jsonRoot = json.parseToJsonElement(body)
-            try {
+            if (jsonRoot is JsonObject) {
                 val error = jsonRoot.jsonObject.getValue(JSON_ERROR_KEY).jsonObject
 
                 return ErrorException(
@@ -37,29 +39,25 @@ class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.H
                     code = error.getValue(JSON_CODE_KEY).jsonPrimitive.int,
                     description = error.getValue(JSON_MESSAGE_KEY).jsonPrimitive.content
                 )
-            } catch (e: NoSuchElementException) {
+            } else if (jsonRoot is JsonArray) {
                 val errorsJson = jsonRoot.jsonArray
 
                 val errors = ArrayList<ValidationException.Error>(errorsJson.size)
 
-                @Suppress("LoopWithTooManyJumpStatements")
-                for (i in (0..errors.size)) {
+                errorsJson.forEach { item ->
                     try {
-                        val jsonObject = errorsJson[i].jsonObject
+                        val jsonObject = item.jsonObject
 
                         val message: String
                         val field: String
 
                         if (jsonObject.containsKey(JSON_MESSAGE_KEY)) {
                             message = jsonObject.getValue(JSON_MESSAGE_KEY).jsonPrimitive.content
-                        } else {
-                            continue
-                        }
+                        } else return@forEach
+
                         if (jsonObject.containsKey(JSON_FIELD_KEY)) {
                             field = jsonObject.getValue(JSON_FIELD_KEY).jsonPrimitive.content
-                        } else {
-                            continue
-                        }
+                        } else return@forEach
 
                         errors.add(ValidationException.Error(field, message))
                     } catch (e: Exception) {
@@ -68,6 +66,8 @@ class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.H
                 }
 
                 return ValidationException(request, response, responseBody.orEmpty(), errors)
+            } else {
+                return null
             }
         } catch (e: Exception) {
             return null
