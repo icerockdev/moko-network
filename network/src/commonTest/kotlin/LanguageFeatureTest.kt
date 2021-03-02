@@ -2,6 +2,7 @@
  * Copyright 2021 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
+import dev.icerock.moko.network.features.LanguageFeature
 import dev.icerock.moko.network.features.TokenFeature
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -12,22 +13,18 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TokenFeatureTest {
+class LanguageFeatureTest {
     @Test
-    fun `token added when exist`() {
+    fun `language added when exist`() {
         val client = createMockClient(
-            tokenProvider = object : TokenFeature.TokenProvider {
-                override fun getToken(): String {
-                    return "mytoken"
-                }
+            provider = object : LanguageFeature.LanguageCodeProvider {
+                override fun getLanguageCode(): String = "ru"
             },
             handler = { request ->
-                if (request.headers[AUTH_HEADER_NAME] == "mytoken") respondOk()
+                if (request.headers[LANGUAGE_HEADER_NAME] == "ru") respondOk()
                 else respondBadRequest()
             }
         )
@@ -40,15 +37,13 @@ class TokenFeatureTest {
     }
 
     @Test
-    fun `token not added when not exist`() {
+    fun `language not added when not exist`() {
         val client = createMockClient(
-            tokenProvider = object : TokenFeature.TokenProvider {
-                override fun getToken(): String? {
-                    return null
-                }
+            provider = object : LanguageFeature.LanguageCodeProvider {
+                override fun getLanguageCode(): String? = null
             },
             handler = { request ->
-                if (request.headers.contains(AUTH_HEADER_NAME).not()) respondOk()
+                if (request.headers.contains(LANGUAGE_HEADER_NAME).not()) respondOk()
                 else respondBadRequest()
             }
         )
@@ -61,7 +56,7 @@ class TokenFeatureTest {
     }
 
     private fun createMockClient(
-        tokenProvider: TokenFeature.TokenProvider,
+        provider: LanguageFeature.LanguageCodeProvider,
         handler: MockRequestHandler
     ): HttpClient {
         return HttpClient(MockEngine) {
@@ -69,14 +64,14 @@ class TokenFeatureTest {
                 addHandler(handler)
             }
 
-            install(TokenFeature) {
-                this.tokenHeaderName = AUTH_HEADER_NAME
-                this.tokenProvider = tokenProvider
+            install(LanguageFeature) {
+                this.languageHeaderName = LANGUAGE_HEADER_NAME
+                this.languageCodeProvider = provider
             }
         }
     }
 
     private companion object {
-        const val AUTH_HEADER_NAME = "Auth"
+        const val LANGUAGE_HEADER_NAME = "Lang"
     }
 }
