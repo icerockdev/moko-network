@@ -8,7 +8,6 @@ import dev.icerock.moko.network.tasks.GenerateTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinNativeCompile
 
@@ -24,8 +23,6 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
     private fun Project.setupProject(extension: SpecConfig) {
         val multiplatformExtension =
             extensions.findByType(KotlinMultiplatformExtension::class.java)
-        val sourceSet =
-            multiplatformExtension?.sourceSets?.getByName(KotlinSourceSet.COMMON_MAIN_SOURCE_SET_NAME)
 
         if (extension.specs.isEmpty()) return
 
@@ -36,6 +33,7 @@ class MultiPlatformNetworkGeneratorPlugin : Plugin<Project> {
         extension.specs.forEach { spec ->
             val generatedDir = "$buildDir/generated/moko-network/${spec.name}"
             val generatedSourcesDir = "$generatedDir/src/main/kotlin"
+            val sourceSet = multiplatformExtension?.sourceSets?.getByName(spec.sourceSet)
 
             sourceSet?.kotlin?.srcDir(generatedSourcesDir)
 
