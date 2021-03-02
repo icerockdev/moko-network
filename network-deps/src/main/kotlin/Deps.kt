@@ -16,9 +16,9 @@ object Deps {
     private const val robolectricVersion = "4.3"
 
     private const val openApiGeneratorVersion = "5.0.0"
-    private const val kotlinxSerializationVersion = "1.0.1"
+    private const val kotlinxSerializationVersion = "1.1.0"
     private const val coroutinesVersion = "1.4.2-native-mt"
-    private const val ktorClientVersion = "1.5.1"
+    private const val ktorClientVersion = "1.5.2"
 
     private const val detektVersion = "1.15.0"
 
@@ -112,6 +112,8 @@ object Deps {
                 "io.ktor:ktor-client-core:$ktorClientVersion"
             const val ktorClientLogging =
                 "io.ktor:ktor-client-logging:$ktorClientVersion"
+            const val ktorClientMock =
+                "io.ktor:ktor-client-mock:$ktorClientVersion"
             const val mokoResources =
                 "dev.icerock.moko:resources:$mokoResourcesVersion"
             const val mokoParcelize =

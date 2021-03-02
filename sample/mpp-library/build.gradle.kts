@@ -25,8 +25,11 @@ dependencies {
 
     androidMainImplementation(Deps.Libs.Android.lifecycle)
 
-    // temporary fix of https://youtrack.jetbrains.com/issue/KT-41821
-    commonMainImplementation("org.jetbrains.kotlinx:atomicfu:0.14.4")
+    commonTestImplementation(Deps.Libs.MultiPlatform.ktorClientMock)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
+
+    androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
 }
 
 multiplatformResources {
