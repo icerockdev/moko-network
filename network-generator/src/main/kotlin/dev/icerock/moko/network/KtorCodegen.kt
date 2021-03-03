@@ -61,6 +61,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         // Add all processors for openapi spec
         openApiProcessor.apply {
             addProcessor(OneOfOperatorProcessor(ONE_OF_REPLACE_TYPE_NAME))
+            addProcessor(SchemaEnumNullProcessor())
         }
     }
 
