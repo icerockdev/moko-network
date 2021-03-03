@@ -27,6 +27,20 @@ paths:
     parameters:
       - $ref: '#/components/parameters/userIdParam'
       - $ref: '#/components/parameters/unitIdParam'
+  '/profile/notification/':
+    get:
+      operationId: profile_notification
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotification'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+      tags:
+        - profile
   '/profile/{user_id}/{unit_id}/activity2/':
     post:
       operationId: profile_activity_create2
@@ -262,3 +276,14 @@ components:
           readOnly: true
         content:
           type: object
+        userInfo:
+          oneOf:
+            - $ref: "#/components/schemas/UserInfo"
+            - description: Info
+              type: string
+    UserInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
