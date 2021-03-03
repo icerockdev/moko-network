@@ -6,6 +6,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.multiplatform")
     id("dev.icerock.mobile.multiplatform")
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("org.gradle.maven-publish")
 }
 
