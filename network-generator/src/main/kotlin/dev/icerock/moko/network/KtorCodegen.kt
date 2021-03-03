@@ -19,7 +19,7 @@ import org.openapitools.codegen.languages.AbstractKotlinCodegen
 
 class KtorCodegen : AbstractKotlinCodegen() {
 
-    private val oneOfOperatorProcessor = OneOfOperatorProcessor(ONE_OF_REPLACE_TYPE_NAME)
+    private val openApiProcessor = OpenApiProcessor()
 
     /**
      * Constructs an instance of `KtorCodegen`.
@@ -57,6 +57,12 @@ class KtorCodegen : AbstractKotlinCodegen() {
         apiDocTemplateFiles["api_doc.mustache"] = ".md"
         apiPackage = "$packageName.apis"
         modelPackage = "$packageName.models"
+
+        // Add all processors for openapi spec
+        openApiProcessor.apply {
+            addProcessor(OneOfOperatorProcessor(ONE_OF_REPLACE_TYPE_NAME))
+            addProcessor(SchemaEnumNullProcessor())
+        }
     }
 
     override fun processOpts() {
@@ -91,9 +97,9 @@ class KtorCodegen : AbstractKotlinCodegen() {
             ?.let { (it as? String)?.split(",")?.toSet() }
             ?.let { filterPaths(openAPI.paths, it) }
 
-        val schemas: MutableMap<String, Schema<*>> = openAPI.components.schemas.toMutableMap()
+        openApiProcessor.process(openAPI)
 
-        oneOfOperatorProcessor.replaceOneOfOperatorsToType(openAPI)
+        val schemas: MutableMap<String, Schema<*>> = openAPI.components.schemas.toMutableMap()
 
         openAPI.components?.requestBodies?.forEach { (requestBodyName, requestBody) ->
             val jsonContent: MediaType? = requestBody.content["application/json"]
