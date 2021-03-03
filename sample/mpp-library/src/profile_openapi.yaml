@@ -41,6 +41,20 @@ paths:
           $ref: '#/components/responses/ValidationError'
       tags:
         - profile
+  '/profile/info/enumarray':
+    get:
+      operationId: profile_info_enumarray
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoWithArray'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+      tags:
+        - profile
   '/profile/{user_id}/{unit_id}/activity2/':
     post:
       operationId: profile_activity_create2
@@ -287,3 +301,21 @@ components:
         name:
           type: string
           readOnly: true
+    UserInfoWithArray:
+      type: object
+      properties:
+        values:
+          type: array
+          description: Activity categories list
+          items:
+            type: string
+            enum:
+              - OnQueueWork
+              - Break
+              - Meal
+              - Meeting
+              - OffQueueWork
+              - TimeOff
+              - Training
+              - Unavailable
+              - Unscheduled
