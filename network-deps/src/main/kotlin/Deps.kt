@@ -27,6 +27,7 @@ object Deps {
     private const val mokoResourcesVersion = "0.15.0"
     private const val mokoMvvmVersion = "0.9.1"
     private const val mokoErrorsVersion = "0.3.1"
+    private const val mokoTestVersion = "0.2.0"
     const val mokoNetworkVersion = "0.11.0"
 
     object Android {
@@ -136,6 +137,7 @@ object Deps {
                     "org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion"
                 const val kotlinTestAnnotations =
                     "org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion"
+                const val mokoTest = "dev.icerock.moko:test:$mokoTestVersion"
             }
         }
 

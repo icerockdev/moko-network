@@ -27,6 +27,7 @@ dependencies {
 
     commonTestImplementation(Deps.Libs.MultiPlatform.ktorClientMock)
     commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.mokoTest)
     commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
 
     androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
