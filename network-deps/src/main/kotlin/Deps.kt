@@ -18,7 +18,7 @@ object Deps {
     private const val openApiGeneratorVersion = "5.0.0"
     private const val kotlinxSerializationVersion = "1.0.0-RC"
     private const val coroutinesVersion = "1.4.2-native-mt"
-    private const val ktorClientVersion = "1.5.2"
+    private const val ktorClientVersion = "1.4.0"
 
     private const val detektVersion = "1.15.0"
 
