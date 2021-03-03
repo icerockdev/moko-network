@@ -8,6 +8,7 @@ import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParse
 import dev.icerock.moko.network.features.ExceptionFeature
 import dev.icerock.moko.network.generated.apis.ProfileApi
 import dev.icerock.moko.network.generated.models.UserInfo
+import dev.icerock.moko.network.generated.models.UserStateEnum
 import dev.icerock.moko.test.runBlocking
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -116,6 +117,30 @@ class ProfileApiTest {
 
         assertTrue {
             result.values!!.size == 3
+        }
+    }
+
+    @Test
+    fun `test enum with null`() {
+        val testResponse = """
+            {
+                "state_name" : "state_1"
+            }
+        """.trimIndent()
+
+        val httpClient = createMockClient {
+            respondOk(content = testResponse)
+        }
+        val profileApi = ProfileApi(httpClient = httpClient, json = json)
+
+        val result = runBlocking {
+            profileApi.profileInfoState()
+        }
+
+        assertNotNull(result.stateName)
+
+        assertTrue {
+            result.stateName == UserStateEnum.StateName._1
         }
     }
 

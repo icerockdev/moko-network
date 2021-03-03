@@ -55,6 +55,20 @@ paths:
           $ref: '#/components/responses/ValidationError'
       tags:
         - profile
+  '/profile/info/state':
+    get:
+      operationId: profile_info_state
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStateEnum'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+      tags:
+        - profile
   '/profile/{user_id}/{unit_id}/activity2/':
     post:
       operationId: profile_activity_create2
@@ -319,3 +333,14 @@ components:
               - Training
               - Unavailable
               - Unscheduled
+    UserStateEnum:
+      type: object
+      properties:
+        state_name:
+          title: Состояние
+          type: string
+          enum:
+            - null
+            - state_1
+            - state_2
+          nullable: true
