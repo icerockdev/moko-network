@@ -6,6 +6,7 @@ import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
 import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParser
 import dev.icerock.moko.network.exceptions.ErrorException
+import dev.icerock.moko.network.exceptions.ResponseException
 import dev.icerock.moko.network.exceptions.ValidationException
 import dev.icerock.moko.network.features.ExceptionFeature
 import io.ktor.client.HttpClient
@@ -182,6 +183,59 @@ class ExceptionFeatureTest {
                 message = "invalid password"
             )
         ), actual = exc.errors)
+    }
+
+    @Test
+    fun `ErrorException on 422`() {
+        val client = createMockClient {
+            respondError(
+                status = HttpStatusCode.UnprocessableEntity,
+                content = """
+{
+    "error": {
+        "message": "test error",
+        "code": 9
+    }
+}
+                """.trimIndent()
+            )
+        }
+
+        val result = runBlocking {
+            kotlin.runCatching { client.get<String>("localhost") }
+        }
+
+        assertEquals(expected = true, actual = result.isFailure)
+        val exc = result.exceptionOrNull()
+        assertTrue(actual = exc is ErrorException)
+        assertEquals(expected = 9, actual = exc.code)
+        assertEquals(expected = "test error", actual = exc.message)
+    }
+
+
+    @Test
+    fun `ResponseException on 422`() {
+        val client = createMockClient {
+            respondError(
+                status = HttpStatusCode.UnprocessableEntity,
+                content = """
+{
+    "error": {
+        "message": "test error"
+    }
+}
+                """.trimIndent()
+            )
+        }
+
+        val result = runBlocking {
+            kotlin.runCatching { client.get<String>("localhost") }
+        }
+
+        assertEquals(expected = true, actual = result.isFailure)
+        val exc = result.exceptionOrNull()
+        assertTrue(actual = exc is ResponseException)
+        assertEquals(expected = HttpStatusCode.UnprocessableEntity.value, actual = exc.httpStatusCode)
     }
 
     private fun createMockClient(
