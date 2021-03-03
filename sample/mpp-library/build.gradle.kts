@@ -24,6 +24,10 @@ dependencies {
     commonMainApi(Deps.Libs.MultiPlatform.mokoNetworkErrors)
 
     androidMainImplementation(Deps.Libs.Android.lifecycle)
+
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.mokoTest)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.ktorClientMock)
 }
 
 multiplatformResources {
