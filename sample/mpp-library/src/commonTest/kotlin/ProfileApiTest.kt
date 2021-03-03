@@ -95,6 +95,30 @@ class ProfileApiTest {
         }
     }
 
+    @Test
+    fun `test enum array`() {
+        val testResponse = """
+            {
+                "values" : ["Break", "Meal", "Unscheduled"]
+            }
+        """.trimIndent()
+
+        val httpClient = createMockClient {
+            respondOk(content = testResponse)
+        }
+        val profileApi = ProfileApi(httpClient = httpClient, json = json)
+
+        val result = runBlocking {
+            profileApi.profileInfoEnumarray()
+        }
+
+        assertNotNull(result.values)
+
+        assertTrue {
+            result.values!!.size == 3
+        }
+    }
+
     private fun createMockClient(
         handler: MockRequestHandler
     ): HttpClient {
