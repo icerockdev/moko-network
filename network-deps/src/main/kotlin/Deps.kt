@@ -12,11 +12,13 @@ object Deps {
     private const val espressoCoreVersion = "3.2.0"
     private const val testRunnerVersion = "1.2.0"
     private const val testExtJunitVersion = "1.1.1"
+    private const val androidxTestVersion = "1.3.0"
+    private const val robolectricVersion = "4.3"
 
     private const val openApiGeneratorVersion = "5.0.0"
     private const val kotlinxSerializationVersion = "1.0.0-RC"
     private const val coroutinesVersion = "1.4.2-native-mt"
-    private const val ktorClientVersion = "1.4.0"
+    private const val ktorClientVersion = "1.5.2"
 
     private const val detektVersion = "1.15.0"
 
@@ -90,9 +92,9 @@ object Deps {
                 const val kotlinTestJUnit =
                     "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
                 const val testCore =
-                    "androidx.test:core:1.3.0"
+                    "androidx.test:core:$androidxTestVersion"
                 const val robolectric =
-                    "org.robolectric:robolectric:4.3"
+                    "org.robolectric:robolectric:$robolectricVersion"
                 const val testRunner =
                     "androidx.test:runner:$testRunnerVersion"
                 const val testRules =
@@ -111,6 +113,8 @@ object Deps {
                 "io.ktor:ktor-client-core:$ktorClientVersion"
             const val ktorClientLogging =
                 "io.ktor:ktor-client-logging:$ktorClientVersion"
+            const val ktorClientMock =
+                "io.ktor:ktor-client-mock:$ktorClientVersion"
             const val mokoResources =
                 "dev.icerock.moko:resources:$mokoResourcesVersion"
             const val mokoParcelize =
@@ -134,8 +138,6 @@ object Deps {
                 const val kotlinTestAnnotations =
                     "org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion"
                 const val mokoTest = "dev.icerock.moko:test:$mokoTestVersion"
-                const val ktorClientMock =
-                    "io.ktor:ktor-client-mock:$ktorClientVersion"
             }
         }
 
