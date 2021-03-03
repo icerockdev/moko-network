@@ -32,6 +32,12 @@ dependencies {
     iosMainApi(Deps.Libs.Ios.ktorClientIos)
 
     androidMainImplementation(Deps.Libs.Android.appCompat)
+
+    commonTestImplementation(Deps.Libs.MultiPlatform.ktorClientMock)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
+
+    androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
 }
 
 publishing {
