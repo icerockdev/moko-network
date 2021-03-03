@@ -26,9 +26,6 @@ import kotlin.test.assertTrue
 class ProfileApiTest {
     private lateinit var json: Json
 
-    private var testResponse: String = ""
-    private var isSuccessResponse = false
-
     @BeforeTest
     fun setup() {
         json = Json {
@@ -38,8 +35,7 @@ class ProfileApiTest {
 
     @Test
     fun `test profileNotification with json field`() {
-        isSuccessResponse = true
-        testResponse = """
+        val testResponse = """
             {
                 "id" : 0,
                 "content" : {
@@ -51,11 +47,7 @@ class ProfileApiTest {
             }
         """.trimIndent()
         val httpClient = createMockClient {
-            if (isSuccessResponse) {
-                respondOk(content = testResponse)
-            } else {
-                respondError(HttpStatusCode.BadRequest)
-            }
+            respondOk(content = testResponse)
         }
         val profileApi = ProfileApi(httpClient = httpClient, json = json)
 
@@ -74,8 +66,7 @@ class ProfileApiTest {
 
     @Test
     fun `test profileNotification with string field`() {
-        isSuccessResponse = true
-        testResponse = """
+        val testResponse = """
             {
                 "id" : 0,
                 "content" : {
@@ -86,11 +77,7 @@ class ProfileApiTest {
         """.trimIndent()
 
         val httpClient = createMockClient {
-            if (isSuccessResponse) {
-                respondOk(content = testResponse)
-            } else {
-                respondError(HttpStatusCode.BadRequest)
-            }
+            respondOk(content = testResponse)
         }
         val profileApi = ProfileApi(httpClient = httpClient, json = json)
 
