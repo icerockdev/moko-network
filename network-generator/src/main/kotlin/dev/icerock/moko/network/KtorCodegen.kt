@@ -19,6 +19,7 @@ import org.openapitools.codegen.CodegenType
 import org.openapitools.codegen.languages.AbstractKotlinCodegen
 import org.apache.commons.lang3.StringUtils
 
+@Suppress("TooManyFunctions")
 class KtorCodegen : AbstractKotlinCodegen() {
 
     private val openApiProcessor = OpenApiProcessor()
