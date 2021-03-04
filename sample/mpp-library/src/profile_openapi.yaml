@@ -316,6 +316,24 @@ components:
         name:
           type: string
           readOnly: true
+    UserInfoWithSet:
+      type: object
+      properties:
+        values:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+              - OnQueueWork
+              - Break
+              - Meal
+              - Meeting
+              - OffQueueWork
+              - TimeOff
+              - Training
+              - Unavailable
+              - Unscheduled
     UserInfoWithArray:
       type: object
       properties:
