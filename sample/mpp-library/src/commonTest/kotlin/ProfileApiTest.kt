@@ -18,6 +18,7 @@ import io.ktor.client.engine.mock.MockRequestHandler
 import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.engine.mock.toByteArray
 import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlin.test.BeforeTest
@@ -145,7 +146,7 @@ class ProfileApiTest {
 
     @Test
     fun `test non-required Nullable property must not exist`() {
-        var isTestSuccess = false
+        val isTestSuccessFlow = MutableStateFlow(false)
 
         json = Json {
             encodeDefaults = false
@@ -161,7 +162,7 @@ class ProfileApiTest {
         val httpClient = createMockClient { request ->
             val inputString = request.body.toByteArray().decodeToString()
 
-            isTestSuccess = inputString.contains("work_id_nonrequired_nullable") == false
+            isTestSuccessFlow.value = inputString.contains("work_id_nonrequired_nullable") == false
 
             respondOk(content = successResponse)
         }
@@ -179,12 +180,12 @@ class ProfileApiTest {
         }
 
         assertNotNull(result.stateName)
-        assertTrue(isTestSuccess)
+        assertTrue(isTestSuccessFlow.value)
     }
 
     @Test
     fun `test non-required Nullable property must contain null`() {
-        var isTestSuccess = false
+        val isTestSuccessFlow = MutableStateFlow(false)
 
         json = Json {
             encodeDefaults = false
@@ -200,7 +201,7 @@ class ProfileApiTest {
         val httpClient = createMockClient { request ->
             val inputString = request.body.toByteArray().decodeToString()
 
-            isTestSuccess = inputString.contains("\"work_id_nonrequired_nullable\":null")
+            isTestSuccessFlow.value = inputString.contains("\"work_id_nonrequired_nullable\":null")
 
             respondOk(content = successResponse)
         }
@@ -219,12 +220,12 @@ class ProfileApiTest {
         }
 
         assertNotNull(result.stateName)
-        assertTrue(isTestSuccess)
+        assertTrue(isTestSuccessFlow.value)
     }
 
     @Test
     fun `test non-required Nullable property must contain value`() {
-        var isTestSuccess = false
+        val isTestSuccessFlow = MutableStateFlow(false)
 
         json = Json {
             encodeDefaults = false
@@ -242,7 +243,7 @@ class ProfileApiTest {
             val inputObj = json
                 .decodeFromString(UserSettingsNullableSchema.serializer(), inputString)
 
-            isTestSuccess = inputObj.workIdNonrequiredNullable != null &&
+            isTestSuccessFlow.value = inputObj.workIdNonrequiredNullable != null &&
                     inputObj.workIdNonrequiredNullable!!.value == 10
 
             respondOk(content = successResponse)
@@ -262,12 +263,12 @@ class ProfileApiTest {
         }
 
         assertNotNull(result.stateName)
-        assertTrue(isTestSuccess)
+        assertTrue(isTestSuccessFlow.value)
     }
 
     @Test
     fun `test non-required Nullable list property must not exist`() {
-        var isTestSuccess = false
+        val isTestSuccessFlow = MutableStateFlow(false)
 
         json = Json {
             encodeDefaults = false
@@ -283,7 +284,7 @@ class ProfileApiTest {
         val httpClient = createMockClient { request ->
             val inputString = request.body.toByteArray().decodeToString()
 
-            isTestSuccess = inputString.contains("array_nonrequired_nullable") == false
+            isTestSuccessFlow.value = inputString.contains("array_nonrequired_nullable") == false
 
             respondOk(content = successResponse)
         }
@@ -301,12 +302,12 @@ class ProfileApiTest {
         }
 
         assertNotNull(result.stateName)
-        assertTrue(isTestSuccess)
+        assertTrue(isTestSuccessFlow.value)
     }
 
     @Test
     fun `test non-required Nullable array property must be null`() {
-        var isTestSuccess = false
+        val isTestSuccessFlow = MutableStateFlow(false)
 
         json = Json {
             encodeDefaults = false
@@ -322,7 +323,7 @@ class ProfileApiTest {
         val httpClient = createMockClient { request ->
             val inputString = request.body.toByteArray().decodeToString()
 
-            isTestSuccess = inputString.contains("\"array_nonrequired_nullable\":null")
+            isTestSuccessFlow.value = inputString.contains("\"array_nonrequired_nullable\":null")
 
             respondOk(content = successResponse)
         }
@@ -341,12 +342,12 @@ class ProfileApiTest {
         }
 
         assertNotNull(result.stateName)
-        assertTrue(isTestSuccess)
+        assertTrue(isTestSuccessFlow.value)
     }
 
     @Test
     fun `test non-required Nullable array property must contain values`() {
-        var isTestSuccess = false
+        val isTestSuccessFlow = MutableStateFlow(false)
 
         json = Json {
             encodeDefaults = false
@@ -364,9 +365,7 @@ class ProfileApiTest {
             val inputObj = json
                 .decodeFromString(UserSettingsNullableSchema.serializer(), inputString)
 
-            isTestSuccess = inputString.contains("array_nonrequired_nullable") == false
-
-            isTestSuccess = inputObj.arrayNonrequiredNullable != null &&
+            isTestSuccessFlow.value = inputObj.arrayNonrequiredNullable != null &&
                     inputObj.arrayNonrequiredNullable!!.value!!.contains("123")
 
             respondOk(content = successResponse)
@@ -386,7 +385,7 @@ class ProfileApiTest {
         }
 
         assertNotNull(result.stateName)
-        assertTrue(isTestSuccess)
+        assertTrue(isTestSuccessFlow.value)
     }
 
     private fun createMockClient(
