@@ -133,6 +133,7 @@ components:
         application/json:
           schema:
             type: array
+            uniqueItems: true
             items:
               type: object
               properties:
