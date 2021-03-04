@@ -30,9 +30,7 @@ class ProfileApiTest {
 
     @BeforeTest
     fun setup() {
-        json = Json {
-            encodeDefaults = false
-        }
+        json = Json.Default
     }
 
     @Test
@@ -146,9 +144,8 @@ class ProfileApiTest {
     }
 
     @Test
-    fun `test non-required Nullable property`() {
+    fun `test non-required Nullable property must not exist`() {
         var isTestSuccess = false
-        var mustContainNullableProperty = false
 
         json = Json {
             encodeDefaults = false
@@ -164,16 +161,14 @@ class ProfileApiTest {
         val httpClient = createMockClient { request ->
             val inputString = request.body.toByteArray().decodeToString()
 
-            isTestSuccess =
-                inputString.contains("work_id_nonrequired_nullable") == mustContainNullableProperty
+            isTestSuccess = inputString.contains("work_id_nonrequired_nullable") == false
 
             respondOk(content = successResponse)
         }
         val profileApi = ProfileApi(httpClient = httpClient, json = json)
 
-        // 1 - request body must not contain "work_id_nonrequired_nullable" property at all
-        mustContainNullableProperty = false
-        var result = runBlocking {
+        // request body must not contain "work_id_nonrequired_nullable" property at all
+        val result = runBlocking {
             profileApi.profileInfoStateIdPut(
                 id = "10",
                 userSettingsNullableSchema = UserSettingsNullableSchema(
@@ -185,11 +180,34 @@ class ProfileApiTest {
 
         assertNotNull(result.stateName)
         assertTrue(isTestSuccess)
-        isTestSuccess = false
+    }
 
-        // 2 - request body must contain "work_id_nonrequired_nullable" property
-        mustContainNullableProperty = true
-        result = runBlocking {
+    @Test
+    fun `test non-required Nullable property must contain null`() {
+        var isTestSuccess = false
+
+        json = Json {
+            encodeDefaults = false
+            ignoreUnknownKeys = true
+        }
+
+        val successResponse = """
+            {
+                "state_name" : "state_1"
+            }
+        """.trimIndent()
+
+        val httpClient = createMockClient { request ->
+            val inputString = request.body.toByteArray().decodeToString()
+
+            isTestSuccess = inputString.contains("\"work_id_nonrequired_nullable\":null")
+
+            respondOk(content = successResponse)
+        }
+        val profileApi = ProfileApi(httpClient = httpClient, json = json)
+
+        // request body must contain "work_id_nonrequired_nullable" property
+        val result = runBlocking {
             profileApi.profileInfoStateIdPut(
                 id = "10",
                 userSettingsNullableSchema = UserSettingsNullableSchema(
@@ -202,11 +220,37 @@ class ProfileApiTest {
 
         assertNotNull(result.stateName)
         assertTrue(isTestSuccess)
-        isTestSuccess = false
+    }
 
-        // 3 - request body must contain "work_id_nonrequired_nullable" property
-        mustContainNullableProperty = true
-        result = runBlocking {
+    @Test
+    fun `test non-required Nullable property must contain value`() {
+        var isTestSuccess = false
+
+        json = Json {
+            encodeDefaults = false
+            ignoreUnknownKeys = true
+        }
+
+        val successResponse = """
+            {
+                "state_name" : "state_1"
+            }
+        """.trimIndent()
+
+        val httpClient = createMockClient { request ->
+            val inputString = request.body.toByteArray().decodeToString()
+            val inputObj = json
+                .decodeFromString(UserSettingsNullableSchema.serializer(), inputString)
+
+            isTestSuccess = inputObj.workIdNonrequiredNullable != null &&
+                    inputObj.workIdNonrequiredNullable!!.value == 10
+
+            respondOk(content = successResponse)
+        }
+        val profileApi = ProfileApi(httpClient = httpClient, json = json)
+
+        // request body must contain "work_id_nonrequired_nullable" property
+        val result = runBlocking {
             profileApi.profileInfoStateIdPut(
                 id = "10",
                 userSettingsNullableSchema = UserSettingsNullableSchema(
@@ -222,9 +266,8 @@ class ProfileApiTest {
     }
 
     @Test
-    fun `test non-required Nullable list property`() {
+    fun `test non-required Nullable list property must not exist`() {
         var isTestSuccess = false
-        var mustContainNullableProperty = false
 
         json = Json {
             encodeDefaults = false
@@ -240,16 +283,14 @@ class ProfileApiTest {
         val httpClient = createMockClient { request ->
             val inputString = request.body.toByteArray().decodeToString()
 
-            isTestSuccess =
-                inputString.contains("array_nonrequired_nullable") == mustContainNullableProperty
+            isTestSuccess = inputString.contains("array_nonrequired_nullable") == false
 
             respondOk(content = successResponse)
         }
         val profileApi = ProfileApi(httpClient = httpClient, json = json)
 
-        // 1 - request body must not contain "array_nonrequired_nullable" property at all
-        mustContainNullableProperty = false
-        var result = runBlocking {
+        // request body must not contain "array_nonrequired_nullable" property at all
+        val result = runBlocking {
             profileApi.profileInfoStateIdPut(
                 id = "10",
                 userSettingsNullableSchema = UserSettingsNullableSchema(
@@ -261,11 +302,34 @@ class ProfileApiTest {
 
         assertNotNull(result.stateName)
         assertTrue(isTestSuccess)
-        isTestSuccess = false
+    }
 
-        // 2 - request body must contain "array_nonrequired_nullable" property
-        mustContainNullableProperty = true
-        result = runBlocking {
+    @Test
+    fun `test non-required Nullable array property must be null`() {
+        var isTestSuccess = false
+
+        json = Json {
+            encodeDefaults = false
+            ignoreUnknownKeys = true
+        }
+
+        val successResponse = """
+            {
+                "state_name" : "state_1"
+            }
+        """.trimIndent()
+
+        val httpClient = createMockClient { request ->
+            val inputString = request.body.toByteArray().decodeToString()
+
+            isTestSuccess = inputString.contains("\"array_nonrequired_nullable\":null")
+
+            respondOk(content = successResponse)
+        }
+        val profileApi = ProfileApi(httpClient = httpClient, json = json)
+
+        // request body must contain "array_nonrequired_nullable" property with null
+        val result = runBlocking {
             profileApi.profileInfoStateIdPut(
                 id = "10",
                 userSettingsNullableSchema = UserSettingsNullableSchema(
@@ -278,11 +342,39 @@ class ProfileApiTest {
 
         assertNotNull(result.stateName)
         assertTrue(isTestSuccess)
-        isTestSuccess = false
+    }
 
-        // 3 - request body must contain "array_nonrequired_nullable" property
-        mustContainNullableProperty = true
-        result = runBlocking {
+    @Test
+    fun `test non-required Nullable array property must contain values`() {
+        var isTestSuccess = false
+
+        json = Json {
+            encodeDefaults = false
+            ignoreUnknownKeys = true
+        }
+
+        val successResponse = """
+            {
+                "state_name" : "state_1"
+            }
+        """.trimIndent()
+
+        val httpClient = createMockClient { request ->
+            val inputString = request.body.toByteArray().decodeToString()
+            val inputObj = json
+                .decodeFromString(UserSettingsNullableSchema.serializer(), inputString)
+
+            isTestSuccess = inputString.contains("array_nonrequired_nullable") == false
+
+            isTestSuccess = inputObj.arrayNonrequiredNullable != null &&
+                    inputObj.arrayNonrequiredNullable!!.value!!.contains("123")
+
+            respondOk(content = successResponse)
+        }
+        val profileApi = ProfileApi(httpClient = httpClient, json = json)
+
+        // request body must contain "array_nonrequired_nullable" property with values
+        val result = runBlocking {
             profileApi.profileInfoStateIdPut(
                 id = "10",
                 userSettingsNullableSchema = UserSettingsNullableSchema(
