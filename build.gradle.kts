@@ -8,7 +8,7 @@ plugins {
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
         google()
 
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin") }
@@ -17,24 +17,14 @@ buildscript {
         maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
     }
     dependencies {
-        classpath("dev.icerock.moko:resources-generator:0.14.0")
-        classpath("dev.icerock.moko:network-generator:0.10.0")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.21")
+        classpath("dev.icerock.moko:resources-generator:0.15.0")
+        classpath("dev.icerock.moko:network-generator:0.11.0")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.31")
         classpath("gradle:network-deps:1")
     }
 }
 
 allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        maven { url = uri("https://kotlin.bintray.com/kotlin") }
-        maven { url = uri("https://kotlin.bintray.com/kotlinx") }
-        maven { url = uri("https://kotlin.bintray.com/ktor") }
-        maven { url = uri("https://dl.bintray.com/icerockdev/moko") }
-    }
-
     apply(plugin = Deps.Plugins.detekt.id)
 
     configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {

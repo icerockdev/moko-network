@@ -2,4 +2,4 @@
     /* {{{description}}} */
 {{/description}}
     @SerialName("{{{baseName}}}")
-    val {{{name}}}: {{#isEnum}}{{classname}}.{{nameInCamelCase}}{{#isNullable}}?{{/isNullable}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{#isNullable}}?{{/isNullable}}{{/isEnum}}
+    val {{{name}}}: {{#isEnum}}{{#isArray}}kotlin.collections.List<{{classname}}.{{{nameInCamelCase}}}>{{/isArray}}{{^isArray}}{{classname}}.{{nameInCamelCase}}{{/isArray}}{{#isNullable}}?{{/isNullable}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{#isNullable}}?{{/isNullable}}{{/isEnum}}

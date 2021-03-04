@@ -15,6 +15,7 @@ import io.ktor.http.takeFrom
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.serializer
 import io.ktor.client.call.ReceivePipelineException
 import io.ktor.http.content.TextContent
@@ -63,9 +64,16 @@ import io.ktor.http.content.TextContent
             builder.body = TextContent(
         {{#dataType}}
             {{#isArray}}
+                {{#uniqueItems}}
+                {{#items}}
+                _json.encodeToString(SetSerializer({{dataType}}.serializer()),
+                {{/items}}
+                {{/uniqueItems}}
+                {{^uniqueItems}}
                 {{#items}}
                 _json.encodeToString(ListSerializer({{dataType}}.serializer()),
                 {{/items}}
+                {{/uniqueItems}}
             {{/isArray}}
             {{#isMap}}
                 _json.encodeToString(
@@ -101,7 +109,7 @@ import io.ktor.http.content.TextContent
             {{^returnTypeIsPrimitive}}
             //not primitive type
             val result: String = _httpClient.request(builder)
-            return _json.decodeFromString({{returnBaseType}}.serializer(){{#isArray}}.let { ListSerializer(it) }{{/isArray}}, result)
+            return _json.decodeFromString({{returnBaseType}}.serializer(){{#isArray}}{{#uniqueItems}}.let { SetSerializer(it) }{{/uniqueItems}}{{^uniqueItems}}.let { ListSerializer(it) }{{/uniqueItems}}{{/isArray}}{{#isMap}}. let { MapSerializer(keySerializer = String.serializer(),valueSerializer = {{returnBaseType}}.serializer()) }{{/isMap}}, result)
             {{/returnTypeIsPrimitive}}
             {{#returnTypeIsPrimitive}}
             //primitive type

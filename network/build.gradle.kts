@@ -6,6 +6,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.multiplatform")
     id("dev.icerock.mobile.multiplatform")
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("org.gradle.maven-publish")
 }
 
@@ -32,6 +33,12 @@ dependencies {
     iosMainApi(Deps.Libs.Ios.ktorClientIos)
 
     androidMainImplementation(Deps.Libs.Android.appCompat)
+
+    commonTestImplementation(Deps.Libs.MultiPlatform.ktorClientMock)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
+
+    androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
 }
 
 publishing {

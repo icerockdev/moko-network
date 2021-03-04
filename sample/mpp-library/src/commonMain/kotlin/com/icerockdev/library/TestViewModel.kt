@@ -33,7 +33,8 @@ class TestViewModel : ViewModel() {
             alertTitle = MR.strings.moko_errors_presenters_alertDialogTitle.desc(),
             positiveButtonText = MR.strings.moko_errors_presenters_alertPositiveButton.desc()
         ),
-        exceptionMapper = ExceptionMappersStorage.throwableMapper()
+        exceptionMapper = ExceptionMappersStorage.throwableMapper(),
+        onCatch = { it.printStackTrace() }
     )
 
     private val httpClient = HttpClient {

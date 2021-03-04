@@ -14,10 +14,16 @@ import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.servers.Server
 import org.openapitools.codegen.CodegenConstants
 import org.openapitools.codegen.CodegenOperation
+import org.openapitools.codegen.CodegenProperty
 import org.openapitools.codegen.CodegenType
 import org.openapitools.codegen.languages.AbstractKotlinCodegen
+import org.apache.commons.lang3.StringUtils
 
+@Suppress("TooManyFunctions")
 class KtorCodegen : AbstractKotlinCodegen() {
+
+    private val openApiProcessor = OpenApiProcessor()
+
     /**
      * Constructs an instance of `KtorCodegen`.
      */
@@ -41,8 +47,10 @@ class KtorCodegen : AbstractKotlinCodegen() {
         typeMapping["UUID"] = "kotlin.String"
         typeMapping["URI"] = "kotlin.String"
         typeMapping["object"] = "JsonObject"
+        typeMapping[ONE_OF_REPLACE_TYPE_NAME] = "JsonElement"
 
         importMapping["JsonObject"] = "kotlinx.serialization.json.JsonObject"
+        importMapping["JsonElement"] = "kotlinx.serialization.json.JsonElement"
 
         embeddedTemplateDir = "kotlin-ktor-client"
 
@@ -52,6 +60,12 @@ class KtorCodegen : AbstractKotlinCodegen() {
         apiDocTemplateFiles["api_doc.mustache"] = ".md"
         apiPackage = "$packageName.apis"
         modelPackage = "$packageName.models"
+
+        // Add all processors for openapi spec
+        openApiProcessor.apply {
+            addProcessor(OneOfOperatorProcessor(ONE_OF_REPLACE_TYPE_NAME))
+            addProcessor(SchemaEnumNullProcessor())
+        }
     }
 
     override fun processOpts() {
@@ -80,13 +94,20 @@ class KtorCodegen : AbstractKotlinCodegen() {
         return "Generates a kotlin ktor client."
     }
 
+    override fun toEnumName(property: CodegenProperty): String {
+        return StringUtils.capitalize(property.name)
+    }
+
     override fun preprocessOpenAPI(openAPI: OpenAPI) {
         super.preprocessOpenAPI(openAPI)
         additionalProperties[ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS]
             ?.let { (it as? String)?.split(",")?.toSet() }
             ?.let { filterPaths(openAPI.paths, it) }
 
+        openApiProcessor.process(openAPI)
+
         val schemas: MutableMap<String, Schema<*>> = openAPI.components.schemas.toMutableMap()
+
         openAPI.components?.requestBodies?.forEach { (requestBodyName, requestBody) ->
             val jsonContent: MediaType? = requestBody.content["application/json"]
             val jsonSchema = jsonContent?.schema
@@ -188,5 +209,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         const val ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS = "excludedTags"
         const val ADDITIONAL_OPTIONS_KEY_IS_OPEN = "isOpen"
         const val ADDITIONAL_OPTIONS_KEY_IS_INTERNAL = "nonPublicApi"
+
+        private const val ONE_OF_REPLACE_TYPE_NAME = "oneOfElement"
     }
 }
