@@ -13,9 +13,8 @@ import dev.icerock.moko.test.runBlocking
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandler
-import io.ktor.client.engine.mock.respondError
 import io.ktor.client.engine.mock.respondOk
-import io.ktor.http.ContentType.Application.Json
+import io.ktor.client.engine.mock.toByteArray
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
@@ -30,6 +29,7 @@ class ProfileApiTest {
     @BeforeTest
     fun setup() {
         json = Json {
+            encodeDefaults = false
             ignoreUnknownKeys = true
         }
     }
@@ -140,7 +140,32 @@ class ProfileApiTest {
         assertNotNull(result.stateName)
 
         assertTrue {
-            result.stateName == UserStateEnum.StateName._1
+            result.stateName?.value == UserStateEnum.StateName._1
+        }
+    }
+
+    @Test
+    fun `test nonrequired and nullable param`() {
+        val testResponse = """
+            {
+                "state_name" : "state_1"
+            }
+        """.trimIndent()
+
+        val httpClient = createMockClient { request ->
+            println("DBG Input body: ${request.body.toByteArray().decodeToString()}")
+            respondOk(content = testResponse)
+        }
+        val profileApi = ProfileApi(httpClient = httpClient, json = json)
+
+        val result = runBlocking {
+            profileApi.profileInfoStateIdPut("10", null)
+        }
+
+        assertNotNull(result.stateName)
+
+        assertTrue {
+            result.stateName?.value == UserStateEnum.StateName._1
         }
     }
 

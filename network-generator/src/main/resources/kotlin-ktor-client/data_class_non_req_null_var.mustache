@@ -1,0 +1,5 @@
+{{#description}}
+    /* {{{description}}} */
+{{/description}}
+    @SerialName("{{{baseName}}}")
+    val {{{name}}}: dev.icerock.moko.network.nullable.Nullable<{{#isEnum}}{{classname}}.{{nameInCamelCase}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{/isEnum}}>? = null

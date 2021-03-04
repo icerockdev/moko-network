@@ -69,6 +69,48 @@ paths:
           $ref: '#/components/responses/ValidationError'
       tags:
         - profile
+  /profile/user/settings/:
+    post:
+      description: Сохранить настройки пользователя
+      operationId: profile_user_settings_create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: Настройки видимости
+              properties:
+                settings:
+                  $ref: "#/components/schemas/UserSettings"
+              required:
+                - settings
+              type: object
+        required: true
+      responses:
+        "201":
+          description: Успешное создание
+        "400":
+          $ref: "#/components/responses/ValidationError"
+  '/profile/info/state/{id}/':
+    put:
+      tags:
+        - profile
+      parameters:
+        - schema:
+            type: string
+            nullable: true
+          name: id
+          in: path
+          required: true
+          description: id
+      requestBody:
+        $ref: '#/components/requestBodies/UserInfoBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStateEnum'
   '/profile/{user_id}/{unit_id}/activity2/':
     post:
       operationId: profile_activity_create2
@@ -128,6 +170,13 @@ components:
               - car_rid
               - car_pid
       required: true
+    UserInfoBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            nullable: true
+            $ref: '#/components/schemas/UserSettings'
     UnitActivityArray:
       content:
         application/json:
@@ -344,3 +393,28 @@ components:
             - state_1
             - state_2
           nullable: true
+    UserSettings:
+      properties:
+        about_me_required_nullable:
+          description: Обо мне
+          type: string
+          nullable: true
+        raiting_required_nonnull:
+          description: Рейтинг
+          maximum: 2
+          minimum: 0
+          type: integer
+          nullable: false
+        work_id_nonrequired_nullable:
+          description: id
+          type: integer
+          nullable: true
+        office_nonrequired_nonnull:
+          description: Офис
+          type: integer
+          nullable: false
+          default: 0
+      required:
+        - about_me_required_nullable
+        - raiting_required_nonnull
+      type: object
