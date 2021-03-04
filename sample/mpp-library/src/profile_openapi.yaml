@@ -10,7 +10,7 @@ paths:
     post:
       operationId: profile_activity_create
       requestBody:
-        $ref: '#/components/requestBodies/UnitActivityArray'
+        $ref: '#/components/requestBodies/UnitActivitySet'
       responses:
         '201':
           description: ''
@@ -90,6 +90,28 @@ paths:
     parameters:
       - $ref: '#/components/parameters/userIdParam'
       - $ref: '#/components/parameters/unitIdParam'
+  '/profile/get/map':
+    get:
+      operationId: api_profile_get_map
+      description: Получить хэшмапу
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoWithMap'
+  '/profile/get/set':
+    get:
+      operationId: api_profile_get_set
+      description: Получить множество
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoWithSet'
 security:
   - Bearer: []
 components:
@@ -128,7 +150,7 @@ components:
               - car_rid
               - car_pid
       required: true
-    UnitActivityArray:
+    UnitActivitySet:
       content:
         application/json:
           schema:
@@ -324,16 +346,10 @@ components:
           uniqueItems: true
           items:
             type: string
-            enum:
-              - OnQueueWork
-              - Break
-              - Meal
-              - Meeting
-              - OffQueueWork
-              - TimeOff
-              - Training
-              - Unavailable
-              - Unscheduled
+    UserInfoWithMap:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/UserInfo'
     UserInfoWithArray:
       type: object
       properties:
