@@ -8,6 +8,7 @@ import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParse
 import dev.icerock.moko.network.features.ExceptionFeature
 import dev.icerock.moko.network.generated.apis.DefaultApi
 import dev.icerock.moko.network.generated.apis.ProfileApi
+import dev.icerock.moko.network.generated.models.UnitActivity
 import dev.icerock.moko.network.generated.models.UnitActivitySetItem
 import dev.icerock.moko.network.generated.models.UserInfo
 import dev.icerock.moko.network.generated.models.UserSettingsNullableSchema
@@ -25,6 +26,7 @@ import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -58,8 +60,10 @@ class ProfileApiTest {
             defaultApi.apiProfileGetMap()
         }
 
-        assertTrue { result["user1"]!!.name == "user1" }
-        assertTrue { result["user2"]!!.name == "user2" }
+        assertEquals(
+            expected = mapOf("user1" to UserInfo("user1"), "user2" to UserInfo("user2")),
+            actual = result
+        )
     }
 
     @Test
@@ -79,9 +83,10 @@ class ProfileApiTest {
             defaultApi.apiProfileGetSet()
         }
 
-        assertNotNull(result.values)
-        assertTrue { result.values!!.size == 2 }
-        assertTrue { result.values!!.contains("str1") && result.values!!.contains("str2") }
+        assertEquals(
+            expected = setOf("str1", "str2"),
+            actual = result.values
+        )
     }
 
     @Test
@@ -106,8 +111,10 @@ class ProfileApiTest {
             )
         }
 
-        assertTrue { result.isNotEmpty() }
-        assertTrue { result.first().id == "10" }
+        assertEquals(
+            expected = listOf(UnitActivity(id = "10")),
+            actual = result
+        )
     }
 
     @Test
