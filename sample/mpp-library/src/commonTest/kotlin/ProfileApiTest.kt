@@ -8,7 +8,9 @@ import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParse
 import dev.icerock.moko.network.features.ExceptionFeature
 import dev.icerock.moko.network.generated.apis.ProfileApi
 import dev.icerock.moko.network.generated.models.UserInfo
+import dev.icerock.moko.network.generated.models.UserSettingsNullableSchema
 import dev.icerock.moko.network.generated.models.UserStateEnum
+import dev.icerock.moko.network.nullable.asNullable
 import dev.icerock.moko.test.runBlocking
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -30,7 +32,6 @@ class ProfileApiTest {
     fun setup() {
         json = Json {
             encodeDefaults = false
-            ignoreUnknownKeys = true
         }
     }
 
@@ -145,28 +146,155 @@ class ProfileApiTest {
     }
 
     @Test
-    fun `test nonrequired and nullable param`() {
-        val testResponse = """
+    fun `test non-required Nullable property`() {
+        var isTestSuccess = false
+        var mustContainNullableProperty = false
+
+        json = Json {
+            encodeDefaults = false
+            ignoreUnknownKeys = true
+        }
+
+        val successResponse = """
             {
                 "state_name" : "state_1"
             }
         """.trimIndent()
 
         val httpClient = createMockClient { request ->
-            println("DBG Input body: ${request.body.toByteArray().decodeToString()}")
-            respondOk(content = testResponse)
+            val inputString = request.body.toByteArray().decodeToString()
+
+            isTestSuccess =
+                inputString.contains("work_id_nonrequired_nullable") == mustContainNullableProperty
+
+            respondOk(content = successResponse)
         }
         val profileApi = ProfileApi(httpClient = httpClient, json = json)
 
-        val result = runBlocking {
-            profileApi.profileInfoStateIdPut("10", null)
+        // 1 - request body must not contain "work_id_nonrequired_nullable" property at all
+        mustContainNullableProperty = false
+        var result = runBlocking {
+            profileApi.profileInfoStateIdPut(
+                id = "10",
+                userSettingsNullableSchema = UserSettingsNullableSchema(
+                    aboutMeRequiredNullable = null,
+                    raitingRequiredNonnull = 10
+                )
+            )
         }
 
         assertNotNull(result.stateName)
+        assertTrue(isTestSuccess)
+        isTestSuccess = false
 
-        assertTrue {
-            result.stateName?.value == UserStateEnum.StateName._1
+        // 2 - request body must contain "work_id_nonrequired_nullable" property
+        mustContainNullableProperty = true
+        result = runBlocking {
+            profileApi.profileInfoStateIdPut(
+                id = "10",
+                userSettingsNullableSchema = UserSettingsNullableSchema(
+                    aboutMeRequiredNullable = null,
+                    raitingRequiredNonnull = 10,
+                    workIdNonrequiredNullable = null.asNullable()
+                )
+            )
         }
+
+        assertNotNull(result.stateName)
+        assertTrue(isTestSuccess)
+        isTestSuccess = false
+
+        // 3 - request body must contain "work_id_nonrequired_nullable" property
+        mustContainNullableProperty = true
+        result = runBlocking {
+            profileApi.profileInfoStateIdPut(
+                id = "10",
+                userSettingsNullableSchema = UserSettingsNullableSchema(
+                    aboutMeRequiredNullable = null,
+                    raitingRequiredNonnull = 10,
+                    workIdNonrequiredNullable = 10.asNullable()
+                )
+            )
+        }
+
+        assertNotNull(result.stateName)
+        assertTrue(isTestSuccess)
+    }
+
+    @Test
+    fun `test non-required Nullable list property`() {
+        var isTestSuccess = false
+        var mustContainNullableProperty = false
+
+        json = Json {
+            encodeDefaults = false
+            ignoreUnknownKeys = true
+        }
+
+        val successResponse = """
+            {
+                "state_name" : "state_1"
+            }
+        """.trimIndent()
+
+        val httpClient = createMockClient { request ->
+            val inputString = request.body.toByteArray().decodeToString()
+
+            isTestSuccess =
+                inputString.contains("array_nonrequired_nullable") == mustContainNullableProperty
+
+            respondOk(content = successResponse)
+        }
+        val profileApi = ProfileApi(httpClient = httpClient, json = json)
+
+        // 1 - request body must not contain "array_nonrequired_nullable" property at all
+        mustContainNullableProperty = false
+        var result = runBlocking {
+            profileApi.profileInfoStateIdPut(
+                id = "10",
+                userSettingsNullableSchema = UserSettingsNullableSchema(
+                    aboutMeRequiredNullable = null,
+                    raitingRequiredNonnull = 10
+                )
+            )
+        }
+
+        assertNotNull(result.stateName)
+        assertTrue(isTestSuccess)
+        isTestSuccess = false
+
+        // 2 - request body must contain "array_nonrequired_nullable" property
+        mustContainNullableProperty = true
+        result = runBlocking {
+            profileApi.profileInfoStateIdPut(
+                id = "10",
+                userSettingsNullableSchema = UserSettingsNullableSchema(
+                    aboutMeRequiredNullable = null,
+                    raitingRequiredNonnull = 10,
+                    arrayNonrequiredNullable = null.asNullable()
+                )
+            )
+        }
+
+        assertNotNull(result.stateName)
+        assertTrue(isTestSuccess)
+        isTestSuccess = false
+
+        // 3 - request body must contain "array_nonrequired_nullable" property
+        mustContainNullableProperty = true
+        result = runBlocking {
+            profileApi.profileInfoStateIdPut(
+                id = "10",
+                userSettingsNullableSchema = UserSettingsNullableSchema(
+                    aboutMeRequiredNullable = null,
+                    raitingRequiredNonnull = 10,
+                    arrayNonrequiredNullable = listOf("123").asNullable()
+                )
+            )
+        }
+
+        assertNotNull(result.stateName)
+        assertTrue(isTestSuccess)
     }
 
     private fun createMockClient(

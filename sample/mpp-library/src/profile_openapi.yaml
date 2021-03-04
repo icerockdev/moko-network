@@ -80,7 +80,7 @@ paths:
               description: Настройки видимости
               properties:
                 settings:
-                  $ref: "#/components/schemas/UserSettings"
+                  $ref: "#/components/schemas/UserSettingsNullableSchema"
               required:
                 - settings
               type: object
@@ -176,7 +176,7 @@ components:
         application/json:
           schema:
             nullable: true
-            $ref: '#/components/schemas/UserSettings'
+            $ref: '#/components/schemas/UserSettingsNullableSchema'
     UnitActivityArray:
       content:
         application/json:
@@ -393,27 +393,37 @@ components:
             - state_1
             - state_2
           nullable: true
-    UserSettings:
+    UserSettingsNullableSchema:
       properties:
         about_me_required_nullable:
-          description: Обо мне
+          description: Обязательное нуллабельное значение
           type: string
           nullable: true
         raiting_required_nonnull:
-          description: Рейтинг
+          description: Обязательное не нуллабельное значение
           maximum: 2
           minimum: 0
           type: integer
           nullable: false
         work_id_nonrequired_nullable:
-          description: id
+          description: Необязательное нуллабельное значение без дефолта
           type: integer
           nullable: true
+        array_nonrequired_nullable:
+          description: Необязательный нуллабельный массив
+          type: array
+          items:
+            type: string
+          nullable: true
         office_nonrequired_nonnull:
-          description: Офис
+          description: Необязательное не нуллабельное значение с дефолтом
           type: integer
           nullable: false
           default: 0
+        office_nonrequired_nonnull_without_default:
+          description: Необязательное не нуллабельное значение без дефолта
+          type: string
+          nullable: false
       required:
         - about_me_required_nullable
         - raiting_required_nonnull

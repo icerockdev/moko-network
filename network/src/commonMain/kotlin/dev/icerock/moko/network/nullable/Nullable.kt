@@ -8,3 +8,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable(with = NullableSerializer::class)
 data class Nullable<T : Any>(val value: T?)
+
+fun <T : Any> T?.asNullable(): Nullable<T> = Nullable(this)
