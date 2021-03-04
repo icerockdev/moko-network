@@ -9,7 +9,7 @@ import kotlinx.serialization.SerialName
 @Serializable
 {{#nonPublicApi}}internal {{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}data class {{classname}} (
 {{#allVars}}
-{{#required}}{{#optional}}{{>data_class_opt_var}}{{/optional}}{{^optional}}{{>data_class_req_var}}{{/optional}}{{/required}}{{^required}}{{#isNullable}}{{>data_class_non_req_null_var}}{{/isNullable}}{{^isNullable}}{{>data_class_non_req_non_opt_var}}{{/isNullable}}{{/required}}{{^-last}},{{/-last}}
+{{#required}}{{#optional}}{{>data_class_opt_var}}{{/optional}}{{^optional}}{{>data_class_req_var}}{{/optional}}{{/required}}{{^required}}{{#isNullable}}{{>data_class_non_req_null_var}}{{/isNullable}}{{^isNullable}}{{>data_class_non_req_non_null_var}}{{/isNullable}}{{/required}}{{^-last}},{{/-last}}
 {{/allVars}}
 
 ) {
