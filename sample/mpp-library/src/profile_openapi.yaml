@@ -10,7 +10,7 @@ paths:
     post:
       operationId: profile_activity_create
       requestBody:
-        $ref: '#/components/requestBodies/UnitActivityArray'
+        $ref: '#/components/requestBodies/UnitActivitySet'
       responses:
         '201':
           description: ''
@@ -132,6 +132,28 @@ paths:
     parameters:
       - $ref: '#/components/parameters/userIdParam'
       - $ref: '#/components/parameters/unitIdParam'
+  '/profile/get/map':
+    get:
+      operationId: api_profile_get_map
+      description: Получить хэшмапу
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoWithMap'
+  '/profile/get/set':
+    get:
+      operationId: api_profile_get_set
+      description: Получить множество
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoWithSet'
 security:
   - Bearer: []
 components:
@@ -177,11 +199,12 @@ components:
           schema:
             nullable: true
             $ref: '#/components/schemas/UserSettingsNullableSchema'
-    UnitActivityArray:
+    UnitActivitySet:
       content:
         application/json:
           schema:
             type: array
+            uniqueItems: true
             items:
               type: object
               properties:
@@ -364,6 +387,18 @@ components:
         name:
           type: string
           readOnly: true
+    UserInfoWithSet:
+      type: object
+      properties:
+        values:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    UserInfoWithMap:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/UserInfo'
     UserInfoWithArray:
       type: object
       properties:

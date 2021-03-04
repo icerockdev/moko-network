@@ -6,7 +6,10 @@ import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
 import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParser
 import dev.icerock.moko.network.features.ExceptionFeature
+import dev.icerock.moko.network.generated.apis.DefaultApi
 import dev.icerock.moko.network.generated.apis.ProfileApi
+import dev.icerock.moko.network.generated.models.UnitActivity
+import dev.icerock.moko.network.generated.models.UnitActivitySetItem
 import dev.icerock.moko.network.generated.models.UserInfo
 import dev.icerock.moko.network.generated.models.UserSettingsNullableSchema
 import dev.icerock.moko.network.generated.models.UserStateEnum
@@ -23,6 +26,7 @@ import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -32,6 +36,85 @@ class ProfileApiTest {
     @BeforeTest
     fun setup() {
         json = Json.Default
+    }
+
+    @Test
+    fun `test return map from api call`() {
+        val testResponse = """
+            {
+                "user1" : {
+                    "name" : "user1"
+                },
+                "user2" : {
+                    "name" : "user2"
+                }
+            }
+        """.trimIndent()
+
+        val httpClient = createMockClient {
+            respondOk(content = testResponse)
+        }
+        val defaultApi = DefaultApi(httpClient = httpClient, json = json)
+
+        val result = runBlocking {
+            defaultApi.apiProfileGetMap()
+        }
+
+        assertEquals(
+            expected = mapOf("user1" to UserInfo("user1"), "user2" to UserInfo("user2")),
+            actual = result
+        )
+    }
+
+    @Test
+    fun `test return set from api call`() {
+        val testResponse = """
+            {
+                "values" : ["str1", "str2"]
+            }
+        """.trimIndent()
+
+        val httpClient = createMockClient {
+            respondOk(content = testResponse)
+        }
+        val defaultApi = DefaultApi(httpClient = httpClient, json = json)
+
+        val result = runBlocking {
+            defaultApi.apiProfileGetSet()
+        }
+
+        assertEquals(
+            expected = setOf("str1", "str2"),
+            actual = result.values
+        )
+    }
+
+    @Test
+    fun `test request body with set`() {
+        val testResponse = """
+            [{"id" : "10"}]
+        """.trimIndent()
+
+        val httpClient = createMockClient {
+            respondOk(content = testResponse)
+        }
+        val profileApi = ProfileApi(httpClient = httpClient, json = json)
+
+        val result = runBlocking {
+            profileApi.profileActivityCreate(
+                userId = "1",
+                unitId = 1,
+                unitActivitySetItem = setOf(
+                    UnitActivitySetItem(activityRid = "1"),
+                    UnitActivitySetItem(activityRid = "2")
+                )
+            )
+        }
+
+        assertEquals(
+            expected = listOf(UnitActivity(id = "10")),
+            actual = result
+        )
     }
 
     @Test
