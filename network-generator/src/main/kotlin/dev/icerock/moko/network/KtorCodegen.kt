@@ -14,9 +14,12 @@ import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.servers.Server
 import org.openapitools.codegen.CodegenConstants
 import org.openapitools.codegen.CodegenOperation
+import org.openapitools.codegen.CodegenProperty
 import org.openapitools.codegen.CodegenType
 import org.openapitools.codegen.languages.AbstractKotlinCodegen
+import org.apache.commons.lang3.StringUtils
 
+@Suppress("TooManyFunctions")
 class KtorCodegen : AbstractKotlinCodegen() {
 
     private val openApiProcessor = OpenApiProcessor()
@@ -89,6 +92,10 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
     override fun getHelp(): String {
         return "Generates a kotlin ktor client."
+    }
+
+    override fun toEnumName(property: CodegenProperty): String {
+        return StringUtils.capitalize(property.name)
     }
 
     override fun preprocessOpenAPI(openAPI: OpenAPI) {
