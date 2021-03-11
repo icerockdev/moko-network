@@ -6,4 +6,5 @@
 	<string name="accessDeniedErrorText">Access denied</string>
 	<string name="internalServerErrorText">Internal server error (%d)</string>
 	<string name="serializationErrorText">Invalid server data received</string>
+	<string name="sslErrorText">The certificate for this server is invalid.</string>
 </resources>

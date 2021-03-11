@@ -10,7 +10,7 @@ import io.ktor.util.KtorExperimentalAPI
 @KtorExperimentalAPI
 actual fun Throwable.isNetworkConnectionError(): Boolean {
     return when (this) {
-        is IosHttpRequestException -> true
+        is IosHttpRequestException -> isSSLException().not()
         else -> false
     }
 }
