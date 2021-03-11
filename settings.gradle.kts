@@ -18,6 +18,7 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
+        jcenter()
 
         maven { url = uri("https://kotlin.bintray.com/kotlin") }
         maven { url = uri("https://kotlin.bintray.com/kotlinx") }
@@ -37,6 +38,7 @@ includeBuild("network-generator")
 
 include(":network")
 include(":network-errors")
+include(":network-bignum")
 
 include(":sample:android-app")
 include(":sample:mpp-library")

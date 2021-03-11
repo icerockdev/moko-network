@@ -428,6 +428,17 @@ components:
             - state_1
             - state_2
           nullable: true
+    DecimalTest:
+      type: object
+      properties:
+        amount:
+          title: Amount
+          type: string
+          format: decimal
+        total:
+          title: Total
+          type: string
+          format: decimal
     UserSettingsNullableSchema:
       properties:
         about_me_required_nullable:

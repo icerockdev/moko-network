@@ -17,11 +17,13 @@ dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.ktorClient)
     commonMainImplementation(Deps.Libs.MultiPlatform.ktorClientLogging)
     commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
+    commonMainImplementation(Deps.Libs.MultiPlatform.kbignum)
 
     commonMainApi(Deps.Libs.MultiPlatform.mokoMvvmCore)
     commonMainApi(Deps.Libs.MultiPlatform.mokoMvvmLiveData)
     commonMainApi(Deps.Libs.MultiPlatform.mokoNetwork)
     commonMainApi(Deps.Libs.MultiPlatform.mokoNetworkErrors)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoNetworkBignum)
 
     androidMainImplementation(Deps.Libs.Android.lifecycle)
 
