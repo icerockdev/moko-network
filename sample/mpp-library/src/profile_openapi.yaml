@@ -434,7 +434,7 @@ components:
         amount:
           title: Amount
           type: string
-          format: decimal
+          format: number
         total:
           title: Total
           type: string

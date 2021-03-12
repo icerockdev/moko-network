@@ -17,12 +17,6 @@ dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.kbignum)
 
     commonMainImplementation(project(":network"))
-
-    androidMainImplementation(Deps.Libs.Android.appCompat)
-
-    // temporary fix of https://youtrack.jetbrains.com/issue/KT-41821
-    commonMainImplementation("io.ktor:ktor-utils:1.4.0")
-    commonMainImplementation("org.jetbrains.kotlinx:atomicfu:0.14.4")
 }
 
 publishing {
