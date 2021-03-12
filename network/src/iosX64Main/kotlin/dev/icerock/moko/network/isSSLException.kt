@@ -6,25 +6,34 @@ package dev.icerock.moko.network
 
 import io.ktor.client.engine.ios.IosHttpRequestException
 import io.ktor.util.KtorExperimentalAPI
+import platform.Foundation.NSURLErrorCannotLoadFromNetwork
+import platform.Foundation.NSURLErrorClientCertificateRequired
+import platform.Foundation.NSURLErrorSecureConnectionFailed
+import platform.Foundation.NSURLErrorServerCertificateHasBadDate
+import platform.Foundation.NSURLErrorServerCertificateHasUnknownRoot
+import platform.Foundation.NSURLErrorServerCertificateNotYetValid
+import platform.Foundation.NSURLErrorServerCertificateUntrusted
+
+private val sslKeys = mapOf(
+    NSURLErrorSecureConnectionFailed to SSLExceptionType.SecureConnectionFailed,
+    NSURLErrorServerCertificateHasBadDate to SSLExceptionType.ServerCertificateHasBadDate,
+    NSURLErrorServerCertificateUntrusted to SSLExceptionType.ServerCertificateUntrusted,
+    NSURLErrorServerCertificateHasUnknownRoot to SSLExceptionType.ServerCertificateHasUnknownRoot,
+    NSURLErrorServerCertificateNotYetValid to SSLExceptionType.ServerCertificateNotYetValid,
+    NSURLErrorClientCertificateRequired to SSLExceptionType.ClientCertificateRequired,
+    NSURLErrorCannotLoadFromNetwork to SSLExceptionType.CannotLoadFromNetwork
+)
 
 @KtorExperimentalAPI
 actual fun Throwable.isSSLException(): Boolean {
     val iosHttpException = this as? IosHttpRequestException ?: return false
-    return listOf<Int>(-1200, -1201, -1202, -1203,-1204, -1205, -1206, -2000).contains(iosHttpException.origin.code.toInt())
+    return sslKeys.keys.contains(
+        iosHttpException.origin.code
+    )
 }
 
 @KtorExperimentalAPI
 actual fun Throwable.getSSLExceptionType(): SSLExceptionType? {
     val iosHttpException = this as? IosHttpRequestException ?: return null
-    return when (iosHttpException.origin.code.toInt()) {
-        -1200 -> SSLExceptionType.SecureConnectionFailed
-        -1201 -> SSLExceptionType.ServerCertificateHasBadDate
-        -1202 -> SSLExceptionType.ServerCertificateUntrusted
-        -1203 -> SSLExceptionType.ServerCertificateHasUnknownRoot
-        -1204 -> SSLExceptionType.ServerCertificateNotYetValid
-        -1205 -> SSLExceptionType.ClientCertificateRejected
-        -1206 -> SSLExceptionType.ClientCertificateRequired
-        -2000 -> SSLExceptionType.CannotLoadFromNetwork
-        else -> null
-    }
+    return sslKeys[iosHttpException.origin.code]
 }

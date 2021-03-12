@@ -21,13 +21,12 @@ data class HttpNetworkErrorsTexts(
 )
 
 data class SSLNetworkErrorsTexts(
-    val default: StringResource = MR.strings.sslErrorText,
-    val secureConnectionFailed: StringResource? = null,
-    val serverCertificateHasBadDate: StringResource? = null,
-    val serverCertificateUntrusted: StringResource? = null,
-    val serverCertificateHasUnknownRoot: StringResource? = null,
-    val serverCertificateNotYetValid: StringResource? = null,
-    val clientCertificateRejected: StringResource? = null,
-    val clientCertificateRequired: StringResource? = null,
-    val cannotLoadFromNetwork: StringResource? = null
+    val secureConnectionFailed: StringResource = MR.strings.secureConnectionFailedText,
+    val serverCertificateHasBadDate: StringResource = MR.strings.serverCertificateHasBadDateText,
+    val serverCertificateUntrusted: StringResource = MR.strings.serverCertificateUntrustedText,
+    val serverCertificateHasUnknownRoot: StringResource = MR.strings.serverCertificateHasUnknownRootText,
+    val serverCertificateNotYetValid: StringResource = MR.strings.serverCertificateNotYetValidText,
+    val clientCertificateRejected: StringResource = MR.strings.clientCertificateRejectedText,
+    val clientCertificateRequired: StringResource = MR.strings.clientCertificateRequiredText,
+    val cannotLoadFromNetwork: StringResource = MR.strings.cannotLoadFromNetworkText
 )

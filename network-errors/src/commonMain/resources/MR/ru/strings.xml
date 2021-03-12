@@ -6,5 +6,12 @@
 	<string name="accessDeniedErrorText">Доступ запрещен</string>
 	<string name="internalServerErrorText">Внутренняя ошибка сервера (%d)</string>
 	<string name="serializationErrorText">Получены некорректные данные сервера</string>
-	<string name="sslErrorText">Сертификат для этого сервера недействителен.</string>
+	<string name="secureConnectionFailedText">Ошибка SSL-сертификата. Сбой безопасного соединения</string>
+	<string name="serverCertificateHasBadDateText">Ошибка SSL-сертификата. Сертификат сервера имеет неверную дату</string>
+	<string name="serverCertificateUntrustedText">Ошибка SSL-сертификата. Сертификат сервера ненадежный</string>
+	<string name="serverCertificateHasUnknownRootText">Ошибка SSL-сертификата. Сертификат сервера имеет неизвестный корень</string>
+	<string name="serverCertificateNotYetValidText">Ошибка SSL-сертификата. Сертификат сервера еще не действителен</string>
+	<string name="clientCertificateRejectedText">Ошибка SSL-сертификата. Клиентский сертификат отклонен</string>
+	<string name="clientCertificateRequiredText">Ошибка SSL-сертификата. Требуется сертификат клиента</string>
+	<string name="cannotLoadFromNetworkText">Ошибка SSL-сертификата. Не удается загрузить из сети</string>
 </resources>

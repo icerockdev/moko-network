@@ -81,22 +81,14 @@ private fun getSSLExceptionStringDescMapper(
     sslNetworkErrorsTexts: SSLNetworkErrorsTexts
 ): StringDesc {
     return when (sslException.getSSLExceptionType()) {
-        SSLExceptionType.SecureConnectionFailed -> (sslNetworkErrorsTexts.secureConnectionFailed
-            ?: sslNetworkErrorsTexts.default).desc()
-        SSLExceptionType.ServerCertificateHasBadDate -> (sslNetworkErrorsTexts.serverCertificateHasBadDate
-            ?: sslNetworkErrorsTexts.default).desc()
-        SSLExceptionType.ServerCertificateUntrusted -> (sslNetworkErrorsTexts.serverCertificateUntrusted
-            ?: sslNetworkErrorsTexts.default).desc()
-        SSLExceptionType.ServerCertificateHasUnknownRoot -> (sslNetworkErrorsTexts.serverCertificateHasUnknownRoot
-            ?: sslNetworkErrorsTexts.default).desc()
-        SSLExceptionType.ServerCertificateNotYetValid -> (sslNetworkErrorsTexts.serverCertificateNotYetValid
-            ?: sslNetworkErrorsTexts.default).desc()
-        SSLExceptionType.ClientCertificateRejected -> (sslNetworkErrorsTexts.clientCertificateRejected
-            ?: sslNetworkErrorsTexts.default).desc()
-        SSLExceptionType.ClientCertificateRequired -> (sslNetworkErrorsTexts.clientCertificateRequired
-            ?: sslNetworkErrorsTexts.default).desc()
-        SSLExceptionType.CannotLoadFromNetwork -> (sslNetworkErrorsTexts.cannotLoadFromNetwork
-            ?: sslNetworkErrorsTexts.default).desc()
+        SSLExceptionType.SecureConnectionFailed -> sslNetworkErrorsTexts.secureConnectionFailed.desc()
+        SSLExceptionType.ServerCertificateHasBadDate -> sslNetworkErrorsTexts.serverCertificateHasBadDate.desc()
+        SSLExceptionType.ServerCertificateUntrusted -> sslNetworkErrorsTexts.serverCertificateUntrusted.desc()
+        SSLExceptionType.ServerCertificateHasUnknownRoot -> sslNetworkErrorsTexts.serverCertificateHasUnknownRoot.desc()
+        SSLExceptionType.ServerCertificateNotYetValid -> sslNetworkErrorsTexts.serverCertificateNotYetValid.desc()
+        SSLExceptionType.ClientCertificateRejected -> sslNetworkErrorsTexts.clientCertificateRejected.desc()
+        SSLExceptionType.ClientCertificateRequired -> sslNetworkErrorsTexts.clientCertificateRequired.desc()
+        SSLExceptionType.CannotLoadFromNetwork -> sslNetworkErrorsTexts.cannotLoadFromNetwork.desc()
         else -> ExceptionMappersStorage.getFallbackValue()
     }
 }
