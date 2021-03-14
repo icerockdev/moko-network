@@ -10,6 +10,7 @@ plugins {
     id("dev.icerock.mobile.multiplatform-resources")
     id("dev.icerock.mobile.multiplatform-network-generator")
     id("dev.icerock.mobile.multiplatform.ios-framework")
+    id("org.jetbrains.dokka") version("1.4.20")
 }
 
 dependencies {
@@ -53,6 +54,24 @@ mokoNetwork {
         isOpen = true
         configureTask {
             inputSpec.set(file("src/newsApi.yaml").path)
+        }
+    }
+}
+
+tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().all {
+    dokkaSourceSets {
+        named("commonMain") {
+            noAndroidSdkLink.set(true)
+            noJdkLink.set(true)
+            reportUndocumented.set(true) 
+            skipEmptyPackages.set(false)
+        }
+    }
+
+    doFirst {
+        dokkaSourceSets.forEach { dokkaSourceSet ->
+            println("dokka source set ${dokkaSourceSet.name}")
+            println("dokka source set files ${dokkaSourceSet.sourceRoots.files}")
         }
     }
 }
