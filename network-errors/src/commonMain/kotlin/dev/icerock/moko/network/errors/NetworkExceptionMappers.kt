@@ -5,10 +5,12 @@
 package dev.icerock.moko.network.errors
 
 import dev.icerock.moko.errors.mappers.ExceptionMappersStorage
+import dev.icerock.moko.network.SSLExceptionType
 import dev.icerock.moko.network.exceptions.ErrorException
 import dev.icerock.moko.network.exceptions.ValidationException
+import dev.icerock.moko.network.getSSLExceptionType
 import dev.icerock.moko.network.isNetworkConnectionError
-import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.network.isSSLException
 import dev.icerock.moko.resources.desc.CompositionStringDesc
 import dev.icerock.moko.resources.desc.ResourceFormatted
 import dev.icerock.moko.resources.desc.StringDesc
@@ -23,26 +25,26 @@ private const val INTERNAL_SERVER_ERROR_CODE_MAX = 599
  */
 @Suppress("LongParameterList")
 fun ExceptionMappersStorage.registerAllNetworkMappers(
-    networkConnectionErrorText: StringResource = MR.strings.networkConnectionErrorText,
-    unauthorizedErrorText: StringResource = MR.strings.unauthorizedErrorText,
-    notFoundErrorText: StringResource = MR.strings.notFoundErrorText,
-    accessDeniedErrorText: StringResource = MR.strings.accessDeniedErrorText,
-    internalServerErrorText: StringResource = MR.strings.internalServerErrorText,
-    serializationErrorText: StringResource = MR.strings.serializationErrorText
+    errorsTexts: NetworkErorrsTexts
 ): ExceptionMappersStorage {
     return condition<StringDesc>(
         condition = { it.isNetworkConnectionError() },
-        mapper = { networkConnectionErrorText.desc() }
+        mapper = { errorsTexts.networkConnectionErrorText.desc() }
+    ).condition<StringDesc>(
+        condition = { it.isSSLException() },
+        mapper = {
+            getSSLExceptionStringDescMapper(
+                sslException = it,
+                sslNetworkErrorsTexts = errorsTexts.sslNetworkErrorsTexts
+            )
+        }
     ).condition<StringDesc>(
         condition = { it is SerializationException },
-        mapper = { serializationErrorText.desc() }
+        mapper = { errorsTexts.serializationErrorText.desc() }
     ).register<ErrorException, StringDesc> {
         getNetworkErrorExceptionStringDescMapper(
             errorException = it,
-            unauthorizedErrorText = unauthorizedErrorText,
-            notFoundErrorText = notFoundErrorText,
-            accessDeniedErrorText = accessDeniedErrorText,
-            internalServerErrorText = internalServerErrorText
+            httpNetworkErrorsTexts = errorsTexts.httpNetworkErrorsTexts
         )
     }.register<ValidationException, StringDesc>(::validationExceptionStringDescMapper)
 }
@@ -52,24 +54,42 @@ fun ExceptionMappersStorage.registerAllNetworkMappers(
  */
 private fun getNetworkErrorExceptionStringDescMapper(
     errorException: ErrorException,
-    unauthorizedErrorText: StringResource,
-    notFoundErrorText: StringResource,
-    accessDeniedErrorText: StringResource,
-    internalServerErrorText: StringResource
+    httpNetworkErrorsTexts: HttpNetworkErrorsTexts
 ): StringDesc {
     val httpStatusCode = errorException.httpStatusCode
     return when {
-        errorException.isUnauthorized -> unauthorizedErrorText.desc()
-        errorException.isNotFound -> notFoundErrorText.desc()
-        errorException.isAccessDenied -> accessDeniedErrorText.desc()
+        errorException.isUnauthorized -> httpNetworkErrorsTexts.unauthorizedErrorText.desc()
+        errorException.isNotFound -> httpNetworkErrorsTexts.notFoundErrorText.desc()
+        errorException.isAccessDenied -> httpNetworkErrorsTexts.accessDeniedErrorText.desc()
         httpStatusCode >= HttpStatusCode.InternalServerError.value &&
                 httpStatusCode <= INTERNAL_SERVER_ERROR_CODE_MAX -> {
             StringDesc.ResourceFormatted(
-                internalServerErrorText,
+                httpNetworkErrorsTexts.internalServerErrorText,
                 httpStatusCode
             )
         }
         else -> errorException.description?.desc() ?: ExceptionMappersStorage.getFallbackValue()
+    }
+}
+
+/**
+ * Maps the input error [sslException] to ssl error text.
+ */
+@Suppress("ComplexMethod")
+private fun getSSLExceptionStringDescMapper(
+    sslException: Throwable,
+    sslNetworkErrorsTexts: SSLNetworkErrorsTexts
+): StringDesc {
+    return when (sslException.getSSLExceptionType()) {
+        SSLExceptionType.SecureConnectionFailed -> sslNetworkErrorsTexts.secureConnectionFailed.desc()
+        SSLExceptionType.ServerCertificateHasBadDate -> sslNetworkErrorsTexts.serverCertificateHasBadDate.desc()
+        SSLExceptionType.ServerCertificateUntrusted -> sslNetworkErrorsTexts.serverCertificateUntrusted.desc()
+        SSLExceptionType.ServerCertificateHasUnknownRoot -> sslNetworkErrorsTexts.serverCertificateHasUnknownRoot.desc()
+        SSLExceptionType.ServerCertificateNotYetValid -> sslNetworkErrorsTexts.serverCertificateNotYetValid.desc()
+        SSLExceptionType.ClientCertificateRejected -> sslNetworkErrorsTexts.clientCertificateRejected.desc()
+        SSLExceptionType.ClientCertificateRequired -> sslNetworkErrorsTexts.clientCertificateRequired.desc()
+        SSLExceptionType.CannotLoadFromNetwork -> sslNetworkErrorsTexts.cannotLoadFromNetwork.desc()
+        else -> ExceptionMappersStorage.getFallbackValue()
     }
 }
 
