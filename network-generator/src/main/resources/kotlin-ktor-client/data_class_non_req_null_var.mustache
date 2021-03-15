@@ -1,5 +1,6 @@
 {{#description}}
     /* {{{description}}} */
 {{/description}}
+    {{#isDecimal}}@Serializable(with = BigNumSerializer::class) {{/isDecimal}}
     @SerialName("{{{baseName}}}")
     val {{{name}}}: dev.icerock.moko.network.nullable.Nullable<{{#isEnum}}{{classname}}.{{nameInCamelCase}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{/isEnum}}>? = null

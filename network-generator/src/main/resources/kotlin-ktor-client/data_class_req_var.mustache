@@ -1,5 +1,6 @@
 {{#description}}
     /* {{{description}}} */
 {{/description}}
+    {{#isDecimal}}@Serializable(with = BigNumSerializer::class) {{/isDecimal}}
     @SerialName("{{{baseName}}}")
     val {{{name}}}: {{#isEnum}}{{#isArray}}kotlin.collections.List<{{classname}}.{{{nameInCamelCase}}}>{{/isArray}}{{^isArray}}{{classname}}.{{nameInCamelCase}}{{/isArray}}{{#isNullable}}?{{/isNullable}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{#isNullable}}?{{/isNullable}}{{/isEnum}}

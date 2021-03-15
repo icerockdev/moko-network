@@ -12,12 +12,13 @@ import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.servers.Server
+import org.openapitools.codegen.languages.AbstractKotlinCodegen
+import org.apache.commons.lang3.StringUtils
 import org.openapitools.codegen.CodegenConstants
+import org.openapitools.codegen.CodegenModel
 import org.openapitools.codegen.CodegenOperation
 import org.openapitools.codegen.CodegenProperty
 import org.openapitools.codegen.CodegenType
-import org.openapitools.codegen.languages.AbstractKotlinCodegen
-import org.apache.commons.lang3.StringUtils
 
 @Suppress("TooManyFunctions")
 class KtorCodegen : AbstractKotlinCodegen() {
@@ -47,10 +48,12 @@ class KtorCodegen : AbstractKotlinCodegen() {
         typeMapping["UUID"] = "kotlin.String"
         typeMapping["URI"] = "kotlin.String"
         typeMapping["object"] = "JsonObject"
+        typeMapping["decimal"] = "BigNum"
         typeMapping[ONE_OF_REPLACE_TYPE_NAME] = "JsonElement"
 
         importMapping["JsonObject"] = "kotlinx.serialization.json.JsonObject"
         importMapping["JsonElement"] = "kotlinx.serialization.json.JsonElement"
+        importMapping["BigNum"] = "com.soywiz.kbignum.BigNum"
 
         embeddedTemplateDir = "kotlin-ktor-client"
 
@@ -160,6 +163,25 @@ class KtorCodegen : AbstractKotlinCodegen() {
         }
         codegenOperation.path = currentPath
         return codegenOperation
+    }
+
+    override fun fromProperty(name: String?, p: Schema<*>?): CodegenProperty {
+        val property = super.fromProperty(name, p)
+        if (p?.format?.equals("decimal") == true) {
+            property.isDecimal = true
+        }
+
+        return property
+    }
+
+    override fun fromModel(name: String?, schema: Schema<*>?): CodegenModel {
+        val model = super.fromModel(name, schema)
+        model.vars.forEach {
+            if (it.isDecimal) {
+                model.imports.add("dev.icerock.moko.network.bignum.BigNumSerializer")
+            }
+        }
+        return model
     }
 
     private fun String.firstCapitalized(): String {
