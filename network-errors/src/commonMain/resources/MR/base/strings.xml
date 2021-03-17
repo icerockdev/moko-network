@@ -6,4 +6,12 @@
 	<string name="accessDeniedErrorText">Access denied</string>
 	<string name="internalServerErrorText">Internal server error (%d)</string>
 	<string name="serializationErrorText">Invalid server data received</string>
+	<string name="secureConnectionFailedText">The SSL certificate error. Secure connection failed</string>
+	<string name="serverCertificateHasBadDateText">The SSL certificate error. Server certificate has bad date</string>
+	<string name="serverCertificateUntrustedText">The SSL certificate error. Server certificate untrusted</string>
+	<string name="serverCertificateHasUnknownRootText">The SSL certificate error. Server certificate has unknown root</string>
+	<string name="serverCertificateNotYetValidText">The SSL certificate error. Server certificate not yet valid</string>
+	<string name="clientCertificateRejectedText">The SSL certificate error. Client certificate rejected</string>
+	<string name="clientCertificateRequiredText">The SSL certificate error. Client certificate required</string>
+	<string name="cannotLoadFromNetworkText">The SSL certificate error. Cannot load from network</string>
 </resources>

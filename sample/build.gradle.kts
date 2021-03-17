@@ -9,6 +9,8 @@ subprojects {
                 .with(project(":network"))
             substitute(module(Deps.Libs.MultiPlatform.mokoNetworkErrors))
                 .with(project(":network-errors"))
+            substitute(module(Deps.Libs.MultiPlatform.mokoNetworkBignum))
+                .with(project(":network-bignum"))
         }
     }
 }

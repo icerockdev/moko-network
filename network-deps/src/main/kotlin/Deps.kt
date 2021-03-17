@@ -28,7 +28,9 @@ object Deps {
     private const val mokoMvvmVersion = "0.9.1"
     private const val mokoErrorsVersion = "0.3.1"
     private const val mokoTestVersion = "0.2.0"
-    const val mokoNetworkVersion = "0.11.0"
+    const val mokoNetworkVersion = "0.12.0"
+
+    private const val kbignumVersion = "1.11.0"
 
     object Android {
         const val compileSdk = 30
@@ -131,6 +133,10 @@ object Deps {
                 "dev.icerock.moko:network:$mokoNetworkVersion"
             const val mokoNetworkErrors =
                 "dev.icerock.moko:network-errors:$mokoNetworkVersion"
+            const val mokoNetworkBignum =
+                "dev.icerock.moko:network-bignum:$mokoNetworkVersion"
+
+            const val kbignum = "com.soywiz.korlibs.kbignum:kbignum:$kbignumVersion"
 
             object Tests {
                 const val kotlinTest =
