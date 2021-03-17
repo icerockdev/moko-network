@@ -18,8 +18,9 @@ buildscript {
     }
     dependencies {
         classpath("dev.icerock.moko:resources-generator:0.15.0")
-        classpath("dev.icerock.moko:network-generator:0.11.0")
+        classpath("dev.icerock.moko:network-generator") // substituted
         classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.31")
+        classpath("dev.icerock.gradle:bintray-publish:0.1.0")
         classpath("gradle:network-deps:1")
     }
 }
@@ -44,6 +45,24 @@ allprojects {
                 targetSdkVersion(Deps.Android.targetSdk)
             }
         }
+    }
+
+    plugins.withId(Deps.Plugins.mavenPublish.id) {
+        group = "dev.icerock.moko"
+        version = Deps.mokoNetworkVersion
+
+        configure<PublishingExtension> {
+            repositories.maven("https://api.bintray.com/maven/icerockdev/moko/moko-network/;publish=1") {
+                name = "bintray"
+
+                credentials {
+                    username = System.getenv("BINTRAY_USER")
+                    password = System.getenv("BINTRAY_KEY")
+                }
+            }
+        }
+
+        apply(plugin = "dev.icerock.gradle.bintray-publish")
     }
 }
 
