@@ -51,3 +51,9 @@ publishing {
         }
     }
 }
+
+tasks.named("publishToMavenLocal") {
+    val pluginPublish = gradle.includedBuild("network-generator")
+        .task(":publishToMavenLocal")
+    dependsOn(pluginPublish)
+}
