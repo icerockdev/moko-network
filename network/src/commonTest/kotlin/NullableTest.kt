@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 
 class NullableTest {
     @Test
-    fun `nullable with default`() {
+    fun `nullable with default encode`() {
         val json = Json.Default
         val data = TestData()
 
@@ -19,7 +19,7 @@ class NullableTest {
     }
 
     @Test
-    fun `nullable with null`() {
+    fun `nullable with null encode`() {
         val json = Json.Default
         val data = TestData(data = Nullable(value = null))
 
@@ -28,12 +28,43 @@ class NullableTest {
     }
 
     @Test
-    fun `nullable with value`() {
+    fun `nullable with value encode`() {
         val json = Json.Default
         val data = TestData(data = Nullable(value = "test"))
 
         val result = json.encodeToString(TestData.serializer(), data)
         assertEquals(expected = """{"data":"test"}""", actual = result)
+    }
+
+
+    @Test
+    fun `nullable with default decode`() {
+        val json = Json.Default
+        val input = "{}"
+
+        val result = json.decodeFromString(TestData.serializer(), input)
+        assertEquals(expected = TestData(), actual = result)
+    }
+
+    @Test
+    fun `nullable with null decode`() {
+        val json = Json.Default
+        val input = """{"data":null}"""
+
+        val result = json.decodeFromString(TestData.serializer(), input)
+        assertEquals(
+            expected = TestData(data = null),
+            actual = result
+        ) // for now we cant check key exists
+    }
+
+    @Test
+    fun `nullable with value decode`() {
+        val json = Json.Default
+        val input = """{"data":"test"}"""
+
+        val result = json.decodeFromString(TestData.serializer(), input)
+        assertEquals(expected = TestData(data = Nullable(value = "test")), actual = result)
     }
 
     @Serializable
