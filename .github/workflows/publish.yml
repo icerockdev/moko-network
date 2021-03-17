@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: macOS-latest
+    env:
+      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
+      BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
 
     steps:
       - uses: actions/checkout@v1
@@ -17,7 +20,4 @@ jobs:
       - name: Publish plugin
         run: ./gradlew -p network-generator publishAllPublicationsToBintrayRepository
       - name: Publish runtime
-        env:
-          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
         run: ./gradlew publishNoValidationToBintray
