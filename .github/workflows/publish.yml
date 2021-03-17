@@ -15,7 +15,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Publish plugin
-        run: ./gradlew -p network-generator publishNoValidationToBintray
+        run: ./gradlew -p network-generator publishAllPublicationsToBintrayRepository
       - name: Publish runtime
         env:
           BINTRAY_USER: ${{ secrets.BINTRAY_USER }}

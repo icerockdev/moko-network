@@ -10,7 +10,7 @@ plugins {
 
 buildscript {
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.21")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.31")
         classpath("gradle:network-deps:1")
     }
 }
@@ -33,8 +33,8 @@ publishing {
         name = "bintray"
 
         credentials {
-            username = System.getProperty("BINTRAY_USER")
-            password = System.getProperty("BINTRAY_KEY")
+            username = System.getenv("BINTRAY_USER")
+            password = System.getenv("BINTRAY_KEY")
         }
     }
     publications {
