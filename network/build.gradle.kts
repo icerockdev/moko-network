@@ -10,9 +10,6 @@ plugins {
     id("org.gradle.maven-publish")
 }
 
-group = "dev.icerock.moko"
-version = Deps.mokoNetworkVersion
-
 kotlin {
     sourceSets {
         val iosArm64Main by getting
@@ -39,17 +36,6 @@ dependencies {
     commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
 
     androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
-}
-
-publishing {
-    repositories.maven("https://api.bintray.com/maven/icerockdev/moko/moko-network/;publish=1") {
-        name = "bintray"
-
-        credentials {
-            username = System.getProperty("BINTRAY_USER")
-            password = System.getProperty("BINTRAY_KEY")
-        }
-    }
 }
 
 tasks.named("publishToMavenLocal") {

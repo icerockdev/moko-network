@@ -10,9 +10,6 @@ plugins {
     id("org.gradle.maven-publish")
 }
 
-group = "dev.icerock.moko"
-version = Deps.mokoNetworkVersion
-
 dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
 
@@ -26,23 +23,8 @@ dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoMvvmCore)
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoParcelize)
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoGraphics)
-
-    // temporary fix of https://youtrack.jetbrains.com/issue/KT-41821
-    commonMainImplementation("io.ktor:ktor-utils:1.4.0")
-    commonMainImplementation("org.jetbrains.kotlinx:atomicfu:0.14.4")
 }
 
 multiplatformResources {
     multiplatformResourcesPackage = "dev.icerock.moko.network.errors"
-}
-
-publishing {
-    repositories.maven("https://api.bintray.com/maven/icerockdev/moko/moko-network/;publish=1") {
-        name = "bintray"
-
-        credentials {
-            username = System.getProperty("BINTRAY_USER")
-            password = System.getProperty("BINTRAY_KEY")
-        }
-    }
 }

@@ -9,23 +9,9 @@ plugins {
     id("org.gradle.maven-publish")
 }
 
-group = "dev.icerock.moko"
-version = Deps.mokoNetworkVersion
-
 dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
     commonMainImplementation(Deps.Libs.MultiPlatform.kbignum)
 
     commonMainImplementation(project(":network"))
-}
-
-publishing {
-    repositories.maven("https://api.bintray.com/maven/icerockdev/moko/moko-network/;publish=1") {
-        name = "bintray"
-
-        credentials {
-            username = System.getProperty("BINTRAY_USER")
-            password = System.getProperty("BINTRAY_KEY")
-        }
-    }
 }
