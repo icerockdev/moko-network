@@ -21,7 +21,26 @@ import io.ktor.client.call.ReceivePipelineException
 import io.ktor.http.content.TextContent
 
 {{#operations}}
-{{#nonPublicApi}}internal {{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpClient: HttpClient, json: Json) {
+{{#nonPublicApi}}internal {{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}interface {{classname}} {
+
+{{#operation}}
+    /**
+    * {{summary}}
+    * {{notes}}
+    {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
+    {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
+    */{{#returnType}}
+    @Suppress("UNCHECKED_CAST"){{/returnType}}
+    {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
+
+    {{/operation}}
+
+    companion object {
+        operator fun invoke(basePath: String = "{{{basePath}}}", httpClient: HttpClient, json: Json): {{classname}} = {{classname}}Impl(basePath, httpClient, json)
+    }
+}
+
+{{#nonPublicApi}}internal {{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}class {{classname}}Impl(basePath: kotlin.String, httpClient: HttpClient, json: Json): {{classname}} {
     private val _basePath = basePath
     private val _httpClient = httpClient
     private val _json = json
@@ -34,7 +53,7 @@ import io.ktor.http.content.TextContent
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
-    {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
+    override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
         val builder = HttpRequestBuilder()
 
         builder.method = HttpMethod.{{httpMethod}}
