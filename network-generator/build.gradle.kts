@@ -21,6 +21,7 @@ version = Deps.mokoNetworkVersion
 dependencies {
     implementation(gradleKotlinDsl())
 
+    implementation(Deps.Libs.Jvm.guava)
     implementation(Deps.Libs.Jvm.openApiGenerator)
 
     compileOnly(Deps.Plugins.kotlinMultiplatform.module!!)

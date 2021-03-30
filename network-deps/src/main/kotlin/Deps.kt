@@ -15,7 +15,8 @@ object Deps {
     private const val androidxTestVersion = "1.3.0"
     private const val robolectricVersion = "4.3"
 
-    private const val openApiGeneratorVersion = "5.0.0"
+    private const val openApiGeneratorVersion = "5.1.0"
+    private const val guavaVersion = "30.1-jre"
     private const val kotlinxSerializationVersion = "1.1.0"
     private const val coroutinesVersion = "1.4.2-native-mt"
     private const val ktorClientVersion = "1.5.2"
@@ -155,6 +156,8 @@ object Deps {
         object Jvm {
             const val openApiGenerator =
                 "org.openapitools:openapi-generator-gradle-plugin:$openApiGeneratorVersion"
+            const val guava =
+                "com.google.guava:guava:$guavaVersion"
         }
 
         object Detekt {
