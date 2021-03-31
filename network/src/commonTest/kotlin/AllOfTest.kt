@@ -60,23 +60,10 @@ private data class Dog(
     val inlineDog: InlineDog
 )
 
-// allOf
-@Serializable
-private data class Cat(
-    val pet: Pet,
-    val inlineCat: InlineCat
-)
-
 @Serializable
 private data class InlineDog(
     val bark: Boolean? = null,
     val breed: String? = null
-)
-
-@Serializable
-private data class InlineCat(
-    val hunts: Boolean? = null,
-    val age: Int? = null
 )
 
 private object DogSerializer : AllOfSerializer<Dog>("DogSerializer") {
