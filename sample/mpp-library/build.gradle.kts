@@ -57,4 +57,8 @@ mokoNetwork {
             inputSpec.set(file("src/newsApi.yaml").path)
         }
     }
+    spec("allOf") {
+        packageName = "test.allOf"
+        inputSpec = file("src/allOf.yaml")
+    }
 }

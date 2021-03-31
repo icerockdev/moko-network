@@ -4,13 +4,14 @@
 
 package dev.icerock.moko.network
 
+import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.media.Schema
 
 /**
  * OpenApi schema processor that removes all [null] items from enum fields of the schema.
  */
 internal class SchemaEnumNullProcessor : OpenApiSchemaProcessor {
-    override fun process(schema: Schema<*>) {
+    override fun process(openApi: OpenAPI, schema: Schema<*>) {
         val schemaProperties = schema.properties ?: return
 
         schemaProperties.forEach { (_, propSchema) ->
