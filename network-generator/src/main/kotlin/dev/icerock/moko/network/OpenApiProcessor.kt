@@ -19,54 +19,47 @@ internal class OpenApiProcessor {
     }
 
     fun process(openAPI: OpenAPI) {
-        openAPI.paths.forEach { pathName, pathItem ->
-            pathItem.processSchema()
+        openAPI.paths.forEach { _, pathItem ->
+            pathItem.processSchema(openAPI)
         }
 
         openAPI.components?.run {
             this.schemas?.forEach { (_, componentSchema) ->
-                componentSchema?.processSchema()
+                componentSchema?.processSchema(openAPI)
             }
             this.parameters?.forEach { (_, param) ->
-                param.schema?.processSchema()
+                param.schema?.processSchema(openAPI)
             }
             this.requestBodies?.forEach { (_, requestBody) ->
                 requestBody.content?.forEach { (_, content) ->
-                    content.schema?.processSchema()
+                    content.schema?.processSchema(openAPI)
                 }
             }
             this.responses?.forEach { (_, response) ->
-                response.processSchema()
+                response.processSchema(openAPI)
             }
         }
     }
 
-    private fun PathItem.processSchema() {
-        get?.processSchema()
-        post?.processSchema()
-        patch?.processSchema()
-        delete?.processSchema()
-        put?.processSchema()
-        options?.processSchema()
-        head?.processSchema()
-        trace?.processSchema()
+    private fun PathItem.processSchema(openAPI: OpenAPI) {
+        readOperations().forEach { it.processSchema(openAPI) }
     }
 
-    private fun Operation.processSchema() {
+    private fun Operation.processSchema(openAPI: OpenAPI) {
         responses?.forEach { (_, apiResponse) ->
-            apiResponse.processSchema()
+            apiResponse.processSchema(openAPI)
         }
     }
 
-    private fun ApiResponse.processSchema() {
+    private fun ApiResponse.processSchema(openAPI: OpenAPI) {
         content?.forEach { (_, mediaType) ->
-            mediaType.schema?.processSchema()
+            mediaType.schema?.processSchema(openAPI)
         }
     }
 
-    private fun Schema<*>.processSchema() {
+    private fun Schema<*>.processSchema(openAPI: OpenAPI) {
         schemaProcessors.forEach {
-            it.process(this)
+            it.process(openAPI, this)
         }
     }
 }

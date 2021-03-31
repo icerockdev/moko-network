@@ -21,7 +21,7 @@ import io.ktor.client.call.ReceivePipelineException
 import io.ktor.http.content.TextContent
 
 {{#operations}}
-{{#nonPublicApi}}internal {{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}interface {{classname}} {
+{{>classes_modifiers}}interface {{classname}} {
 
 {{#operation}}
     /**
@@ -40,7 +40,7 @@ import io.ktor.http.content.TextContent
     }
 }
 
-{{#nonPublicApi}}internal {{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}class {{classname}}Impl(basePath: kotlin.String, httpClient: HttpClient, json: Json): {{classname}} {
+{{>classes_modifiers}}{{#isOpen}}open {{/isOpen}}class {{classname}}Impl(basePath: kotlin.String, httpClient: HttpClient, json: Json): {{classname}} {
     private val _basePath = basePath
     private val _httpClient = httpClient
     private val _json = json

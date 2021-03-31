@@ -1,0 +1,32 @@
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
+import dev.icerock.moko.network.schemas.AllOfSerializer
+
+@Serializable(with = {{classname}}Serializer::class)
+{{>classes_modifiers}}data class {{classname}} (
+{{#allVars}}
+    val {{{name}}}: {{{datatype}}}{{^-last}},{{/-last}}
+{{/allVars}}
+)
+
+private object {{classname}}Serializer : AllOfSerializer<{{classname}}>("{{classname}}Serializer") {
+
+    override fun decodeJson(json: Json, element: JsonElement): {{classname}} {
+        return {{classname}}(
+            {{#allVars}}
+            {{{name}}} = json.decodeFromJsonElement({{{datatype}}}.serializer(), element){{^-last}},{{/-last}}
+            {{/allVars}}
+        )
+    }
+
+    override fun encodeJson(json: Json, value: {{classname}}): List<JsonObject> {
+        return listOf(
+            {{#allVars}}
+            json.encodeToJsonElement({{{datatype}}}.serializer(), value.{{{name}}}).jsonObject{{^-last}},{{/-last}}
+            {{/allVars}}
+        )
+    }
+}

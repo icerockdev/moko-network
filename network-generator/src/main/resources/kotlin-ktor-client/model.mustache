@@ -7,6 +7,10 @@ import kotlinx.serialization.Serializable
 
 {{#models}}
 {{#model}}
-{{#isEnum}}{{>enum_class}}{{/isEnum}}{{^isEnum}}{{#isAlias}}typealias {{classname}} = {{dataType}}{{/isAlias}}{{^isAlias}}{{>data_class}}{{/isAlias}}{{/isEnum}}
+{{#isEnum}}{{>enum_class}}{{/isEnum}}
+{{#isAlias}}typealias {{classname}} = {{dataType}}{{/isAlias}}
+{{#allOf}}{{>data_class_allof}}{{/allOf}}
+
+{{^isEnum}}{{^isAlias}}{{^allOf}}{{>data_class}}{{/allOf}}{{/isAlias}}{{/isEnum}}
 {{/model}}
 {{/models}}

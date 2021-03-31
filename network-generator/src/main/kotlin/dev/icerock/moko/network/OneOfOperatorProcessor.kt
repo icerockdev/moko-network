@@ -4,6 +4,7 @@
 
 package dev.icerock.moko.network
 
+import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.media.ComposedSchema
 import io.swagger.v3.oas.models.media.Schema
 
@@ -14,7 +15,7 @@ internal class OneOfOperatorProcessor(
     private val propertyNewType: String
 ) : OpenApiSchemaProcessor {
 
-    override fun process(schema: Schema<*>) {
+    override fun process(openApi: OpenAPI, schema: Schema<*>) {
         val schemaProperties = schema.properties ?: return
 
         schemaProperties.forEach { (_, propSchema) ->
