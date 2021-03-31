@@ -8,11 +8,9 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.Paths
 import io.swagger.v3.oas.models.media.ArraySchema
-import io.swagger.v3.oas.models.media.ComposedSchema
 import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
-import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.servers.Server
 import org.apache.commons.lang3.StringUtils
 import org.openapitools.codegen.CodegenConstants
@@ -70,6 +68,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         openApiProcessor.apply {
             addProcessor(OneOfOperatorProcessor(ONE_OF_REPLACE_TYPE_NAME))
             addProcessor(SchemaEnumNullProcessor())
+            addProcessor(AllOfSchemeProcessor())
         }
     }
 
@@ -111,7 +110,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
         openApiProcessor.process(openAPI)
 
-        val schemas: MutableMap<String, Schema<*>> = openAPI.components.schemas.toMutableMap()
+        val schemas: MutableMap<String, Schema<*>> = openAPI.components.schemas
 
         openAPI.components?.requestBodies?.forEach { (requestBodyName, requestBody) ->
             val jsonContent: MediaType? = requestBody.content["application/json"]
@@ -142,79 +141,6 @@ class KtorCodegen : AbstractKotlinCodegen() {
                     }
                     jsonContent.schema = objectSchema
                 }
-            }
-        }
-
-        preprocessOpenApiAllOfSchemas(openAPI, schemas)
-
-        openAPI.components.schemas = schemas
-    }
-
-    private fun preprocessOpenApiAllOfSchemas(openAPI: OpenAPI, schemas: MutableMap<String, Schema<*>>) {
-        openAPI.paths?.forEach { _, item ->
-            val operations: List<Operation> = item.readOperations()
-            operations.forEach { operation ->
-                operation.responses.forEach { name, responseBody ->
-                    processResponse(
-                        responseBody,
-                        responseName = operation.operationId + "_response_" + name,
-                        schemas
-                    )
-                }
-            }
-        }
-
-        openAPI.components?.responses?.forEach { (responseName, responseBody) ->
-            processResponse(responseBody, responseName, schemas)
-        }
-    }
-
-    @Suppress("ReturnCount")
-    private fun processResponse(
-        responseBody: ApiResponse?,
-        responseName: String?,
-        schemas: MutableMap<String, Schema<*>>
-    ) {
-        val jsonContent: MediaType = responseBody?.content?.get("application/json") ?: return
-        val jsonSchema: ComposedSchema = jsonContent.schema as? ComposedSchema ?: return
-        val allOfSchemas: List<Schema<*>> = jsonSchema.allOf ?: return
-
-        val allOfSchemaName: String = responseName ?: jsonContent.toString()
-        extractAllOfSchema(schemas, allOfSchemaName, allOfSchemas)
-
-        jsonContent.schema = Schema<Any>().apply {
-            `$ref` = "#/components/schemas/$allOfSchemaName"
-        }
-    }
-
-    private fun extractAllOfSchema(
-        schemas: MutableMap<String, Schema<*>>,
-        allOfSchemaName: String,
-        allOfSchemas: List<Schema<*>>
-    ) {
-        val allOfSchema = Schema<Any>().apply {
-            // mark our synthetic schema by this name, to mark codegen model later for correct template processing
-            name = "allOf"
-            properties = mutableMapOf()
-        }
-        schemas[allOfSchemaName] = allOfSchema
-
-        var inlineIdx = 1
-        allOfSchemas.forEachIndexed { index, schema ->
-            val propertyName = "item_$index"
-
-            if (schema.`$ref` == null) {
-                val name = allOfSchemaName + "_inline_" + inlineIdx
-                inlineIdx++
-                if (schemas.containsKey(name)) throw IllegalAccessException(name)
-
-                schemas[name] = schema
-
-                allOfSchema.properties[propertyName] = Schema<Any>().apply {
-                    `$ref` = "#/components/schemas/$name"
-                }
-            } else {
-                allOfSchema.properties[propertyName] = schema
             }
         }
     }
