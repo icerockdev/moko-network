@@ -29,7 +29,7 @@ object Deps {
     private const val mokoMvvmVersion = "0.9.1"
     private const val mokoErrorsVersion = "0.3.1"
     private const val mokoTestVersion = "0.2.0"
-    const val mokoNetworkVersion = "0.12.1"
+    const val mokoNetworkVersion = "0.13.0"
 
     private const val kbignumVersion = "1.11.0"
 
