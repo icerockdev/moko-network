@@ -8,17 +8,19 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.Paths
 import io.swagger.v3.oas.models.media.ArraySchema
+import io.swagger.v3.oas.models.media.ComposedSchema
 import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema
+import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.servers.Server
-import org.openapitools.codegen.languages.AbstractKotlinCodegen
 import org.apache.commons.lang3.StringUtils
 import org.openapitools.codegen.CodegenConstants
 import org.openapitools.codegen.CodegenModel
 import org.openapitools.codegen.CodegenOperation
 import org.openapitools.codegen.CodegenProperty
 import org.openapitools.codegen.CodegenType
+import org.openapitools.codegen.languages.AbstractKotlinCodegen
 
 @Suppress("TooManyFunctions")
 class KtorCodegen : AbstractKotlinCodegen() {
@@ -143,7 +145,67 @@ class KtorCodegen : AbstractKotlinCodegen() {
             }
         }
 
+        openAPI.paths?.forEach { _, item ->
+            val operations: List<Operation> = item.readOperations()
+            operations.forEach { operation ->
+                operation.responses.forEach { name, responseBody ->
+                    processResponse(
+                        responseBody,
+                        responseName = operation.operationId + "_response_" + name,
+                        schemas
+                    )
+                }
+            }
+        }
+
+        openAPI.components?.responses?.forEach { (responseName, responseBody) ->
+            processResponse(responseBody, responseName, schemas)
+        }
+
         openAPI.components.schemas = schemas
+    }
+
+    private fun processResponse(
+        responseBody: ApiResponse?,
+        responseName: String?,
+        schemas: MutableMap<String, Schema<*>>
+    ) {
+        val jsonContent: MediaType = responseBody?.content?.get("application/json") ?: return
+        val jsonSchema: Schema<*> = jsonContent.schema ?: return
+
+        if (jsonSchema !is ComposedSchema) return
+        val allOfSchemas: List<Schema<*>> = jsonSchema.allOf ?: return
+
+        val allOfSchemaName: String = responseName ?: jsonContent.toString()
+        val allOfSchema = Schema<Any>().apply {
+            // mark our synthetic schema by this name, to mark codegen model later for correct template processing
+            name = "allOf"
+            properties = mutableMapOf()
+        }
+        schemas[allOfSchemaName] = allOfSchema
+
+        var inlineIdx = 1
+        allOfSchemas.forEachIndexed { index, schema ->
+            val propertyName = "item_$index"
+
+            if (schema.`$ref` == null) {
+                val name = allOfSchemaName + "_inline_" + inlineIdx
+                inlineIdx++
+                if (schemas.containsKey(name)) throw IllegalAccessException(name)
+
+                schemas[name] = schema
+
+                allOfSchema.properties[propertyName] = Schema<Any>().apply {
+                    `$ref` = "#/components/schemas/$name"
+                }
+            } else {
+                allOfSchema.properties[propertyName] = schema
+            }
+        }
+
+        jsonContent.schema = Schema<Any>().apply {
+            `$ref` = "#/components/schemas/$allOfSchemaName"
+        }
     }
 
     override fun fromOperation(
@@ -153,7 +215,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         servers: List<Server>?
     ): CodegenOperation {
         val codegenOperation = super.fromOperation(path, httpMethod, operation, servers)
-        codegenOperation.httpMethod = codegenOperation.httpMethod.firstCapitalized()
+        codegenOperation.httpMethod = codegenOperation.httpMethod.toLowerCase().capitalize()
         var currentPath = codegenOperation.path
         for (param in codegenOperation.pathParams) {
             currentPath = currentPath.replace("{" + param.baseName + "}", "$" + param.paramName)
@@ -165,9 +227,9 @@ class KtorCodegen : AbstractKotlinCodegen() {
         return codegenOperation
     }
 
-    override fun fromProperty(name: String?, p: Schema<*>?): CodegenProperty {
-        val property = super.fromProperty(name, p)
-        if (p?.format?.equals("decimal") == true) {
+    override fun fromProperty(name: String?, schema: Schema<*>?): CodegenProperty {
+        val property = super.fromProperty(name, schema)
+        if (schema?.format?.equals("decimal") == true) {
             property.isDecimal = true
         }
 
@@ -181,11 +243,13 @@ class KtorCodegen : AbstractKotlinCodegen() {
                 model.imports.add("dev.icerock.moko.network.bignum.BigNumSerializer")
             }
         }
+        // fill allOf property only for marked schemas, to use custom codegen template
+        if (schema?.name == "allOf") {
+            model.allOf = setOf("true")
+        } else {
+            model.allOf = null
+        }
         return model
-    }
-
-    private fun String.firstCapitalized(): String {
-        return substring(0, 1).toUpperCase() + substring(1).toLowerCase()
     }
 
     override fun getEnumPropertyNaming(): CodegenConstants.ENUM_PROPERTY_NAMING_TYPE {
