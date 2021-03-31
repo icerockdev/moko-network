@@ -145,6 +145,12 @@ class KtorCodegen : AbstractKotlinCodegen() {
             }
         }
 
+        preprocessOpenApiAllOfSchemas(openAPI, schemas)
+
+        openAPI.components.schemas = schemas
+    }
+
+    private fun preprocessOpenApiAllOfSchemas(openAPI: OpenAPI, schemas: MutableMap<String, Schema<*>>) {
         openAPI.paths?.forEach { _, item ->
             val operations: List<Operation> = item.readOperations()
             operations.forEach { operation ->
@@ -161,22 +167,31 @@ class KtorCodegen : AbstractKotlinCodegen() {
         openAPI.components?.responses?.forEach { (responseName, responseBody) ->
             processResponse(responseBody, responseName, schemas)
         }
-
-        openAPI.components.schemas = schemas
     }
 
+    @Suppress("ReturnCount")
     private fun processResponse(
         responseBody: ApiResponse?,
         responseName: String?,
         schemas: MutableMap<String, Schema<*>>
     ) {
         val jsonContent: MediaType = responseBody?.content?.get("application/json") ?: return
-        val jsonSchema: Schema<*> = jsonContent.schema ?: return
-
-        if (jsonSchema !is ComposedSchema) return
+        val jsonSchema: ComposedSchema = jsonContent.schema as? ComposedSchema ?: return
         val allOfSchemas: List<Schema<*>> = jsonSchema.allOf ?: return
 
         val allOfSchemaName: String = responseName ?: jsonContent.toString()
+        extractAllOfSchema(schemas, allOfSchemaName, allOfSchemas)
+
+        jsonContent.schema = Schema<Any>().apply {
+            `$ref` = "#/components/schemas/$allOfSchemaName"
+        }
+    }
+
+    private fun extractAllOfSchema(
+        schemas: MutableMap<String, Schema<*>>,
+        allOfSchemaName: String,
+        allOfSchemas: List<Schema<*>>
+    ) {
         val allOfSchema = Schema<Any>().apply {
             // mark our synthetic schema by this name, to mark codegen model later for correct template processing
             name = "allOf"
@@ -201,10 +216,6 @@ class KtorCodegen : AbstractKotlinCodegen() {
             } else {
                 allOfSchema.properties[propertyName] = schema
             }
-        }
-
-        jsonContent.schema = Schema<Any>().apply {
-            `$ref` = "#/components/schemas/$allOfSchemaName"
         }
     }
 

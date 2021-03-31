@@ -58,6 +58,7 @@ mokoNetwork {
         }
     }
     spec("allOf") {
+        packageName = "test.allOf"
         inputSpec = file("src/allOf.yaml")
     }
 }
