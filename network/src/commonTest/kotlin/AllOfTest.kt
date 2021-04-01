@@ -2,7 +2,7 @@
  * Copyright 2021 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
-import dev.icerock.moko.network.schemas.AllOfSerializer
+import dev.icerock.moko.network.schemas.ComposedSchemaSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -66,7 +66,7 @@ private data class InlineDog(
     val breed: String? = null
 )
 
-private object DogSerializer : AllOfSerializer<Dog>("DogSerializer") {
+private object DogSerializer : ComposedSchemaSerializer<Dog>("DogSerializer") {
 
     override fun decodeJson(json: Json, element: JsonElement): Dog {
         val pet = json.decodeFromJsonElement(Pet.serializer(), element)
