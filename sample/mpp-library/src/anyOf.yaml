@@ -43,3 +43,12 @@ components:
           type: boolean
       required:
         - pet_type
+    TimeLineList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/PetByType'
+              - $ref: '#/components/schemas/PetByAge'

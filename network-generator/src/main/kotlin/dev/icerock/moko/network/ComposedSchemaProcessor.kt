@@ -42,7 +42,7 @@ internal class ComposedSchemaProcessor(
         context: SchemaContext,
         allOfSchemas: List<Schema<*>>
     ): Schema<*> {
-        val newSchemaName: String = context.buildSchemaName()
+        val newSchemaName: String = context.buildSchemaName() + "_composed"
         extractAllOfSchema(schemas, newSchemaName, allOfSchemas)
 
         return Schema<Any>().apply {
@@ -56,7 +56,7 @@ internal class ComposedSchemaProcessor(
         context: SchemaContext,
         anyOfSchemas: List<Schema<*>>
     ): Schema<*> {
-        val newSchemaName: String = context.buildSchemaName()
+        val newSchemaName: String = context.buildSchemaName() + "_composed"
         extractAnyOfSchema(schemas, newSchemaName, anyOfSchemas)
 
         return Schema<Any>().apply {
@@ -147,6 +147,7 @@ internal class ComposedSchemaProcessor(
             is SchemaContext.ParameterComponent -> this.parameterName
             is SchemaContext.SchemaComponent -> this.schemaName
             is SchemaContext.PropertyComponent -> this.schemaName + "_" + this.propertyName
-        } + "_composed"
+            is SchemaContext.Child -> this.parent.buildSchemaName() + "_" + this.child.buildSchemaName()
+        }
     }
 }

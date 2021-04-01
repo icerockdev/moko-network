@@ -12,7 +12,7 @@ import dev.icerock.moko.network.schemas.ComposedSchemaSerializer
 {{/allVars}}
 )
 
-private object {{classname}}Serializer : ComposedSchemaSerializer<{{classname}}>("{{classname}}Serializer") {
+{{>classes_modifiers}}object {{classname}}Serializer : ComposedSchemaSerializer<{{classname}}>("{{classname}}Serializer") {
 
     override fun decodeJson(json: Json, element: JsonElement): {{classname}} {
         return {{classname}}(

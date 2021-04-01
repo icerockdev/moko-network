@@ -7,6 +7,7 @@ package dev.icerock.moko.network
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
+import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.parameters.Parameter
@@ -151,14 +152,27 @@ internal class OpenApiProcessor {
     private fun Schema<*>.processSchema(openAPI: OpenAPI, context: SchemaContext): Schema<*> {
         this.properties?.keys?.toList()?.also { keys ->
             for (i in keys.indices) {
-                val name = keys[i]
-                val componentSchema = this.properties?.get(name)
+                val propertyName = keys[i]
+                val componentSchema = this.properties?.get(propertyName)
                 val propertyContext = SchemaContext.PropertyComponent(
-                    schemaName = name,
-                    propertyName = name
+                    schemaName = this.name ?: "",
+                    propertyName = propertyName
                 )
-                this.properties[name] = componentSchema?.processSchema(openAPI, propertyContext)
+                this.properties[propertyName] = componentSchema?.processSchema(
+                    openAPI,
+                    SchemaContext.Child(parent = context, child = propertyContext)
+                )
             }
+        }
+        if (this is ArraySchema) {
+            val propertyContext = SchemaContext.PropertyComponent(
+                schemaName = this.name ?: "",
+                propertyName = "items"
+            )
+            this.items = this.items.processSchema(
+                openAPI,
+                SchemaContext.Child(parent = context, child = propertyContext)
+            )
         }
 
         var result = this
@@ -217,5 +231,10 @@ sealed class SchemaContext {
     data class PropertyComponent(
         val schemaName: String,
         val propertyName: String
+    ) : SchemaContext()
+
+    data class Child(
+        val parent: SchemaContext,
+        val child: SchemaContext
     ) : SchemaContext()
 }
