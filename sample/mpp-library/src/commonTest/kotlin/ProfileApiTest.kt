@@ -470,29 +470,4 @@ class ProfileApiTest {
         assertNotNull(result.stateName)
         assertTrue(isTestSuccessFlow.value)
     }
-
-    private fun createMockClient(
-        handler: MockRequestHandler
-    ): HttpClient {
-        val json = Json {
-            ignoreUnknownKeys = true
-        }
-
-        return HttpClient(MockEngine) {
-            engine {
-                addHandler(handler)
-            }
-
-            install(ExceptionFeature) {
-                exceptionFactory = HttpExceptionFactory(
-                    defaultParser = ErrorExceptionParser(json),
-                    customParsers = mapOf(
-                        HttpStatusCode.UnprocessableEntity.value to ValidationExceptionParser(json)
-                    )
-                )
-            }
-
-            expectSuccess = false
-        }
-    }
 }

@@ -9,8 +9,9 @@ import kotlinx.serialization.Serializable
 {{#model}}
 {{#isEnum}}{{>enum_class}}{{/isEnum}}
 {{#isAlias}}typealias {{classname}} = {{dataType}}{{/isAlias}}
-{{#allOf}}{{>data_class_allof}}{{/allOf}}
+{{#vendorExtensions.x-allOfGeneration}}{{>data_class_allof}}{{/vendorExtensions.x-allOfGeneration}}
+{{#vendorExtensions.x-anyOfGeneration}}{{>data_class_anyof}}{{/vendorExtensions.x-anyOfGeneration}}
 
-{{^isEnum}}{{^isAlias}}{{^allOf}}{{>data_class}}{{/allOf}}{{/isAlias}}{{/isEnum}}
+{{^isEnum}}{{^isAlias}}{{^vendorExtensions.x-allOfGeneration}}{{^vendorExtensions.x-anyOfGeneration}}{{>data_class}}{{/vendorExtensions.x-anyOfGeneration}}{{/vendorExtensions.x-allOfGeneration}}{{/isAlias}}{{/isEnum}}
 {{/model}}
 {{/models}}

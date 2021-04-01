@@ -15,20 +15,12 @@ internal class OneOfOperatorProcessor(
     private val propertyNewType: String
 ) : OpenApiSchemaProcessor {
 
-    override fun process(openApi: OpenAPI, schema: Schema<*>) {
-        val schemaProperties = schema.properties ?: return
+    override fun process(openApi: OpenAPI, schema: Schema<*>, context: SchemaContext): Schema<*> {
+        if(schema !is ComposedSchema) return schema
+        if(schema.oneOf.isNullOrEmpty()) return schema
 
-        schemaProperties.forEach { (_, propSchema) ->
-            if (propSchema == null ||
-                propSchema !is ComposedSchema ||
-                propSchema.oneOf?.isEmpty() == true
-            ) {
-                return@forEach
-            }
-
-            propSchema.type = propertyNewType
-            propSchema.oneOf = null
-            propSchema.`$ref` = null
+        return Schema<Any>().apply {
+            type = propertyNewType
         }
     }
 }
