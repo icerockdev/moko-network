@@ -23,12 +23,10 @@ object Deps {
 
     private const val detektVersion = "1.15.0"
 
-    private const val mokoGraphicsVersion = "0.5.0"
-    private const val mokoParcelizeVersion = "0.5.0"
-    private const val mokoResourcesVersion = "0.15.0"
-    private const val mokoMvvmVersion = "0.9.1"
-    private const val mokoErrorsVersion = "0.3.1"
-    private const val mokoTestVersion = "0.2.0"
+    private const val mokoResourcesVersion = "0.15.1"
+    private const val mokoMvvmVersion = "0.9.2"
+    private const val mokoErrorsVersion = "0.3.2"
+    private const val mokoTestVersion = "0.2.1"
     const val mokoNetworkVersion = "0.14.0"
 
     private const val kbignumVersion = "1.11.0"
@@ -40,25 +38,17 @@ object Deps {
     }
 
     object Plugins {
-        val javaGradle = GradlePlugin(id = "java-gradle-plugin")
-        val androidApplication = GradlePlugin(id = "com.android.application")
         val androidLibrary = GradlePlugin(id = "com.android.library")
-        val kotlinJvm = GradlePlugin(id = "org.jetbrains.kotlin.jvm")
         val kotlinMultiplatform = GradlePlugin(
             id = "org.jetbrains.kotlin.multiplatform",
             module = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         )
         val kotlinKapt = GradlePlugin(id = "kotlin-kapt")
-        val kotlinAndroid = GradlePlugin(id = "kotlin-android")
-        val kotlinAndroidExtensions = GradlePlugin(id = "kotlin-android-extensions")
         val kotlinSerialization = GradlePlugin(
             id = "org.jetbrains.kotlin.plugin.serialization",
             module = "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
         )
         val mavenPublish = GradlePlugin(id = "org.gradle.maven-publish")
-
-        val mobileMultiplatform = GradlePlugin(id = "dev.icerock.mobile.multiplatform")
-        val iosFramework = GradlePlugin(id = "dev.icerock.mobile.multiplatform.ios-framework")
 
         val mokoNetwork = GradlePlugin(
             id = "dev.icerock.mobile.multiplatform-network-generator",
@@ -120,10 +110,6 @@ object Deps {
                 "io.ktor:ktor-client-mock:$ktorClientVersion"
             const val mokoResources =
                 "dev.icerock.moko:resources:$mokoResourcesVersion"
-            const val mokoParcelize =
-                "dev.icerock.moko:parcelize:$mokoParcelizeVersion"
-            const val mokoGraphics =
-                "dev.icerock.moko:graphics:$mokoGraphicsVersion"
             const val mokoMvvmCore =
                 "dev.icerock.moko:mvvm-core:$mokoMvvmVersion"
             const val mokoMvvmLiveData =
