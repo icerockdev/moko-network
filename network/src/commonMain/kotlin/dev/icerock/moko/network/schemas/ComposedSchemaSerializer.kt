@@ -4,6 +4,8 @@
 
 package dev.icerock.moko.network.schemas
 
+import dev.icerock.moko.network.exceptions.DataNotFitAnyOfSchema
+import dev.icerock.moko.network.exceptions.DataNotFitOneOfSchema
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -17,7 +19,7 @@ import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 
-abstract class AllOfSerializer<T>(serialName: String) : KSerializer<T> {
+abstract class ComposedSchemaSerializer<T>(serialName: String) : KSerializer<T> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor(serialName, PrimitiveKind.STRING)
 
@@ -52,4 +54,25 @@ abstract class AllOfSerializer<T>(serialName: String) : KSerializer<T> {
     abstract fun decodeJson(json: Json, element: JsonElement): T
 
     abstract fun encodeJson(json: Json, value: T): List<JsonObject>
+
+    protected fun ensureAnyItemIsSuccess(element: JsonElement, results: List<Result<*>>) {
+        val isAllFailed = results.all { it.isFailure }
+
+        if (isAllFailed.not()) return
+
+        throw DataNotFitAnyOfSchema(
+            data = element,
+            causes = results.mapNotNull { it.exceptionOrNull() }
+        )
+    }
+
+    protected fun ensureOnlyOneItemIsSuccess(element: JsonElement, results: List<Result<*>>) {
+        val failedCount = results.count { it.isFailure }
+        if (failedCount == results.size - 1) return
+
+        throw DataNotFitOneOfSchema(
+            data = element,
+            results = results
+        )
+    }
 }

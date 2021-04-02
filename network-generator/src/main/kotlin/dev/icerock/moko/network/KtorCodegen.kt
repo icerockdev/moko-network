@@ -68,7 +68,9 @@ class KtorCodegen : AbstractKotlinCodegen() {
         openApiProcessor.apply {
             addProcessor(OneOfOperatorProcessor(ONE_OF_REPLACE_TYPE_NAME))
             addProcessor(SchemaEnumNullProcessor())
-            addProcessor(AllOfSchemeProcessor())
+            addProcessor(ComposedSchemaProcessor { operation, path, method ->
+                getOrGenerateOperationId(operation, path, method)
+            })
         }
     }
 
@@ -179,12 +181,6 @@ class KtorCodegen : AbstractKotlinCodegen() {
             if (it.isDecimal) {
                 model.imports.add("dev.icerock.moko.network.bignum.BigNumSerializer")
             }
-        }
-        // fill allOf property only for marked schemas, to use custom codegen template
-        if (schema?.name == "allOf") {
-            model.allOf = setOf("true")
-        } else {
-            model.allOf = null
         }
         return model
     }

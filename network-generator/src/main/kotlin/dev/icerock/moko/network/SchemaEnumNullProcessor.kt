@@ -11,8 +11,8 @@ import io.swagger.v3.oas.models.media.Schema
  * OpenApi schema processor that removes all [null] items from enum fields of the schema.
  */
 internal class SchemaEnumNullProcessor : OpenApiSchemaProcessor {
-    override fun process(openApi: OpenAPI, schema: Schema<*>) {
-        val schemaProperties = schema.properties ?: return
+    override fun process(openApi: OpenAPI, schema: Schema<*>, context: SchemaContext): Schema<*> {
+        val schemaProperties = schema.properties ?: return schema
 
         schemaProperties.forEach { (_, propSchema) ->
             val enumField = propSchema.enum
@@ -20,5 +20,7 @@ internal class SchemaEnumNullProcessor : OpenApiSchemaProcessor {
                 propSchema.enum = enumField.filterNotNull()
             }
         }
+
+        return schema
     }
 }

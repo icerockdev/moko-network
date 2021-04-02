@@ -2,152 +2,54 @@ openapi: 3.0.0
 info:
   title: API
   version: v1
-tags:
-  - name: profile
-    description: Профиль пользователя
 paths:
-  '/profile/allOf':
-    get:
-      operationId: api_profile_allof
+  /pets:
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/Cat'
+                - $ref: '#/components/schemas/Dog'
+              discriminator:
+                propertyName: pet_type
       responses:
         '200':
-          description: Ok
+          description: Updated
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/LimitIdResponse"
-                  - type: object
-                    properties:
-                      items:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/Unit"
-security:
-  - Bearer: []
+                $ref: '#/components/schemas/Dog'
 components:
-  securitySchemes:
-    Bearer:
-      in: header
-      name: Authorization
-      type: apiKey
   schemas:
-    Unit:
+    Pet:
       type: object
-      properties:
-        name:
-          maxLength: 255
-          minLength: 1
-          title: Название
-          type: string
-        name_rid:
-          format: uuid
-          type: string
-          description: UUID из сервиса справочников
-        division:
-          maxLength: 255
-          minLength: 1
-          title: Дивизион
-          type: string
-        organization:
-          maxLength: 255
-          minLength: 1
-          title: Организация
-          type: string
-        organization_unit:
-          maxLength: 255
-          minLength: 1
-          title: Организацинная еденица
-          type: string
-        position:
-          maxLength: 255
-          minLength: 1
-          title: Должность
-          type: string
-        user:
-          format: uuid
-          title: Сотрудник
-          type: string
-          nullable: true
-        work_town:
-          description: Город работы
-          minLength: 1
-          title: Work town
-          type: string
-          nullable: true
-        activities:
-          type: array
-          items:
-            $ref: '#/components/schemas/UnitActivity'
-        employee_number:
-          type: string
-          description: Табельный номер
-        remote_employee:
-          type: boolean
-          description: Внешний сотрудник
-          default: false
-        organization_rid:
-          type: string
-          format: uuid
-          description: UUID из сервиса справочников
-        organization_unit_rid:
-          type: string
-          format: uuid
-          description: UUID из сервиса справочников
-        division_rid:
-          type: string
-          format: uuid
-          description: UUID из сервиса справочников
-        position_rid:
-          type: string
-          format: uuid
-          description: UUID из сервиса справочников
       required:
-        - division
-        - organization
-        - organization_unit
-        - position
-    UnitActivity:
-      title: UnitActivity
-      type: object
+        - pet_type
       properties:
-        id:
+        pet_type:
           type: string
-          format: uuid
-        is_main_activity:
-          type: boolean
-        activity:
-          type: string
-        functional_activity:
-          type: string
-          nullable: true
-        activity_rid:
-          title: Основное направление
-          type: string
-          format: uuid
-        functional_activity_rid:
-          title: Функциональное направление
-          type: string
-          format: uuid
-          nullable: true
-    LimitIdResponse:
-      type: object
-      title: LimitIdResponse
-      required:
-        - unpassed_ids
-        - limit
-        - unpassed_external_ids
-      properties:
-        unpassed_ids:
-          type: array
-          items:
-            type: string
-            format: uuid
-        limit:
-          type: integer
-          default: 100
-          minimum: 1
-        unpassed_external_ids:
-          type: array
-          items:
-            type: string
+      discriminator:
+        propertyName: pet_type
+    Dog:     # "Dog" is a value for the pet_type property (the discriminator value)
+      allOf: # Combines the main `Pet` schema with `Dog`-specific properties
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          # all other properties specific to a `Dog`
+          properties:
+            bark:
+              type: boolean
+            breed:
+              type: string
+              enum: [Dingo, Husky, Retriever, Shepherd]
+    Cat:     # "Cat" is a value for the pet_type property (the discriminator value)
+      allOf: # Combines the main `Pet` schema with `Cat`-specific properties
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          # all other properties specific to a `Cat`
+          properties:
+            hunts:
+              type: boolean
+            age:
+              type: integer

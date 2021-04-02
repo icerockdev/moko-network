@@ -7,7 +7,9 @@ package dev.icerock.moko.network
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
+import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.Schema
+import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.responses.ApiResponse
 
 internal class OpenApiProcessor {
@@ -19,47 +21,175 @@ internal class OpenApiProcessor {
     }
 
     fun process(openAPI: OpenAPI) {
-        openAPI.paths.forEach { _, pathItem ->
-            pathItem.processSchema(openAPI)
+        openAPI.paths.forEach { pathName, pathItem ->
+            pathItem.processSchema(openAPI, pathName)
         }
 
         openAPI.components?.run {
-            this.schemas?.forEach { (_, componentSchema) ->
-                componentSchema?.processSchema(openAPI)
-            }
-            this.parameters?.forEach { (_, param) ->
-                param.schema?.processSchema(openAPI)
-            }
-            this.requestBodies?.forEach { (_, requestBody) ->
-                requestBody.content?.forEach { (_, content) ->
-                    content.schema?.processSchema(openAPI)
+            this.schemas?.keys?.toList()?.also { keys ->
+                for (i in keys.indices) {
+                    val name = keys[i]
+                    val componentSchema = this.schemas?.get(name)
+                    val context = SchemaContext.SchemaComponent(
+                        schemaName = name
+                    )
+                    this.schemas[name] = componentSchema?.processSchema(openAPI, context)
                 }
             }
-            this.responses?.forEach { (_, response) ->
-                response.processSchema(openAPI)
+            this.parameters?.forEach { (paramName, param) ->
+                val context = SchemaContext.ParameterComponent(
+                    parameterName = paramName,
+                    parameter = param
+                )
+                param.schema = param.schema?.processSchema(openAPI, context)
+            }
+            this.requestBodies?.forEach { (requestName, requestBody) ->
+                requestBody.processSchema(openAPI, requestName)
+            }
+            this.responses?.forEach { (responseName, response) ->
+                response.processSchema(
+                    openAPI,
+                    responseName = responseName
+                )
             }
         }
     }
 
-    private fun PathItem.processSchema(openAPI: OpenAPI) {
-        readOperations().forEach { it.processSchema(openAPI) }
-    }
-
-    private fun Operation.processSchema(openAPI: OpenAPI) {
-        responses?.forEach { (_, apiResponse) ->
-            apiResponse.processSchema(openAPI)
+    private fun PathItem.processSchema(openAPI: OpenAPI, pathName: String) {
+        readOperationsMap().forEach { (method, operation) ->
+            operation.processSchema(openAPI, pathName, this, method)
         }
     }
 
-    private fun ApiResponse.processSchema(openAPI: OpenAPI) {
-        content?.forEach { (_, mediaType) ->
-            mediaType.schema?.processSchema(openAPI)
+    private fun Operation.processSchema(
+        openAPI: OpenAPI,
+        pathName: String,
+        pathItem: PathItem,
+        method: PathItem.HttpMethod
+    ) {
+        requestBody?.processSchema(openAPI, pathName, pathItem, method, this)
+        responses?.forEach { (responseName, apiResponse) ->
+            apiResponse.processSchema(openAPI, pathName, pathItem, method, this, responseName)
         }
     }
 
-    private fun Schema<*>.processSchema(openAPI: OpenAPI) {
+    private fun RequestBody.processSchema(
+        openAPI: OpenAPI,
+        pathName: String,
+        pathItem: PathItem,
+        method: PathItem.HttpMethod,
+        operation: Operation
+    ) {
+        content?.forEach { (contentName, content) ->
+            val context = SchemaContext.OperationRequest(
+                pathName = pathName,
+                pathItem = pathItem,
+                operation = operation,
+                method = method,
+                requestBody = this,
+                contentName = contentName,
+                mediaType = content
+            )
+            content.schema = content.schema?.processSchema(openAPI, context)
+        }
+    }
+
+    private fun RequestBody.processSchema(
+        openAPI: OpenAPI,
+        requestName: String
+    ) {
+        content?.forEach { (contentName, content) ->
+            val context = SchemaContext.Request(
+                requestName = requestName,
+                requestBody = this,
+                contentName = contentName,
+                mediaType = content
+            )
+            content.schema = content.schema?.processSchema(openAPI, context)
+        }
+    }
+
+    @Suppress("LongParameterList")
+    private fun ApiResponse.processSchema(
+        openAPI: OpenAPI,
+        pathName: String,
+        pathItem: PathItem,
+        method: PathItem.HttpMethod,
+        operation: Operation,
+        responseName: String
+    ) {
+        content?.forEach { (contentName, mediaType) ->
+            val context = SchemaContext.OperationResponse(
+                pathName = pathName,
+                pathItem = pathItem,
+                operation = operation,
+                method = method,
+                responseName = responseName,
+                response = this,
+                contentName = contentName,
+                mediaType = mediaType
+            )
+            mediaType.schema = mediaType.schema?.processSchema(openAPI, context)
+        }
+    }
+
+    private fun ApiResponse.processSchema(
+        openAPI: OpenAPI,
+        responseName: String
+    ) {
+        content?.forEach { (contentName, mediaType) ->
+            val context = SchemaContext.Response(
+                responseName = responseName,
+                response = this,
+                contentName = contentName,
+                mediaType = mediaType
+            )
+            mediaType.schema = mediaType.schema?.processSchema(openAPI, context)
+        }
+    }
+
+    private fun Schema<*>.processSchema(openAPI: OpenAPI, context: SchemaContext): Schema<*> {
+        this.properties?.keys?.toList()?.also { keys ->
+            for (i in keys.indices) {
+                val propertyName = keys[i]
+                val componentSchema = this.properties?.get(propertyName)
+                val propertyContext = SchemaContext.PropertyComponent(
+                    schemaName = this.name,
+                    propertyName = propertyName
+                )
+                this.properties[propertyName] = componentSchema?.processSchema(
+                    openAPI,
+                    SchemaContext.Child(parent = context, child = propertyContext)
+                )
+            }
+        }
+        if (this is ArraySchema) {
+            val propertyContext = SchemaContext.PropertyComponent(
+                schemaName = this.name,
+                propertyName = "items"
+            )
+            this.items = this.items.processSchema(
+                openAPI,
+                SchemaContext.Child(parent = context, child = propertyContext)
+            )
+        }
+
+        return processSchemaByProcessors(
+            input = this,
+            openAPI = openAPI,
+            context = context
+        )
+    }
+
+    private fun processSchemaByProcessors(
+        input: Schema<*>,
+        openAPI: OpenAPI,
+        context: SchemaContext
+    ): Schema<*> {
+        var result = input
         schemaProcessors.forEach {
-            it.process(openAPI, this)
+            result = it.process(openAPI, result, context)
         }
+        return result
     }
 }

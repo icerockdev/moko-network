@@ -58,7 +58,15 @@ mokoNetwork {
         }
     }
     spec("allOf") {
-        packageName = "test.allOf"
+        packageName = "openapi.allof"
         inputSpec = file("src/allOf.yaml")
+    }
+    spec("anyOf") {
+        packageName = "openapi.anyof"
+        inputSpec = file("src/anyOf.yaml")
+    }
+    spec("oneOf") {
+        packageName = "openapi.oneof"
+        inputSpec = file("src/oneOf.yaml")
     }
 }
