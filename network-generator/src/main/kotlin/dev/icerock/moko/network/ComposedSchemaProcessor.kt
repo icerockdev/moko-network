@@ -42,8 +42,15 @@ internal class ComposedSchemaProcessor(
         context: SchemaContext,
         allOfSchemas: List<Schema<*>>
     ): Schema<*> {
+        if (allOfSchemas.size == 1) return allOfSchemas.first().withPropsOf(schema)
+
         val newSchemaName: String = context.buildSchemaName() + "_composed"
-        extractAllOfSchema(schemas, newSchemaName, allOfSchemas)
+        extractSchema(
+            schemas = schemas,
+            newSchemaName = newSchemaName,
+            markExtension = "x-allOfGeneration",
+            propertySchemas = allOfSchemas
+        )
 
         return Schema<Any>().apply {
             `$ref` = "#/components/schemas/$newSchemaName"
@@ -56,60 +63,35 @@ internal class ComposedSchemaProcessor(
         context: SchemaContext,
         anyOfSchemas: List<Schema<*>>
     ): Schema<*> {
+        if (anyOfSchemas.size == 1) return anyOfSchemas.first().withPropsOf(schema)
+
         val newSchemaName: String = context.buildSchemaName() + "_composed"
-        extractAnyOfSchema(schemas, newSchemaName, anyOfSchemas)
+        extractSchema(
+            schemas = schemas,
+            newSchemaName = newSchemaName,
+            markExtension = "x-anyOfGeneration",
+            propertySchemas = anyOfSchemas
+        )
 
         return Schema<Any>().apply {
             `$ref` = "#/components/schemas/$newSchemaName"
         }
     }
 
-    private fun extractAllOfSchema(
-        schemas: MutableMap<String, Schema<*>>,
-        allOfSchemaName: String,
-        allOfSchemas: List<Schema<*>>
-    ) {
-        val allOfSchema = Schema<Any>().apply {
-            // mark our synthetic schema by this name, to mark codegen model later for correct template processing
-            addExtension("x-allOfGeneration", true)
-            properties = mutableMapOf()
-        }
-        schemas[allOfSchemaName] = allOfSchema
-
-        var inlineIdx = 1
-        allOfSchemas.forEachIndexed { index, schema ->
-            val propertyName = "item_$index"
-
-            if (schema.`$ref` == null) {
-                val name = allOfSchemaName + "_inline_" + inlineIdx
-                inlineIdx++
-                if (schemas.containsKey(name)) throw IllegalAccessException(name)
-
-                schemas[name] = schema
-
-                allOfSchema.properties[propertyName] = Schema<Any>().apply {
-                    `$ref` = "#/components/schemas/$name"
-                }
-            } else {
-                allOfSchema.properties[propertyName] = schema
-            }
-        }
-    }
-
-    private fun extractAnyOfSchema(
+    private fun extractSchema(
         schemas: MutableMap<String, Schema<*>>,
         newSchemaName: String,
-        anyOfSchemas: List<Schema<*>>
+        markExtension: String,
+        propertySchemas: List<Schema<*>>
     ) {
-        val anyOfSchema = Schema<Any>().apply {
-            // mark our synthetic schema by this name, to mark codegen model later for correct template processing
-            addExtension("x-anyOfGeneration", true)
+        val resultSchema = Schema<Any>().apply {
+            addExtension(markExtension, true)
             properties = mutableMapOf()
         }
-        schemas[newSchemaName] = anyOfSchema
+        schemas[newSchemaName] = resultSchema
 
         var inlineIdx = 1
-        anyOfSchemas.forEachIndexed { index, schema ->
+        propertySchemas.forEachIndexed { index, schema ->
             val propertyName = "item_$index"
 
             if (schema.`$ref` == null) {
@@ -119,13 +101,17 @@ internal class ComposedSchemaProcessor(
 
                 schemas[name] = schema
 
-                anyOfSchema.properties[propertyName] = Schema<Any>().apply {
+                resultSchema.properties[propertyName] = Schema<Any>().apply {
                     `$ref` = "#/components/schemas/$name"
                 }
             } else {
-                anyOfSchema.properties[propertyName] = schema
+                resultSchema.properties[propertyName] = schema
             }
         }
+    }
+
+    private fun Schema<*>.withPropsOf(schema: ComposedSchema) = apply {
+        nullable = schema.nullable
     }
 
     private fun SchemaContext.buildSchemaName(): String {
