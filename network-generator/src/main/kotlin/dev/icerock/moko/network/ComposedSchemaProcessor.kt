@@ -133,7 +133,7 @@ internal class ComposedSchemaProcessor(
             ) + "_requestBody"
             is SchemaContext.ParameterComponent -> this.parameterName
             is SchemaContext.SchemaComponent -> this.schemaName
-            is SchemaContext.PropertyComponent -> this.schemaName + "_" + this.propertyName
+            is SchemaContext.PropertyComponent -> this.schemaName.orEmpty() + "_" + this.propertyName
             is SchemaContext.Child -> this.parent.buildSchemaName() + "_" + this.child.buildSchemaName()
         }
     }
