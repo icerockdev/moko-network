@@ -11,7 +11,7 @@ plugins {
 
 dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
-    commonMainImplementation(Deps.Libs.MultiPlatform.kbignum)
+    commonMainApi(Deps.Libs.MultiPlatform.kbignum)
 
     commonMainImplementation(project(":network"))
 }
