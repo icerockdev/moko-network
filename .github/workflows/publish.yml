@@ -25,6 +25,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Build K/N cache
+        run: ./gradlew :network:runCommonizer
       - name: Publish plugin
         run: ./gradlew -p network-generator publishMavenJavaPublicationToOSSRHRepository
       - name: Publish library

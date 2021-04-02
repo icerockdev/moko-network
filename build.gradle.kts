@@ -12,17 +12,12 @@ buildscript {
     repositories {
         mavenCentral()
         google()
-
-        maven { url = uri("https://dl.bintray.com/kotlin/kotlin") }
-        maven { url = uri("https://kotlin.bintray.com/kotlinx") }
-        maven { url = uri("https://plugins.gradle.org/m2/") }
-        maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
+        gradlePluginPortal()
     }
     dependencies {
-        classpath("dev.icerock.moko:resources-generator:0.15.0")
+        classpath("dev.icerock.moko:resources-generator:0.15.1")
         classpath("dev.icerock.moko:network-generator") // substituted
         classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.31")
-        classpath("dev.icerock.gradle:bintray-publish:0.1.0")
         classpath("gradle:network-deps:1")
     }
 }
