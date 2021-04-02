@@ -13,6 +13,7 @@ internal class ComposedSchemaProcessor(
     private val operationIdGenerator: (operation: Operation, path: String, method: String) -> String
 ) : OpenApiSchemaProcessor {
 
+    @Suppress("ReturnCount")
     override fun process(openApi: OpenAPI, schema: Schema<*>, context: SchemaContext): Schema<*> {
         if (schema !is ComposedSchema) return schema
 

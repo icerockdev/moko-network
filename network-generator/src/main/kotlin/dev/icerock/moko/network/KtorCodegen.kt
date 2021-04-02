@@ -182,9 +182,6 @@ class KtorCodegen : AbstractKotlinCodegen() {
                 model.imports.add("dev.icerock.moko.network.bignum.BigNumSerializer")
             }
         }
-//        if (schema?.extensions?.isNullOrEmpty() == false) {
-//            model.vendorExtensions.putAll(schema.extensions)
-//        }
         return model
     }
 

@@ -15,9 +15,10 @@ internal class OneOfOperatorProcessor(
     private val propertyNewType: String
 ) : OpenApiSchemaProcessor {
 
+    @Suppress("ReturnCount")
     override fun process(openApi: OpenAPI, schema: Schema<*>, context: SchemaContext): Schema<*> {
-        if(schema !is ComposedSchema) return schema
-        if(schema.oneOf.isNullOrEmpty()) return schema
+        if (schema !is ComposedSchema) return schema
+        if (schema.oneOf.isNullOrEmpty()) return schema
 
         return Schema<Any>().apply {
             type = propertyNewType
