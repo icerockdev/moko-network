@@ -17,12 +17,6 @@ dependencies {
     commonMainApi(Deps.Libs.MultiPlatform.mokoResources)
 
     commonMainImplementation(project(":network"))
-
-    androidMainImplementation(Deps.Libs.Android.appCompat)
-
-    commonMainImplementation(Deps.Libs.MultiPlatform.mokoMvvmCore)
-    commonMainImplementation(Deps.Libs.MultiPlatform.mokoParcelize)
-    commonMainImplementation(Deps.Libs.MultiPlatform.mokoGraphics)
 }
 
 multiplatformResources {

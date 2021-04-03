@@ -4,29 +4,36 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
 import dev.icerock.moko.network.schemas.ComposedSchemaSerializer
+import dev.icerock.moko.network.exceptions.DataNotFitAnyOfSchema
 
 @Serializable(with = {{classname}}Serializer::class)
 {{>classes_modifiers}}data class {{classname}} (
 {{#allVars}}
-    val {{{name}}}: {{{datatype}}}{{^-last}},{{/-last}}
+    val {{{name}}}: {{{datatype}}}?{{^-last}},{{/-last}}
 {{/allVars}}
 )
 
 {{>classes_modifiers}}object {{classname}}Serializer : ComposedSchemaSerializer<{{classname}}>("{{classname}}Serializer") {
 
     override fun decodeJson(json: Json, element: JsonElement): {{classname}} {
+        {{#allVars}}
+        val {{{name}}} = runCatching { json.decodeFromJsonElement({{{datatype}}}.serializer(), element) }
+        {{/allVars}}
+
+        ensureAnyItemIsSuccess(element, listOf({{#allVars}}{{{name}}}{{^-last}},{{/-last}}{{/allVars}}))
+
         return {{classname}}(
             {{#allVars}}
-            {{{name}}} = json.decodeFromJsonElement({{{datatype}}}.serializer(), element){{^-last}},{{/-last}}
+            {{{name}}} = {{{name}}}.getOrNull(){{^-last}},{{/-last}}
             {{/allVars}}
         )
     }
 
     override fun encodeJson(json: Json, value: {{classname}}): List<JsonObject> {
-        return listOf(
+        return listOfNotNull(
             {{#allVars}}
-            json.encodeToJsonElement({{{datatype}}}.serializer(), value.{{{name}}}).jsonObject{{^-last}},{{/-last}}
+            value.{{{name}}}?.let { json.encodeToJsonElement({{{datatype}}}.serializer(), it) }{{^-last}},{{/-last}}
             {{/allVars}}
-        )
+        ).map { it.jsonObject }
     }
 }
