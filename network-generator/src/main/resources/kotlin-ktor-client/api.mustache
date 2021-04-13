@@ -35,8 +35,8 @@ import io.ktor.http.content.TextContent
 
     {{/operation}}
 
-    companion object {
-        operator fun invoke(basePath: String = "{{{basePath}}}", httpClient: HttpClient, json: Json): {{classname}} = {{classname}}Impl(basePath, httpClient, json)
+    {{^nonPublicApi}}public {{/nonPublicApi}}companion object {
+        {{^nonPublicApi}}public {{/nonPublicApi}}operator fun invoke(basePath: String = "{{{basePath}}}", httpClient: HttpClient, json: Json): {{classname}} = {{classname}}Impl(basePath, httpClient, json)
     }
 }
 
