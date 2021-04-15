@@ -50,7 +50,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         typeMapping["object"] = "JsonObject"
         typeMapping["decimal"] = "BigNum"
         typeMapping[ONE_OF_REPLACE_TYPE_NAME] = "JsonElement"
-        typeMapping["AnyType"] = "JsonElement";
+        typeMapping["AnyType"] = "JsonElement"
 
         importMapping["JsonObject"] = "kotlinx.serialization.json.JsonObject"
         importMapping["JsonElement"] = "kotlinx.serialization.json.JsonElement"
@@ -170,7 +170,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
         var propertyProcess: (CodegenProperty) -> Unit = {}
 
-        propertyProcess  = { property ->
+        propertyProcess = { property ->
             imports.add(property.baseType)
 
             property.additionalProperties?.let(propertyProcess)
@@ -178,7 +178,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         }
 
         val successResponse = codegenOperation.responses.firstOrNull { it.is2xx }
-        if(successResponse != null) {
+        if (successResponse != null) {
             with(successResponse) {
                 baseType?.let { imports.add(it) }
                 additionalProperties?.let(propertyProcess)
