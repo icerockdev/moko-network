@@ -73,4 +73,8 @@ mokoNetwork {
         packageName = "openapi.mapResponse"
         inputSpec = file("src/mapResponse.yaml")
     }
+    spec("AnyType") {
+        packageName = "openapi.anyType"
+        inputSpec = file("src/AnyType.yaml")
+    }
 }

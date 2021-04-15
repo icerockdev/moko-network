@@ -50,6 +50,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         typeMapping["object"] = "JsonObject"
         typeMapping["decimal"] = "BigNum"
         typeMapping[ONE_OF_REPLACE_TYPE_NAME] = "JsonElement"
+        typeMapping["AnyType"] = "JsonElement";
 
         importMapping["JsonObject"] = "kotlinx.serialization.json.JsonObject"
         importMapping["JsonElement"] = "kotlinx.serialization.json.JsonElement"
