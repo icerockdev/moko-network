@@ -29,14 +29,13 @@ import io.ktor.http.content.TextContent
     * {{notes}}
     {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
-    */{{#returnType}}
-    @Suppress("UNCHECKED_CAST"){{/returnType}}
+    */
     {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
 
     {{/operation}}
 
-    companion object {
-        operator fun invoke(basePath: String = "{{{basePath}}}", httpClient: HttpClient, json: Json): {{classname}} = {{classname}}Impl(basePath, httpClient, json)
+    {{^nonPublicApi}}public {{/nonPublicApi}}companion object {
+        {{^nonPublicApi}}public {{/nonPublicApi}}operator fun invoke(basePath: String = "{{{basePath}}}", httpClient: HttpClient, json: Json): {{classname}} = {{classname}}Impl(basePath, httpClient, json)
     }
 }
 
@@ -125,15 +124,12 @@ import io.ktor.http.content.TextContent
 
         try {
         {{#returnType}}
-            {{^returnTypeIsPrimitive}}
-            //not primitive type
-            val result: String = _httpClient.request(builder)
-            return _json.decodeFromString({{returnBaseType}}.serializer(){{#isArray}}{{#uniqueItems}}.let { SetSerializer(it) }{{/uniqueItems}}{{^uniqueItems}}.let { ListSerializer(it) }{{/uniqueItems}}{{/isArray}}{{#isMap}}. let { MapSerializer(keySerializer = String.serializer(),valueSerializer = {{returnBaseType}}.serializer()) }{{/isMap}}, result)
-            {{/returnTypeIsPrimitive}}
-            {{#returnTypeIsPrimitive}}
-            //primitive type
-            return _httpClient.request(builder)
-            {{/returnTypeIsPrimitive}}
+            {{#vendorExtensions.x-successResponse}}
+                val serializer = {{>property_serializer}}
+                //not primitive type
+                val result: String = _httpClient.request(builder)
+                return _json.decodeFromString(serializer, result)
+            {{/vendorExtensions.x-successResponse}}
         {{/returnType}}
         {{^returnType}}
             return _httpClient.request(builder)

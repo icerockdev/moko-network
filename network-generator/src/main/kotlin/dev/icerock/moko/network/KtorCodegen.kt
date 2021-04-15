@@ -50,6 +50,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         typeMapping["object"] = "JsonObject"
         typeMapping["decimal"] = "BigNum"
         typeMapping[ONE_OF_REPLACE_TYPE_NAME] = "JsonElement"
+        typeMapping["AnyType"] = "JsonElement"
 
         importMapping["JsonObject"] = "kotlinx.serialization.json.JsonObject"
         importMapping["JsonElement"] = "kotlinx.serialization.json.JsonElement"
@@ -163,6 +164,29 @@ class KtorCodegen : AbstractKotlinCodegen() {
             currentPath = currentPath.substring(1)
         }
         codegenOperation.path = currentPath
+
+        // fix imports for complex types
+        val imports: MutableSet<String> = codegenOperation.imports
+
+        var propertyProcess: (CodegenProperty) -> Unit = {}
+
+        propertyProcess = { property ->
+            imports.add(property.baseType)
+
+            property.additionalProperties?.let(propertyProcess)
+            property.items?.let(propertyProcess)
+        }
+
+        val successResponse = codegenOperation.responses.firstOrNull { it.is2xx }
+        if (successResponse != null) {
+            with(successResponse) {
+                baseType?.let { imports.add(it) }
+                additionalProperties?.let(propertyProcess)
+                items?.let(propertyProcess)
+            }
+            codegenOperation.vendorExtensions["x-successResponse"] = successResponse
+        }
+
         return codegenOperation
     }
 
