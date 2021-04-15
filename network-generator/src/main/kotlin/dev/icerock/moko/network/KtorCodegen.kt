@@ -163,6 +163,29 @@ class KtorCodegen : AbstractKotlinCodegen() {
             currentPath = currentPath.substring(1)
         }
         codegenOperation.path = currentPath
+
+        // fix imports for complex types
+        val imports: MutableSet<String> = codegenOperation.imports
+
+        var propertyProcess: (CodegenProperty) -> Unit = {}
+
+        propertyProcess  = { property ->
+            imports.add(property.baseType)
+
+            property.additionalProperties?.let(propertyProcess)
+            property.items?.let(propertyProcess)
+        }
+
+        val successResponse = codegenOperation.responses.firstOrNull { it.is2xx }
+        if(successResponse != null) {
+            with(successResponse) {
+                baseType?.let { imports.add(it) }
+                additionalProperties?.let(propertyProcess)
+                items?.let(propertyProcess)
+            }
+            codegenOperation.vendorExtensions["x-successResponse"] = successResponse
+        }
+
         return codegenOperation
     }
 

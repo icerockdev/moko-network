@@ -1,0 +1,29 @@
+openapi: 3.0.0
+info:
+  title: API
+  version: v1
+paths:
+  /dynamic:
+    get:
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DogsByGroup'
+components:
+  schemas:
+    DogsByGroup:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/Dog'
+    Dog:
+      type: object
+      properties:
+        bark:
+          type: boolean
+        breed:
+          type: string
