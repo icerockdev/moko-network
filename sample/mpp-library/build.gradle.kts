@@ -77,4 +77,8 @@ mokoNetwork {
         packageName = "openapi.anyType"
         inputSpec = file("src/AnyType.yaml")
     }
+    spec("formData") {
+        packageName = "cases.formData"
+        inputSpec = file("src/formData.yaml")
+    }
 }
