@@ -19,6 +19,7 @@ class FormDataTest {
         val api = createApi { request ->
             val body = request.body
             assertTrue(body is FormDataContent)
+            // TODO #122 fix test and logic of generated formdata support
             assertEquals(expected = "SignupRequest(firstName=first, lastName=last, phone=+799, email=a@b, password=111, passwordRepeat=111, countryId=1, cityId=2, company=test, middleName=null, post=null, interests=null)", actual = body.formData["signup"])
             assertEquals(expected = "teststring", actual = body.formData["avatar"])
 
