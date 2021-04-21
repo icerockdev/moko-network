@@ -213,14 +213,6 @@ class KtorCodegen : AbstractKotlinCodegen() {
         return model
     }
 
-    override fun postProcessAllModels(objs: MutableMap<String, Any>?): MutableMap<String, Any> {
-        return super.postProcessAllModels(objs)
-    }
-
-    override fun postProcess() {
-        super.postProcess()
-    }
-
     override fun getEnumPropertyNaming(): CodegenConstants.ENUM_PROPERTY_NAMING_TYPE {
         return CodegenConstants.ENUM_PROPERTY_NAMING_TYPE.UPPERCASE
     }
