@@ -1,0 +1,188 @@
+openapi: 3.0.0
+info:
+  title: API
+  version: v1
+paths:
+  /v1/auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Create user
+      operationId: 'signup'
+      requestBody:
+        description: |
+          Content-Type: multipart/form-data; boundary=boundary
+
+          --boundary
+          Content-Disposition: form-data; name="signup"
+
+            {
+              "firstName": "Andrey",
+              "lastName": "Kim",
+              "middleName": "Vladimirovich",
+              "phone": "71111111111",
+              "email": "test23@email.com",
+              "password": "mypassword",
+              "passwordRepeat": "mypassword",
+              "post": "CEO",
+              "countryId": 10,
+              "cityId": 11
+            }
+          --boundary
+          Content-Disposition: form-data; name="avatar"; filename="avatar.png";
+
+          < ./avatar.png
+
+          --boundary--
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                signup:
+                  $ref: '#/components/schemas/SignupRequest'
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: 'Ok'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '422':
+          description: 'Validation error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '500':
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Response:
+      description: 'Basic response'
+      required:
+        - status
+        - message
+        - timestamp
+        - success
+      properties:
+        status:
+          description: Http status code
+          type: integer
+        message:
+          description: Response message
+          type: string
+        timestamp:
+          description: Response timestamp
+          type: number
+          format: int64
+        success:
+          description: Response status
+          type: boolean
+      type: object
+    ResponseList:
+      description: 'Basic response list'
+      required:
+        - status
+        - message
+        - timestamp
+        - success
+        - totalCount
+      properties:
+        status:
+          description: Http status code
+          type: integer
+        message:
+          description: Response message
+          type: string
+        timestamp:
+          description: Response timestamp
+          type: number
+          format: int64
+        success:
+          description: Response status
+          type: boolean
+        totalCount:
+          description: Response totlal list count
+          type: integer
+      type: object
+    ErrorResponse:
+      description: 'Error response'
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            success:
+              type: boolean
+              default: false
+    ValidationErrorResponse:
+      description: 'Validation Error Response'
+      allOf:
+        - $ref: '#/components/schemas/ResponseList'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      description: 'Error detail'
+      required:
+        - message
+        - code
+      properties:
+        message:
+          type: string
+          description: Error message
+        code:
+          type: integer
+          description: Error code
+      type: object
+    SignupRequest:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - phone
+        - email
+        - password
+        - passwordRepeat
+        - countryId
+        - cityId
+        - company
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        phone:
+          type: string
+          example: 79999999999
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        passwordRepeat:
+          type: string
+          format: password
+        post:
+          type: string
+        countryId:
+          type: integer
+        cityId:
+          type: integer
+        company:
+          type: string
+        interests:
+          type: string

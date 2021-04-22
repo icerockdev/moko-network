@@ -18,6 +18,7 @@ import org.openapitools.codegen.CodegenModel
 import org.openapitools.codegen.CodegenOperation
 import org.openapitools.codegen.CodegenProperty
 import org.openapitools.codegen.CodegenType
+import org.openapitools.codegen.config.GlobalSettings
 import org.openapitools.codegen.languages.AbstractKotlinCodegen
 
 @Suppress("TooManyFunctions")
@@ -73,6 +74,8 @@ class KtorCodegen : AbstractKotlinCodegen() {
                 getOrGenerateOperationId(operation, path, method)
             })
         }
+
+        GlobalSettings.setProperty(CodegenConstants.SKIP_FORM_MODEL, "false")
     }
 
     override fun processOpts() {
@@ -107,6 +110,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
     override fun preprocessOpenAPI(openAPI: OpenAPI) {
         super.preprocessOpenAPI(openAPI)
+
         additionalProperties[ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS]
             ?.let { (it as? String)?.split(",")?.toSet() }
             ?.let { filterPaths(openAPI.paths, it) }
@@ -117,9 +121,9 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
         openAPI.components?.requestBodies?.forEach { (requestBodyName, requestBody) ->
             val jsonContent: MediaType? = requestBody.content["application/json"]
-            val jsonSchema = jsonContent?.schema
-
             if (jsonContent == null) return@forEach
+
+            val jsonSchema = jsonContent.schema
 
             when {
                 jsonSchema is ArraySchema && jsonSchema.items.`$ref` == null -> {
