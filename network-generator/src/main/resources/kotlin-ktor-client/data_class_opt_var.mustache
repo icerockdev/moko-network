@@ -3,4 +3,4 @@
 {{/description}}
     {{#isDecimal}}@Serializable(with = BigNumSerializer::class) {{/isDecimal}}
     @SerialName("{{{baseName}}}")
-    val {{{name}}}: {{#isEnum}}{{#isArray}}kotlin.collections.List<{{classname}}.{{{nameInCamelCase}}}>{{/isArray}}{{^isArray}}{{classname}}.{{{nameInCamelCase}}}{{/isArray}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}}? = {{#defaultvalue}}{{defaultvalue}}{{/defaultvalue}}{{^defaultvalue}}null{{/defaultvalue}}
+    val {{{name}}}: {{#isEnum}}{{#isArray}}kotlin.collections.List<{{classname}}.{{{nameInCamelCase}}}{{#isEnumFallbackNull}}?{{/isEnumFallbackNull}}>{{/isArray}}{{^isArray}}{{classname}}.{{{nameInCamelCase}}}{{/isArray}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}}? = {{#defaultvalue}}{{defaultvalue}}{{/defaultvalue}}{{^defaultvalue}}null{{/defaultvalue}}

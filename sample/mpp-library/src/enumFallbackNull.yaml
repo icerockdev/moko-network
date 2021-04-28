@@ -1,0 +1,101 @@
+openapi: 3.0.0
+info:
+  title: API
+  version: v1
+paths:
+  '/carcolors':
+    get:
+      operationId: car_colors
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/CarColor'
+                  - $ref: '#/components/schemas/CarColorDefault'
+                  - $ref: '#/components/schemas/CarColorList'
+                  - $ref: '#/components/schemas/CarColorRequired'
+                  - $ref: '#/components/schemas/CarColorNullable'
+  '/carcolorsList':
+    get:
+      operationId: car_colors_list
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarColorList'
+components:
+  schemas:
+    CarColor:
+      properties:
+        color:
+          type: string
+          enum:
+            - black
+            - white
+            - red
+            - green
+            - blue
+    CarColorDefault:
+      properties:
+        color:
+          type: string
+          default: red
+          enum:
+            - black
+            - white
+            - red
+            - green
+            - blue
+    CarColorList:
+      properties:
+        color:
+          type: array
+          items:
+            type: string
+            enum:
+              - black
+              - white
+              - red
+              - green
+              - blue
+    CarColorListNullable:
+      properties:
+        color:
+          type: array
+          nullable: true
+          items:
+            type: string
+            enum:
+              - black
+              - white
+              - red
+              - green
+              - blue
+    CarColorRequired:
+      properties:
+        color:
+          type: string
+          enum:
+            - black
+            - white
+            - red
+            - green
+            - blue
+      required:
+        - color
+    CarColorNullable:
+      properties:
+        color:
+          type: string
+          nullable: true
+          enum:
+            - black
+            - white
+            - red
+            - green
+            - blue

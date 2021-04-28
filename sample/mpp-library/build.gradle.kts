@@ -81,4 +81,9 @@ mokoNetwork {
         packageName = "cases.formData"
         inputSpec = file("src/formData.yaml")
     }
+    spec("enumFallbackNull") {
+        packageName = "cases.enumfallback"
+        enumFallbackNull = true
+        inputSpec = file("src/enumFallbackNull.yaml")
+    }
 }
