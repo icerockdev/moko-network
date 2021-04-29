@@ -15,7 +15,6 @@ paths:
                 anyOf:
                   - $ref: '#/components/schemas/CarColor'
                   - $ref: '#/components/schemas/CarColorDefault'
-                  - $ref: '#/components/schemas/CarColorList'
                   - $ref: '#/components/schemas/CarColorRequired'
                   - $ref: '#/components/schemas/CarColorNullable'
   '/carcolorsList':

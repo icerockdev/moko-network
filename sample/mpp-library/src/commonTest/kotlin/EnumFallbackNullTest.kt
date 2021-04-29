@@ -6,6 +6,9 @@ import cases.enumfallback.apis.DefaultApi
 import cases.enumfallback.models.CarColor
 import cases.enumfallback.models.CarColorDefault
 import cases.enumfallback.models.CarColorList
+import cases.enumfallback.models.CarColorNullable
+import cases.enumfallback.models.CarColorRequired
+import dev.icerock.moko.network.safeable.extractSafeables
 import io.ktor.client.engine.mock.MockRequestHandler
 import io.ktor.client.engine.mock.respondOk
 import kotlinx.coroutines.runBlocking
@@ -31,11 +34,21 @@ class EnumFallbackNullTest {
 
         println(result)
 
-        assertNotNull(result.item0)
-        assertEquals(CarColor.Color.RED, result.item0.color)
+        // Assert CarColor
+        assertNotNull(result.item0?.color?.value)
+        assertEquals(CarColor.Color.RED, result.item0?.color?.value)
 
-        assertNotNull(result.item1)
-        assertEquals(CarColorDefault.Color.RED, result.item1.color)
+        // Assert CarColorDefault
+        assertNotNull(result.item1?.color?.value)
+        assertEquals(CarColorDefault.Color.RED, result.item1?.color?.value)
+
+        // Assert CarColorRequired
+        assertNotNull(result.item2?.color?.value)
+        assertEquals(CarColorRequired.Color.RED, result.item2?.color?.value)
+
+        // Assert CarColorNullable
+        assertNotNull(result.item3?.color?.value?.value)
+        assertEquals(CarColorNullable.Color.RED, result.item3?.color?.value?.value)
     }
 
     @Test
@@ -53,8 +66,9 @@ class EnumFallbackNullTest {
         println(result)
 
         assertNotNull(result.color)
-        assertTrue { result.color.contains(CarColorList.Color.RED) }
-        assertTrue { result.color.contains(CarColorList.Color.WHITE) }
+        assertTrue { result.color.size == 2 }
+        assertTrue { result.color.extractSafeables().contains(CarColorList.Color.RED) }
+        assertTrue { result.color.extractSafeables().contains(CarColorList.Color.WHITE) }
     }
 
     @Test
@@ -71,8 +85,21 @@ class EnumFallbackNullTest {
 
         println(result)
 
-        assertNotNull(result.item0)
-        assertNull(result.item0.color)
+        // Assert CarColor
+        assertNotNull(result.item0?.color)
+        assertNull(result.item0?.color?.value)
+
+        // Assert CarColorDefault
+        assertNotNull(result.item1?.color)
+        assertNotNull(result.item1?.color?.value)
+
+        // Assert CarColorRequired
+        assertNotNull(result.item2?.color)
+        assertNull(result.item2?.color?.value)
+
+        // Assert CarColorNullable
+        assertNotNull(result.item3?.color?.value)
+        assertNull(result.item3?.color?.value?.value)
     }
 
     @Test
@@ -91,6 +118,7 @@ class EnumFallbackNullTest {
 
         assertNotNull(result.color)
         assertTrue { result.color.size == 2 }
+        assertTrue { result.color.extractSafeables().contains(CarColorList.Color.RED) }
     }
 
     private fun createEnumFallbackNullApi(mock: MockRequestHandler): DefaultApi {
