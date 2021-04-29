@@ -9,12 +9,18 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 
 class SafeableTest {
+
+    @BeforeTest
+    fun setup() {
+        SafeableSerializer.deserializeExceptionHandler = null
+    }
 
     @Test
     fun `safeable with default encode`() {
