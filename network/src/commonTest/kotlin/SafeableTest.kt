@@ -3,6 +3,7 @@
  */
 
 import dev.icerock.moko.network.safeable.Safeable
+import dev.icerock.moko.network.safeable.SafeableSerializer
 import dev.icerock.moko.network.safeable.asSafeable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -11,6 +12,7 @@ import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
 
 class SafeableTest {
 
@@ -89,6 +91,36 @@ class SafeableTest {
             ),
             actual = result
         )
+    }
+
+    @Test
+    fun `safeable deserialize handler test`() {
+        val json = Json.Default
+        val input = """{"data":"item3"}"""
+
+        var serializationException: SerializationException? = null
+        SafeableSerializer.deserializeExceptionHandler = {
+            serializationException = it
+            true
+        }
+
+        json.decodeFromString(TestData.serializer(), input)
+
+        assertNotNull(serializationException)
+    }
+
+    @Test
+    fun `safeable deserialize handler throws test`() {
+        val json = Json.Default
+        val input = """{"data":"item3"}"""
+
+        SafeableSerializer.deserializeExceptionHandler = {
+            false
+        }
+
+        assertFailsWith(SerializationException::class) {
+            json.decodeFromString(TestData.serializer(), input)
+        }
     }
 
     @Serializable
