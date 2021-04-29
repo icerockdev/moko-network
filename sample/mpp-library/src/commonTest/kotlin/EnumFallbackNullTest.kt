@@ -32,8 +32,6 @@ class EnumFallbackNullTest {
             enumFallbackApi.carColors()
         }
 
-        println(result)
-
         // Assert CarColor
         assertNotNull(result.item0?.color?.value)
         assertEquals(CarColor.Color.RED, result.item0?.color?.value)
@@ -63,8 +61,6 @@ class EnumFallbackNullTest {
             enumFallbackApi.carColorsList()
         }
 
-        println(result)
-
         assertNotNull(result.color)
         assertTrue { result.color.size == 2 }
         assertTrue { result.color.extractSafeables().contains(CarColorList.Color.RED) }
@@ -83,15 +79,13 @@ class EnumFallbackNullTest {
             enumFallbackApi.carColors()
         }
 
-        println(result)
-
         // Assert CarColor
         assertNotNull(result.item0?.color)
         assertNull(result.item0?.color?.value)
 
         // Assert CarColorDefault
         assertNotNull(result.item1?.color)
-        assertNotNull(result.item1?.color?.value)
+        assertNull(result.item1?.color?.value)
 
         // Assert CarColorRequired
         assertNotNull(result.item2?.color)
@@ -114,11 +108,38 @@ class EnumFallbackNullTest {
             enumFallbackApi.carColorsList()
         }
 
-        println(result)
-
         assertNotNull(result.color)
         assertTrue { result.color.size == 2 }
         assertTrue { result.color.extractSafeables().contains(CarColorList.Color.RED) }
+    }
+
+    @Test
+    fun `enum fallback - unexpected key`() {
+        val enumFallbackApi = createEnumFallbackNullApi { request ->
+            respondOk(
+                """{"number":1020}"""
+            )
+        }
+
+        val result = runBlocking {
+            enumFallbackApi.carColors()
+        }
+
+        // Assert CarColor
+        assertNull(result.item0?.color)
+
+        // Assert CarColorDefault
+        assertNotNull(result.item1?.color)
+        assertEquals(
+            expected = CarColorDefault.Color.RED,
+            actual = result.item1?.color?.value
+        )
+
+        // Assert CarColorRequired
+        assertNull(result.item2)
+
+        // Assert CarColorNullable
+        assertNull(result.item3?.color)
     }
 
     private fun createEnumFallbackNullApi(mock: MockRequestHandler): DefaultApi {
