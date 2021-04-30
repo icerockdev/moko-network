@@ -58,6 +58,7 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
   - 0.14.0
   - 0.14.1
   - 0.14.2
+  - 0.15.0
 
 ## Installation
 root build.gradle  
@@ -68,7 +69,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.14.2"
+        classpath "dev.icerock.moko:network-generator:0.15.0"
     }
 }
 
@@ -85,7 +86,7 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.14.2")
+    commonMainApi("dev.icerock.moko:network:0.15.0")
 }
 ```
 
@@ -108,6 +109,7 @@ mokoNetwork {
         configureTask {
             // here can be configuration of https://github.com/OpenAPITools/openapi-generator GenerateTask
         }
+        enumFallbackNull = false
     }
 }
 ```
@@ -152,6 +154,17 @@ class TestViewModel : ViewModel() {
     }
 }
 ```
+
+For the moko-network specification generator, you can enable safe enum properties generation mode.
+To turn on the mode in `build.gradle` to a `spec` block add flag:
+
+```
+enumFallbackNull = true
+```
+
+The enabled mode will generate special wrapper `Safeable` for all properties with the enum type,
+that which in a situation for an unexpected enum value will return null.
+
 
 #### Deprecated usage
 Old way with `OpenApi Generator Plugin` available by:
