@@ -21,7 +21,8 @@ open class GenerateTask : GenerateTask() {
         val props = mapOf(
             KtorCodegen.ADDITIONAL_OPTIONS_KEY_IS_INTERNAL to "${specInfo.isInternal}",
             KtorCodegen.ADDITIONAL_OPTIONS_KEY_IS_OPEN to "${specInfo.isOpen}",
-            KtorCodegen.ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS to excludedTags
+            KtorCodegen.ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS to excludedTags,
+            KtorCodegen.ADDITIONAL_OPTIONS_KEY_ENUM_FALLBACK_NULL to "${specInfo.enumFallbackNull}"
         )
         additionalProperties.set(props)
 

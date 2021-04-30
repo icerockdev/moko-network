@@ -15,6 +15,7 @@ open class SpecInfo(val name: String) {
     var isInternal = true
     var isOpen = false
     var filterTags: List<String> = listOf()
+    var enumFallbackNull = false
     internal var configureTask: (GenerateTask.() -> Unit)? = null
 
     fun configureTask(block: GenerateTask.() -> Unit) { configureTask = block }

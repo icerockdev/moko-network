@@ -3,4 +3,4 @@
 {{/description}}
     {{#isDecimal}}@Serializable(with = BigNumSerializer::class) {{/isDecimal}}
     @SerialName("{{{baseName}}}")
-    val {{{name}}}: dev.icerock.moko.network.nullable.Nullable<{{#isEnum}}{{classname}}.{{nameInCamelCase}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{/isEnum}}>? = null
+    val {{{name}}}: dev.icerock.moko.network.nullable.Nullable<{{#isEnum}}{{#isEnumFallbackNull}}Safeable<{{/isEnumFallbackNull}}{{classname}}.{{nameInCamelCase}}{{#isEnumFallbackNull}}>{{/isEnumFallbackNull}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{/isEnum}}>? = null

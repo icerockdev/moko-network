@@ -90,6 +90,11 @@ class KtorCodegen : AbstractKotlinCodegen() {
             nonPublicApi = isInternalProp == "true"
             additionalProperties[ADDITIONAL_OPTIONS_KEY_IS_INTERNAL] = nonPublicApi
         }
+        val enumFallbackNullProp = additionalProperties[ADDITIONAL_OPTIONS_KEY_ENUM_FALLBACK_NULL]
+        if (enumFallbackNullProp is String) {
+            additionalProperties[ADDITIONAL_OPTIONS_KEY_ENUM_FALLBACK_NULL] =
+                enumFallbackNullProp == "true"
+        }
     }
 
     override fun getTag(): CodegenType {
@@ -256,6 +261,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         const val ADDITIONAL_OPTIONS_KEY_EXCLUDED_TAGS = "excludedTags"
         const val ADDITIONAL_OPTIONS_KEY_IS_OPEN = "isOpen"
         const val ADDITIONAL_OPTIONS_KEY_IS_INTERNAL = "nonPublicApi"
+        const val ADDITIONAL_OPTIONS_KEY_ENUM_FALLBACK_NULL = "isEnumFallbackNull"
 
         private const val ONE_OF_REPLACE_TYPE_NAME = "oneOfElement"
     }
