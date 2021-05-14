@@ -2,10 +2,6 @@
  * Copyright 2021 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
-import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
-import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
-import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParser
-import dev.icerock.moko.network.features.ExceptionFeature
 import dev.icerock.moko.network.generated.apis.DefaultApi
 import dev.icerock.moko.network.generated.apis.ProfileApi
 import dev.icerock.moko.network.generated.models.UnitActivity
@@ -15,15 +11,13 @@ import dev.icerock.moko.network.generated.models.UserSettingsNullableSchema
 import dev.icerock.moko.network.generated.models.UserStateEnum
 import dev.icerock.moko.network.nullable.asNullable
 import dev.icerock.moko.test.runBlocking
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.MockRequestHandler
 import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.engine.mock.toByteArray
-import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonPrimitive
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -469,5 +463,50 @@ class ProfileApiTest {
 
         assertNotNull(result.stateName)
         assertTrue(isTestSuccessFlow.value)
+    }
+
+    @Test
+    fun `additionalProperties oneOf success`() {
+        val httpClient = createMockClient { request ->
+            respondOk(
+                """
+                    {
+                        "custom_field": [
+                            null,
+                            "value"
+                        ]
+                    }
+                """.trimIndent()
+            )
+        }
+
+        json = Json {
+            ignoreUnknownKeys = true
+        }
+
+        val api = DefaultApi(
+            httpClient = httpClient,
+            json = json
+        )
+
+        val result = runBlocking {
+            api.apiGetBlogPermissionsRoles(10)
+        }
+
+        val field = result["custom_field"]
+        assertNotNull(field)
+
+        val itemsList = field.map { jsonItem ->
+            when (jsonItem) {
+                is JsonNull -> null
+                is JsonPrimitive -> jsonItem.content
+                else -> throw IllegalStateException("Wrong result data")
+            }
+        }
+
+        assertEquals(
+            expected = listOf(null, "value"),
+            actual = itemsList
+        )
     }
 }
