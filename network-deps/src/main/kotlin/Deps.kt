@@ -29,7 +29,7 @@ object Deps {
     private const val mokoTestVersion = "0.2.1"
     const val mokoNetworkVersion = "0.15.0"
 
-    private const val kbignumVersion = "1.11.0"
+    private const val kbignumVersion = "2.0.6"
 
     object Android {
         const val compileSdk = 30

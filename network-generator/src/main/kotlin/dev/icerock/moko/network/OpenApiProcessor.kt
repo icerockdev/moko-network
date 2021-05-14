@@ -163,12 +163,25 @@ internal class OpenApiProcessor {
                 )
             }
         }
+
         if (this is ArraySchema) {
             val propertyContext = SchemaContext.PropertyComponent(
                 schemaName = this.name,
                 propertyName = "items"
             )
             this.items = this.items.processSchema(
+                openAPI,
+                SchemaContext.Child(parent = context, child = propertyContext)
+            )
+        }
+
+        if (additionalProperties != null) {
+            val propertyContext = SchemaContext.PropertyComponent(
+                schemaName = this.name,
+                propertyName = "additionalProperties"
+            )
+
+            this.additionalProperties = (this.additionalProperties as Schema<*>).processSchema(
                 openAPI,
                 SchemaContext.Child(parent = context, child = propertyContext)
             )

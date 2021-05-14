@@ -16,8 +16,6 @@ dependencyResolutionManagement {
         mavenCentral()
         google()
 
-        maven { url = uri("https://dl.bintray.com/korlibs/korlibs") }
-
         jcenter {
             content {
                 includeGroup("org.jetbrains.trove4j")

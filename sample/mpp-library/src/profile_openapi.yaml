@@ -154,6 +154,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserInfoWithSet'
+  '/profile/get/mao/nullable':
+    get:
+      operationId: api_profile_get_map_nullable
+      description: Получить хэшмап со списком nullable строк
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapOfNullableListResponseSchema'
+  '/api/permissions/{blog_id}/':
+    get:
+      operationId: api_get_blog_permissions_roles
+      description: Получить список ролей
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPermissionsRoles'
+    parameters:
+      - $ref: '#/components/parameters/blogIdParam'
 security:
   - Bearer: []
 components:
@@ -247,6 +271,13 @@ components:
         format: uuid
       example: e0520e34-01b3-4ddb-b08a-2735a7dfde56
       description: 'Идентификатор пользователя из keycloak'
+    blogIdParam:
+      name: blog_id
+      in: path
+      description: Идентификатор
+      required: true
+      schema:
+        type: integer
     unitIdParam:
       in: path
       name: unit_id
@@ -474,3 +505,33 @@ components:
         - about_me_required_nullable
         - raiting_required_nonnull
       type: object
+    MapOfNullableListResponseSchema:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          oneOf:
+            - type: integer
+            - type: string
+    MapOfNullableListTestObjectSchema:
+      type: object
+      properties:
+        field1:
+          type: array
+          items:
+            oneOf:
+              - type: null
+              - type: string
+              - type: UserSettingsNullableSchema
+        field2:
+          type: array
+          items:
+            type: string
+    BlogPermissionsRoles:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          oneOf:
+            - type: null
+            - type: string
