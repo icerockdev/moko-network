@@ -175,7 +175,7 @@ internal class OpenApiProcessor {
             )
         }
 
-        if (additionalProperties != null) {
+        if (additionalProperties != null && additionalProperties is Schema<*>) {
             val propertyContext = SchemaContext.PropertyComponent(
                 schemaName = this.name,
                 propertyName = "additionalProperties"
