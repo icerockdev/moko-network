@@ -32,7 +32,7 @@ dependencies {
     commonTestImplementation(Deps.Libs.MultiPlatform.Tests.mokoTest)
     commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
 
-    androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
+    androidTestImplementation(Deps.Libs.JvmAndroid.Tests.kotlinTestJUnit)
 }
 
 multiplatformResources {
