@@ -14,22 +14,22 @@ plugins {
 buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.31")
-        classpath("gradle:network-deps:1")
     }
 }
 
 group = "dev.icerock.moko"
-version = Deps.mokoNetworkVersion
+version = libs.versions.mokoNetworkVersion.get()
 
 dependencies {
     implementation(gradleKotlinDsl())
 
-    implementation(Deps.Libs.Jvm.guava)
-    implementation(Deps.Libs.Jvm.openApiGenerator)
+    implementation(libs.guava)
+    implementation(libs.openApiGenerator)
 
-    compileOnly(Deps.Plugins.kotlinMultiplatform.module!!)
+    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
 
-    "detektPlugins"(Deps.Libs.Detekt.detektFormatting)
+    //"detektPlugins"(libs.detektFormatting)
+    "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
 }
 
 java {

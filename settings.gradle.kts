@@ -28,7 +28,6 @@ dependencyResolutionManagement {
     }
 }
 
-includeBuild("network-deps")
 includeBuild("network-generator")
 
 include(":network")
