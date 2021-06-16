@@ -25,10 +25,6 @@ buildscript {
 }
 
 allprojects {
-    repositories {
-        mavenCentral()
-        google()
-    }
 
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
