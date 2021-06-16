@@ -17,36 +17,44 @@ buildscript {
     dependencies {
         classpath("dev.icerock.moko:resources-generator:0.15.1")
         classpath("dev.icerock.moko:network-generator") // substituted
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.31")
-        classpath("gradle:network-deps:1")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:1.5.10")
+        classpath("dev.icerock:mobile-multiplatform:0.9.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
+        classpath("com.android.tools.build:gradle:4.2.1")
     }
 }
 
 allprojects {
-    apply(plugin = Deps.Plugins.detekt.id)
+    repositories {
+        mavenCentral()
+        google()
+    }
+
+    apply(plugin = "io.gitlab.arturbosch.detekt")
 
     configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
         input.setFrom("src/commonMain/kotlin", "src/androidMain/kotlin", "src/iosMain/kotlin")
     }
 
     dependencies {
-        "detektPlugins"(Deps.Libs.Detekt.detektFormatting)
+        //"detektPlugins"(libs.detektFormatting.get())
+        "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
     }
 
-    plugins.withId(Deps.Plugins.androidLibrary.id) {
+    plugins.withId("com.android.library") {
         configure<com.android.build.gradle.LibraryExtension> {
-            compileSdkVersion(Deps.Android.compileSdk)
+            compileSdkVersion(libs.versions.compileSdk.get().toInt())
 
             defaultConfig {
-                minSdkVersion(Deps.Android.minSdk)
-                targetSdkVersion(Deps.Android.targetSdk)
+                minSdkVersion(libs.versions.minSdk.get().toInt())
+                targetSdkVersion(libs.versions.targetSdk.get().toInt())
             }
         }
     }
 
-    plugins.withId(Deps.Plugins.mavenPublish.id) {
+    plugins.withId("org.gradle.maven-publish") {
         group = "dev.icerock.moko"
-        version = Deps.mokoNetworkVersion
+        version = libs.versions.mokoNetworkVersion.get()
 
         val javadocJar by tasks.registering(Jar::class) {
             archiveClassifier.set("javadoc")

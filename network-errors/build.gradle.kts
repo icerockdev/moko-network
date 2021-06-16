@@ -11,12 +11,12 @@ plugins {
 }
 
 dependencies {
-    commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
+    commonMainImplementation(libs.kotlinSerialization)
 
-    commonMainApi(Deps.Libs.MultiPlatform.mokoErrors)
-    commonMainApi(Deps.Libs.MultiPlatform.mokoResources)
+    commonMainApi(libs.mokoErrors)
+    commonMainApi(libs.mokoResources)
 
-    commonMainImplementation(project(":network"))
+    commonMainImplementation(projects.network)
 }
 
 multiplatformResources {

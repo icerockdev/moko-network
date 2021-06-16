@@ -1,0 +1,61 @@
+[versions]
+kotlinVersion = "1.5.10"
+
+lifecycleVersion = "2.2.0"
+glideVersion = "4.9.0"
+androidAppCompatVersion = "1.2.0"
+espressoCoreVersion = "3.2.0"
+testRunnerVersion = "1.2.0"
+testExtJunitVersion = "1.1.1"
+androidxTestVersion = "1.3.0"
+robolectricVersion = "4.3"
+openApiGeneratorVersion = "5.1.0"
+guavaVersion = "30.1-jre"
+kotlinxSerializationVersion = "1.1.0"
+coroutinesVersion = "1.4.2-native-mt"
+ktorClientVersion = "1.5.2"
+detektVersion = "1.15.0"
+mokoResourcesVersion = "0.15.1"
+mokoMvvmVersion = "0.10.1"
+mokoErrorsVersion = "0.3.3"
+mokoTestVersion = "0.2.1"
+mokoNetworkVersion = "0.15.2"
+kbignumVersion = "2.0.6"
+
+compileSdk = "30"
+targetSdk = "30"
+minSdk = "16"
+
+[libraries]
+appCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidAppCompatVersion" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
+lifecycle =  { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycleVersion" }
+ktorClientOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientVersion" }
+mokoMvvmDataBinding =  { module = "dev.icerock.moko:mvvm-databinding", version.ref = "mokoMvvmVersion" }
+espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
+kotlinTestJUnit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlinVersion" }
+testCore = { module = "androidx.test:core", version.ref = "androidxTestVersion" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectricVersion" }
+testRunner = { module = "androidx.test:runner", version.ref = "testRunnerVersion" }
+testRules = { module = "androidx.test:rules", version.ref = "testRunnerVersion" }
+testExtJunit = { module = "androidx.test.ext:junit", version.ref = "testExtJunitVersion" }
+kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationVersion" }
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
+ktorClient = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientVersion" }
+ktorClientLogging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientVersion" }
+ktorClientMock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorClientVersion" }
+mokoResources = { module = "dev.icerock.moko:resources", version.ref = "mokoResourcesVersion" }
+mokoMvvmCore = { module = "dev.icerock.moko:mvvm-core", version.ref = "mokoMvvmVersion" }
+mokoMvvmLiveData = { module = "dev.icerock.moko:mvvm-livedata", version.ref = "mokoMvvmVersion" }
+mokoErrors =  { module = "dev.icerock.moko:errors", version.ref = "mokoErrorsVersion" }
+mokoNetwork = { module = "dev.icerock.moko:network", version.ref = "mokoNetworkVersion" }
+mokoNetworkErrors = { module = "dev.icerock.moko:network-errors", version.ref = "mokoNetworkVersion" }
+mokoNetworkBignum = { module = "dev.icerock.moko:network-bignum", version.ref = "mokoNetworkVersion" }
+kbignum =  { module = "com.soywiz.korlibs.kbignum:kbignum", version.ref = "kbignumVersion" }
+kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlinVersion" }
+kotlinTestAnnotations = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlinVersion" }
+mokoTest =  { module = "dev.icerock.moko:test", version.ref = "mokoTestVersion" }
+ktorClientIos =  { module = "io.ktor:ktor-client-ios", version.ref = "ktorClientVersion" }
+openApiGenerator = { module = "org.openapitools:openapi-generator-gradle-plugin", version.ref = "openApiGeneratorVersion" }
+guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
+detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektVersion" }

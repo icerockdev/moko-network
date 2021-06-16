@@ -10,8 +10,8 @@ plugins {
 }
 
 dependencies {
-    commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
-    commonMainApi(Deps.Libs.MultiPlatform.kbignum)
+    commonMainImplementation(libs.kotlinSerialization)
+    commonMainApi(libs.kbignum)
 
-    commonMainImplementation(project(":network"))
+    commonMainImplementation(projects.network)
 }

@@ -5,7 +5,7 @@
 import java.util.Base64
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version("1.4.31")
+    id("org.jetbrains.kotlin.jvm") version("1.5.10")
     id("io.gitlab.arturbosch.detekt") version("1.15.0")
     id("org.gradle.maven-publish")
     id("signing")

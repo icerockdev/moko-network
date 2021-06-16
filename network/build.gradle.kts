@@ -20,22 +20,22 @@ kotlin {
 }
 
 dependencies {
-    commonMainImplementation(Deps.Libs.MultiPlatform.coroutines) {
+    commonMainImplementation(libs.coroutines) {
         isForce = true
     }
 
-    commonMainApi(Deps.Libs.MultiPlatform.kotlinSerialization)
-    commonMainApi(Deps.Libs.MultiPlatform.ktorClient)
-    androidMainApi(Deps.Libs.Android.ktorClientOkHttp)
-    iosMainApi(Deps.Libs.Ios.ktorClientIos)
+    commonMainApi(libs.kotlinSerialization)
+    commonMainApi(libs.ktorClient)
+    androidMainApi(libs.ktorClientOkHttp)
+    iosMainApi(libs.ktorClientIos)
 
-    androidMainImplementation(Deps.Libs.Android.appCompat)
+    "androidMainImplementation"(libs.appCompat)
 
-    commonTestImplementation(Deps.Libs.MultiPlatform.ktorClientMock)
-    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
-    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
+    commonTestImplementation(libs.ktorClientMock)
+    commonTestImplementation(libs.kotlinTest)
+    commonTestImplementation(libs.kotlinTestAnnotations)
 
-    androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
+    androidTestImplementation(libs.kotlinTestJUnit)
 }
 
 tasks.named("publishToMavenLocal") {

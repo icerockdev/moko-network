@@ -12,27 +12,36 @@ plugins {
     id("dev.icerock.mobile.multiplatform.ios-framework")
 }
 
+kotlin {
+    macosX64()
+    targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java).all {
+        binaries.withType(org.jetbrains.kotlin.gradle.plugin.mpp.Framework::class.java).all {
+            export(projects.network)
+        }
+    }
+}
+
 dependencies {
-    commonMainImplementation(Deps.Libs.MultiPlatform.coroutines)
-    commonMainImplementation(Deps.Libs.MultiPlatform.ktorClient)
-    commonMainImplementation(Deps.Libs.MultiPlatform.ktorClientLogging)
-    commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
-    commonMainImplementation(Deps.Libs.MultiPlatform.kbignum)
+    commonMainImplementation(libs.coroutines)
+    commonMainImplementation(libs.ktorClient)
+    commonMainImplementation(libs.ktorClientLogging)
+    commonMainImplementation(libs.kotlinSerialization)
+    commonMainImplementation(libs.kbignum)
 
-    commonMainApi(Deps.Libs.MultiPlatform.mokoMvvmCore)
-    commonMainApi(Deps.Libs.MultiPlatform.mokoMvvmLiveData)
-    commonMainApi(Deps.Libs.MultiPlatform.mokoNetwork)
-    commonMainApi(Deps.Libs.MultiPlatform.mokoNetworkErrors)
-    commonMainApi(Deps.Libs.MultiPlatform.mokoNetworkBignum)
+    commonMainApi(libs.mokoMvvmCore)
+    commonMainApi(libs.mokoMvvmLiveData)
+    commonMainApi(libs.mokoNetwork)
+    commonMainApi(libs.mokoNetworkErrors)
+    commonMainApi(libs.mokoNetworkBignum)
 
-    androidMainImplementation(Deps.Libs.Android.lifecycle)
+    "androidMainImplementation"(libs.lifecycle)
 
-    commonTestImplementation(Deps.Libs.MultiPlatform.ktorClientMock)
-    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
-    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.mokoTest)
-    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
+    commonTestImplementation(libs.ktorClientMock)
+    commonTestImplementation(libs.kotlinTest)
+    commonTestImplementation(libs.mokoTest)
+    commonTestImplementation(libs.kotlinTestAnnotations)
 
-    androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
+    androidTestImplementation(libs.kotlinTestJUnit)
 }
 
 multiplatformResources {

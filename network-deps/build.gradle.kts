@@ -12,11 +12,6 @@ repositories {
 
     gradlePluginPortal()
 
-    jcenter {
-        content {
-            includeGroup("org.jetbrains.trove4j")
-        }
-    }
 }
 
 dependencies {
