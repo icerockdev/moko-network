@@ -19,7 +19,7 @@ mokoResourcesVersion = "0.15.1"
 mokoMvvmVersion = "0.10.1"
 mokoErrorsVersion = "0.3.3"
 mokoTestVersion = "0.3.0"
-mokoNetworkVersion = "0.15.2"
+mokoNetworkVersion = "0.16.0"
 kbignumVersion = "2.0.6"
 
 compileSdk = "30"
