@@ -26,6 +26,10 @@ dependencies {
     commonMainApi(libs.mokoNetworkErrors)
     commonMainApi(libs.mokoNetworkBignum)
 
+    commonMainApi(projects.network)
+    commonMainApi(projects.networkBignum)
+    commonMainApi(projects.networkErrors)
+
     "androidMainImplementation"(libs.lifecycle)
 
     commonTestImplementation(libs.ktorClientMock)
