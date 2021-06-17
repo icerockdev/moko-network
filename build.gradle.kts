@@ -33,13 +33,12 @@ allprojects {
     }
 
     dependencies {
-        //"detektPlugins"(libs.detektFormatting.get())
-        "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
+        "detektPlugins"(rootProject.libs.detektFormatting)
     }
 
     configurations.configureEach {
         resolutionStrategy {
-            force("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt")
+            force("${rootProject.libs.coroutines.get().module}:${rootProject.libs.coroutines.get().versionConstraint}")
         }
     }
 

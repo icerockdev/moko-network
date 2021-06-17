@@ -28,8 +28,7 @@ dependencies {
 
     compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
 
-    //"detektPlugins"(libs.detektFormatting)
-    "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
+    "detektPlugins"(rootProject.libs.detektFormatting)
 }
 
 java {
