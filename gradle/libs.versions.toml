@@ -18,7 +18,7 @@ detektVersion = "1.15.0"
 mokoResourcesVersion = "0.15.1"
 mokoMvvmVersion = "0.10.1"
 mokoErrorsVersion = "0.3.3"
-mokoTestVersion = "0.2.1"
+mokoTestVersion = "0.3.0"
 mokoNetworkVersion = "0.15.2"
 kbignumVersion = "2.0.6"
 
@@ -54,7 +54,7 @@ mokoNetworkBignum = { module = "dev.icerock.moko:network-bignum", version.ref = 
 kbignum =  { module = "com.soywiz.korlibs.kbignum:kbignum", version.ref = "kbignumVersion" }
 kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlinVersion" }
 kotlinTestAnnotations = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlinVersion" }
-mokoTest =  { module = "dev.icerock.moko:test", version.ref = "mokoTestVersion" }
+mokoTest =  { module = "dev.icerock.moko:test-core", version.ref = "mokoTestVersion" }
 ktorClientIos =  { module = "io.ktor:ktor-client-ios", version.ref = "ktorClientVersion" }
 openApiGenerator = { module = "org.openapitools:openapi-generator-gradle-plugin", version.ref = "openApiGeneratorVersion" }
 guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
