@@ -20,9 +20,6 @@ kotlin {
 }
 
 dependencies {
-    commonMainImplementation(libs.coroutines) {
-        isForce = true
-    }
 
     commonMainApi(libs.kotlinSerialization)
     commonMainApi(libs.ktorClient)

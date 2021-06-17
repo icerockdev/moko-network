@@ -37,6 +37,12 @@ allprojects {
         "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
     }
 
+    configurations.configureEach {
+        resolutionStrategy {
+            force("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt")
+        }
+    }
+
     plugins.withId("com.android.library") {
         configure<com.android.build.gradle.LibraryExtension> {
             compileSdkVersion(libs.versions.compileSdk.get().toInt())
