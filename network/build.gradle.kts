@@ -26,7 +26,7 @@ dependencies {
     androidMainApi(libs.ktorClientOkHttp)
     iosMainApi(libs.ktorClientIos)
 
-    "androidMainImplementation"(libs.appCompat)
+    androidMainImplementation(libs.appCompat)
 
     commonTestImplementation(libs.ktorClientMock)
     commonTestImplementation(libs.kotlinTest)
