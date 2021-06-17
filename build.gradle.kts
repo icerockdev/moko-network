@@ -18,7 +18,7 @@ buildscript {
         classpath("dev.icerock.moko:resources-generator:0.15.1")
         classpath("dev.icerock.moko:network-generator") // substituted
         classpath("org.jetbrains.kotlin:kotlin-serialization:1.5.10")
-        classpath("dev.icerock:mobile-multiplatform:0.9.2")
+        classpath("dev.icerock:mobile-multiplatform:0.10.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
         classpath("com.android.tools.build:gradle:4.2.1")
     }
