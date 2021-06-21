@@ -11,7 +11,35 @@ plugins {
 }
 
 kotlin {
+    jvm()
+
     sourceSets {
+        val commonMain by getting
+
+        val commonJvmAndroid = create("commonJvmAndroid") {
+            dependsOn(commonMain)
+            dependencies {
+                api(libs.ktorClientOkHttp)
+            }
+        }
+
+        val androidMain by getting {
+            dependsOn(commonJvmAndroid)
+        }
+
+        val jvmMain by getting {
+            dependsOn(commonJvmAndroid)
+            dependencies {
+                api(libs.ktorClientOkHttp)
+            }
+        }
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(libs.kotlinTestJUnit)
+            }
+        }
+
         val iosArm64Main by getting
         val iosX64Main by getting
 
