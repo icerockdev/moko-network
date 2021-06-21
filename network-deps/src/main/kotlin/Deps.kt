@@ -82,8 +82,6 @@ object Deps {
             object Tests {
                 const val espressoCore =
                     "androidx.test.espresso:espresso-core:$espressoCoreVersion"
-                const val kotlinTestJUnit =
-                    "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
                 const val testCore =
                     "androidx.test:core:$androidxTestVersion"
                 const val robolectric =
@@ -144,6 +142,16 @@ object Deps {
                 "org.openapitools:openapi-generator-gradle-plugin:$openApiGeneratorVersion"
             const val guava =
                 "com.google.guava:guava:$guavaVersion"
+        }
+
+        object JvmAndroid {
+            val ktorClientOkHttp =
+                "io.ktor:ktor-client-okhttp:$ktorClientVersion"
+
+            object Tests {
+                const val kotlinTestJUnit =
+                    "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
+            }
         }
 
         object Detekt {

@@ -11,7 +11,35 @@ plugins {
 }
 
 kotlin {
+    jvm()
+
     sourceSets {
+        val commonMain by getting
+
+        val commonJvmAndroid = create("commonJvmAndroid") {
+            dependsOn(commonMain)
+            dependencies {
+                api(Deps.Libs.JvmAndroid.ktorClientOkHttp)
+            }
+        }
+
+        val androidMain by getting {
+            dependsOn(commonJvmAndroid)
+        }
+
+        val jvmMain by getting {
+            dependsOn(commonJvmAndroid)
+            dependencies {
+                api(Deps.Libs.JvmAndroid.ktorClientOkHttp)
+            }
+        }
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(Deps.Libs.JvmAndroid.Tests.kotlinTestJUnit)
+            }
+        }
+
         val iosArm64Main by getting
         val iosX64Main by getting
 
@@ -26,7 +54,7 @@ dependencies {
 
     commonMainApi(Deps.Libs.MultiPlatform.kotlinSerialization)
     commonMainApi(Deps.Libs.MultiPlatform.ktorClient)
-    androidMainApi(Deps.Libs.Android.ktorClientOkHttp)
+    androidMainApi(Deps.Libs.JvmAndroid.ktorClientOkHttp)
     iosMainApi(Deps.Libs.Ios.ktorClientIos)
 
     androidMainImplementation(Deps.Libs.Android.appCompat)
@@ -35,7 +63,7 @@ dependencies {
     commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
     commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
 
-    androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
+    androidTestImplementation(Deps.Libs.JvmAndroid.Tests.kotlinTestJUnit)
 }
 
 tasks.named("publishToMavenLocal") {

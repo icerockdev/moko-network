@@ -26,7 +26,7 @@ allprojects {
     apply(plugin = Deps.Plugins.detekt.id)
 
     configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
-        input.setFrom("src/commonMain/kotlin", "src/androidMain/kotlin", "src/iosMain/kotlin")
+        input.setFrom("src/commonMain/kotlin", "src/androidMain/kotlin", "src/iosMain/kotlin", "src/jvmMain/kotlin")
     }
 
     dependencies {
