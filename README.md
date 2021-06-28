@@ -1,6 +1,5 @@
 ![moko-network](img/logo.png)  
-[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://img.shields.io/maven-central/v/dev.icerock.moko/network) ](https://repo1.maven.org/maven2/dev/icerock/moko/network) ![kotlin-version](https://img.shields.io/badge/kotlin-1.5.10-orange)
-
+[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://img.shields.io/maven-central/v/dev.icerock.moko/network) ](https://repo1.maven.org/maven2/dev/icerock/moko/network) ![kotlin-version](https://kotlin-version.aws.icerock.dev/kotlin-version?group=dev.icerock.moko&name=network)
 # Mobile Kotlin network components
 This is a Kotlin MultiPlatform library that provide network components for iOS & Android. Library is
  addition to [ktor-client](https://github.com/ktorio/ktor) with gradle plugin to generate entities
@@ -24,9 +23,9 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
 - **RefreshTokenFeature** feature to ktor-client that handle Unauthorized response from server, try to update token and repeat failed request in case, when token update was successful;
 
 ## Requirements
-- Gradle version 6.0+
+- Gradle version 6.8+
 - Android API 16+
-- iOS version 9.0+
+- iOS version 11.0+
 
 ## Installation
 root build.gradle  
@@ -37,7 +36,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.15.2"
+        classpath "dev.icerock.moko:network-generator:0.16.0"
     }
 }
 

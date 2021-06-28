@@ -1,5 +1,5 @@
 [versions]
-kotlinVersion = "1.5.10"
+kotlinVersion = "1.5.20"
 
 lifecycleVersion = "2.2.0"
 glideVersion = "4.9.0"
@@ -12,19 +12,15 @@ robolectricVersion = "4.3"
 openApiGeneratorVersion = "5.1.0"
 guavaVersion = "30.1-jre"
 kotlinxSerializationVersion = "1.1.0"
-coroutinesVersion = "1.4.2-native-mt"
-ktorClientVersion = "1.5.2"
+coroutinesVersion = "1.5.0-native-mt"
+ktorClientVersion = "1.6.0"
 detektVersion = "1.15.0"
-mokoResourcesVersion = "0.15.1"
-mokoMvvmVersion = "0.10.1"
-mokoErrorsVersion = "0.3.3"
-mokoTestVersion = "0.3.0"
+mokoResourcesVersion = "0.16.0"
+mokoMvvmVersion = "0.11.0"
+mokoErrorsVersion = "0.4.0"
+mokoTestVersion = "0.4.0"
 mokoNetworkVersion = "0.16.0"
 kbignumVersion = "2.0.6"
-
-compileSdk = "30"
-targetSdk = "30"
-minSdk = "16"
 
 [libraries]
 appCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidAppCompatVersion" }

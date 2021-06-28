@@ -3,11 +3,10 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.multiplatform")
-    id("dev.icerock.mobile.multiplatform")
+    id("multiplatform-library-convention")
+    id("dev.icerock.mobile.multiplatform.android-manifest")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("org.gradle.maven-publish")
+    id("android-publication-convention")
 }
 
 kotlin {
@@ -39,11 +38,6 @@ kotlin {
                 implementation(libs.kotlinTestJUnit)
             }
         }
-
-        val iosArm64Main by getting
-        val iosX64Main by getting
-
-        iosArm64Main.dependsOn(iosX64Main)
     }
 }
 
@@ -54,13 +48,13 @@ dependencies {
     androidMainApi(libs.ktorClientOkHttp)
     iosMainApi(libs.ktorClientIos)
 
-    androidMainImplementation(libs.appCompat)
+    "androidMainImplementation"(libs.appCompat)
 
     commonTestImplementation(libs.ktorClientMock)
     commonTestImplementation(libs.kotlinTest)
     commonTestImplementation(libs.kotlinTestAnnotations)
 
-    androidTestImplementation(libs.kotlinTestJUnit)
+    "androidTestImplementation"(libs.kotlinTestJUnit)
 }
 
 tasks.named("publishToMavenLocal") {

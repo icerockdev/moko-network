@@ -5,7 +5,7 @@
 import java.util.Base64
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version("1.5.10")
+    id("org.jetbrains.kotlin.jvm") version("1.5.20")
     id("io.gitlab.arturbosch.detekt") version("1.15.0")
     id("org.gradle.maven-publish")
     id("signing")
@@ -26,7 +26,7 @@ dependencies {
     implementation(libs.guava)
     implementation(libs.openApiGenerator)
 
-    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
+    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20")
 
     "detektPlugins"(rootProject.libs.detektFormatting)
 }
