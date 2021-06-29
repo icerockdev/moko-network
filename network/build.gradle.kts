@@ -3,39 +3,59 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.multiplatform")
-    id("dev.icerock.mobile.multiplatform")
+    id("multiplatform-library-convention")
+    id("dev.icerock.mobile.multiplatform.android-manifest")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("org.gradle.maven-publish")
+    id("publication-convention")
+    id("javadoc-stub-convention")
 }
 
 kotlin {
-    sourceSets {
-        val iosArm64Main by getting
-        val iosX64Main by getting
+    jvm()
 
-        iosArm64Main.dependsOn(iosX64Main)
+    sourceSets {
+        val commonMain by getting
+
+        val commonJvmAndroid = create("commonJvmAndroid") {
+            dependsOn(commonMain)
+            dependencies {
+                api(libs.ktorClientOkHttp)
+            }
+        }
+
+        val androidMain by getting {
+            dependsOn(commonJvmAndroid)
+        }
+
+        val jvmMain by getting {
+            dependsOn(commonJvmAndroid)
+            dependencies {
+                api(libs.ktorClientOkHttp)
+            }
+        }
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(libs.kotlinTestJUnit)
+            }
+        }
     }
 }
 
 dependencies {
-    commonMainImplementation(Deps.Libs.MultiPlatform.coroutines) {
-        isForce = true
-    }
+    commonMainImplementation(libs.coroutines)
+    commonMainApi(libs.kotlinSerialization)
+    commonMainApi(libs.ktorClient)
+    androidMainApi(libs.ktorClientOkHttp)
+    iosMainApi(libs.ktorClientIos)
 
-    commonMainApi(Deps.Libs.MultiPlatform.kotlinSerialization)
-    commonMainApi(Deps.Libs.MultiPlatform.ktorClient)
-    androidMainApi(Deps.Libs.Android.ktorClientOkHttp)
-    iosMainApi(Deps.Libs.Ios.ktorClientIos)
+    "androidMainImplementation"(libs.appCompat)
 
-    androidMainImplementation(Deps.Libs.Android.appCompat)
+    commonTestImplementation(libs.ktorClientMock)
+    commonTestImplementation(libs.kotlinTest)
+    commonTestImplementation(libs.kotlinTestAnnotations)
 
-    commonTestImplementation(Deps.Libs.MultiPlatform.ktorClientMock)
-    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
-    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
-
-    androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
+    "androidTestImplementation"(libs.kotlinTestJUnit)
 }
 
 tasks.named("publishToMavenLocal") {

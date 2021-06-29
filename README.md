@@ -1,6 +1,5 @@
 ![moko-network](img/logo.png)  
-[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://img.shields.io/maven-central/v/dev.icerock.moko/network) ](https://repo1.maven.org/maven2/dev/icerock/moko/network) ![kotlin-version](https://img.shields.io/badge/kotlin-1.4.31-orange)
-
+[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://img.shields.io/maven-central/v/dev.icerock.moko/network) ](https://repo1.maven.org/maven2/dev/icerock/moko/network) ![kotlin-version](https://kotlin-version.aws.icerock.dev/kotlin-version?group=dev.icerock.moko&name=network)
 # Mobile Kotlin network components
 This is a Kotlin MultiPlatform library that provide network components for iOS & Android. Library is
  addition to [ktor-client](https://github.com/ktorio/ktor) with gradle plugin to generate entities
@@ -24,43 +23,9 @@ This is a Kotlin MultiPlatform library that provide network components for iOS &
 - **RefreshTokenFeature** feature to ktor-client that handle Unauthorized response from server, try to update token and repeat failed request in case, when token update was successful;
 
 ## Requirements
-- Gradle version 6.0+
+- Gradle version 6.8+
 - Android API 16+
-- iOS version 9.0+
-
-## Versions
-### Bintray
-- kotlin 1.3.50
-  - 0.1.0
-  - 0.1.1
-- kotlin 1.3.61
-  - 0.2.0
-  - 0.3.0
-  - 0.4.0
-  - 0.5.0
-  - 0.5.1
-- kotlin 1.3.70
-  - 0.6.0
-  - 0.7.0
-- kotlin 1.4.10
-  - 0.8.0
-- kotlin 1.4.21
-  - 0.9.0
-  - 0.9.1
-  - 0.9.2
-  - 0.9.3
-  - 0.10.0
-- kotlin 1.4.31
-  - 0.11.0
-  - 0.12.0
-  - 0.13.0
-### mavenCentral
-  - 0.14.0
-  - 0.14.1
-  - 0.14.2
-  - 0.15.0
-  - 0.15.1
-  - 0.15.2
+- iOS version 11.0+
 
 ## Installation
 root build.gradle  
@@ -71,7 +36,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.15.2"
+        classpath "dev.icerock.moko:network-generator:0.16.0"
     }
 }
 
@@ -88,7 +53,7 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.15.2")
+    commonMainApi("dev.icerock.moko:network:0.16.0")
 }
 ```
 
