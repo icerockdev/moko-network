@@ -51,6 +51,7 @@ kbignum =  { module = "com.soywiz.korlibs.kbignum:kbignum", version.ref = "kbign
 kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlinVersion" }
 kotlinTestAnnotations = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlinVersion" }
 mokoTest =  { module = "dev.icerock.moko:test-core", version.ref = "mokoTestVersion" }
+kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinVersion" }
 ktorClientIos =  { module = "io.ktor:ktor-client-ios", version.ref = "ktorClientVersion" }
 openApiGenerator = { module = "org.openapitools:openapi-generator-gradle-plugin", version.ref = "openApiGeneratorVersion" }
 guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }

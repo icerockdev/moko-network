@@ -31,3 +31,5 @@ dependencyResolutionManagement {
     }
 }
 
+includeBuild("../network-build-logic")
+
