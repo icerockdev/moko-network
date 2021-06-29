@@ -1,3 +1,5 @@
+import org.gradle.api.internal.artifacts.dependencies.DefaultDependencyConstraint.strictly
+
 /*
  * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
@@ -42,7 +44,11 @@ kotlin {
 }
 
 dependencies {
-
+    commonMainImplementation(libs.coroutines) {
+        version {
+            require("1.5.0-native-mt")
+        }
+    }
     commonMainApi(libs.kotlinSerialization)
     commonMainApi(libs.ktorClient)
     androidMainApi(libs.ktorClientOkHttp)

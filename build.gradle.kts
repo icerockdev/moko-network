@@ -2,8 +2,6 @@
  * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
-import java.util.Base64
-
 buildscript {
     repositories {
         mavenCentral()
@@ -23,11 +21,6 @@ allprojects {
     plugins.withId("org.gradle.maven-publish") {
         group = "dev.icerock.moko"
         version = libs.versions.mokoNetworkVersion.get()
-    }
-    configurations.configureEach {
-        resolutionStrategy {
-            force("${rootProject.libs.coroutines.get().module}:${rootProject.libs.coroutines.get().versionConstraint}")
-        }
     }
 }
 
