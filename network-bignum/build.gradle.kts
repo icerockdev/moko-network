@@ -3,15 +3,15 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.multiplatform")
-    id("dev.icerock.mobile.multiplatform")
-    id("org.gradle.maven-publish")
+    id("multiplatform-library-convention")
+    id("dev.icerock.mobile.multiplatform.android-manifest")
+    id("publication-convention")
+    id("javadoc-stub-convention")
 }
 
 dependencies {
-    commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
-    commonMainApi(Deps.Libs.MultiPlatform.kbignum)
+    commonMainImplementation(libs.kotlinSerialization)
+    commonMainApi(libs.kbignum)
 
-    commonMainImplementation(project(":network"))
+    commonMainImplementation(projects.network)
 }
