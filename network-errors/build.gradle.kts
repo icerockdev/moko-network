@@ -7,6 +7,7 @@ plugins {
     id("dev.icerock.mobile.multiplatform.android-manifest")
     id("dev.icerock.mobile.multiplatform-resources")
     id("publication-convention")
+    id("javadoc-stub-convention")
 }
 
 dependencies {

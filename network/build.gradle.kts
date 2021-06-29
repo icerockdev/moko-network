@@ -7,6 +7,7 @@ plugins {
     id("dev.icerock.mobile.multiplatform.android-manifest")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("publication-convention")
+    id("javadoc-stub-convention")
 }
 
 kotlin {
