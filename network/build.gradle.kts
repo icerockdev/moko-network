@@ -44,11 +44,7 @@ kotlin {
 }
 
 dependencies {
-    commonMainImplementation(libs.coroutines) {
-        version {
-            require("1.5.0-native-mt")
-        }
-    }
+    commonMainImplementation(libs.coroutines)
     commonMainApi(libs.kotlinSerialization)
     commonMainApi(libs.ktorClient)
     androidMainApi(libs.ktorClientOkHttp)
