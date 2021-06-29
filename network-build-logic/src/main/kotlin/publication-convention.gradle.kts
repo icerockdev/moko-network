@@ -5,7 +5,6 @@
 import java.util.Base64
 
 plugins {
-    id("javadoc-stub-convention")
     id("org.gradle.maven-publish")
     id("signing")
 }
@@ -39,6 +38,16 @@ publishing {
                     id.set("Alex009")
                     name.set("Aleksey Mikhailov")
                     email.set("aleksey.mikhailov@icerockdev.com")
+                }
+                developer {
+                    id.set("Tetraquark")
+                    name.set("Vladislav Areshkin")
+                    email.set("vareshkin@icerockdev.com")
+                }
+                developer {
+                    id.set("Dorofeev")
+                    name.set("Andrey Dorofeev")
+                    email.set("adorofeev@icerockdev.com")
                 }
             }
 

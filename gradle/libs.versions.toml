@@ -14,7 +14,6 @@ guavaVersion = "30.1-jre"
 kotlinxSerializationVersion = "1.1.0"
 coroutinesVersion = "1.5.0-native-mt"
 ktorClientVersion = "1.6.0"
-detektVersion = "1.15.0"
 mokoResourcesVersion = "0.16.0"
 mokoMvvmVersion = "0.11.0"
 mokoErrorsVersion = "0.4.0"
@@ -55,4 +54,3 @@ kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", ver
 ktorClientIos =  { module = "io.ktor:ktor-client-ios", version.ref = "ktorClientVersion" }
 openApiGenerator = { module = "org.openapitools:openapi-generator-gradle-plugin", version.ref = "openApiGeneratorVersion" }
 guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
-detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektVersion" }

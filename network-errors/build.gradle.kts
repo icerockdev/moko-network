@@ -6,7 +6,7 @@ plugins {
     id("multiplatform-library-convention")
     id("dev.icerock.mobile.multiplatform.android-manifest")
     id("dev.icerock.mobile.multiplatform-resources")
-    id("android-publication-convention")
+    id("publication-convention")
 }
 
 dependencies {
