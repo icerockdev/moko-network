@@ -14,6 +14,7 @@ android {
     defaultConfig {
         applicationId = "dev.icerock.moko.samples.network"
 
+        multiDexEnabled = true      
         versionCode = 1
         versionName = "0.1.0"
     }
@@ -22,6 +23,6 @@ android {
 dependencies {
     implementation(libs.appCompat)
     implementation(libs.mokoMvvmDataBinding)
-
+    implementation(libs.multidex)
     implementation(projects.sample.mppLibrary)
 }

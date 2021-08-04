@@ -37,7 +37,6 @@ dependencies {
     commonMainApi(projects.networkErrors)
 
     "androidMainImplementation"(libs.lifecycleViewModel)
-    "androidMainImplementation"(libs.multidex)
     
     commonTestImplementation(libs.ktorClientMock)
     commonTestImplementation(libs.kotlinTest)
