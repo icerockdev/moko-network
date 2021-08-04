@@ -6,6 +6,8 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version("1.5.20")
     id("detekt-convention")
     id("publication-convention")
+    id("com.gradle.plugin-publish") version ("0.15.0")
+    id("java-gradle-plugin")
 
 }
 
@@ -38,4 +40,32 @@ publishing.publications.register("mavenJava", MavenPublication::class) {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+gradlePlugin {
+    plugins {
+        create("multiplatform-network-generator") {
+            id = "dev.icerock.mobile.multiplatform-network-generator"
+            implementationClass = "dev.icerock.moko.network.MultiPlatformNetworkGeneratorPlugin"
+        }
+    }
+}
+
+pluginBundle {
+    website = "https://github.com/icerockdev/moko-network"
+    vcsUrl = "https://github.com/icerockdev/moko-network"
+    description = "Plugin to provide network components for iOS & Android"
+    tags = listOf("moko-network", "moko", "kotlin", "kotlin-multiplatform")
+
+    plugins {
+        getByName("multiplatform-network-generator") {
+            displayName = "MOKO network generator plugin"
+        }
+    }
+
+    mavenCoordinates {
+        groupId = project.group as String
+        artifactId = project.name
+        version = project.version as String
+    }
 }
