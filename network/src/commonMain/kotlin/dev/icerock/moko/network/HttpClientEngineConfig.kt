@@ -16,3 +16,5 @@ class HttpClientEngineConfig {
 }
 
 expect fun createHttpClientEngine(block: HttpClientEngineConfig.() -> Unit = {}): HttpClientEngine
+
+expect fun createHttpClientEngine(): HttpClientEngine

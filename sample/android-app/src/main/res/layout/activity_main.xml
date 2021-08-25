@@ -27,5 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Refresh" />
+        <Button
+            android:id="@+id/websocketButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Websocket" />
     </LinearLayout>
 </layout>

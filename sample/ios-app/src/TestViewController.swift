@@ -20,10 +20,18 @@ class TestViewController: UIViewController {
         viewModel.petInfo.addObserver { [weak self] info in
             self?.textView.text = info as String?
         }
+        
+        viewModel.websocketInfo.addObserver { [weak self] info in
+            self?.textView.text = info as String?
+        }
     }
     
     @IBAction func onRefreshPressed() {
         viewModel.onRefreshPressed()
+    }
+    
+    @IBAction func onRefreshWebsocketPressed() {
+        viewModel.onRefreshWebsocketPressed()
     }
     
     deinit {
