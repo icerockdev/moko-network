@@ -27,8 +27,6 @@ import io.ktor.client.features.websocket.webSocket
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.readText
 import io.ktor.http.cio.websocket.send
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -86,7 +84,7 @@ class TestViewModel : ViewModel() {
     private val _petInfo = MutableLiveData<String?>(null)
     val petInfo: LiveData<String?> = _petInfo.readOnly()
 
-    private val _websocketInfo = MutableLiveData<String?>(null)
+    private val _websocketInfo = MutableLiveData<String?>("")
     val websocketInfo: LiveData<String?> = _websocketInfo.readOnly()
 
     init {
