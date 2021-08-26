@@ -37,7 +37,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4P3-zK-HqS">
                                 <rect key="frame" x="16" y="538" width="144" height="30"/>
-                                <state key="normal" title="Refresh"/>
+                                <state key="normal" title="Pets refresh"/>
                                 <connections>
                                     <action selector="onRefreshPressed" destination="TTy-86-aNs" eventType="touchUpInside" id="2wv-pf-F8T"/>
                                 </connections>
@@ -52,7 +52,7 @@
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZd-mg-lsS">
                                 <rect key="frame" x="160" y="538" width="144" height="30"/>
-                                <state key="normal" title="Websocket"/>
+                                <state key="normal" title="Websocket refresh"/>
                                 <connections>
                                     <action selector="onRefreshWebsocketPressed" destination="TTy-86-aNs" eventType="touchUpInside" id="7hh-sW-OWT"/>
                                 </connections>
