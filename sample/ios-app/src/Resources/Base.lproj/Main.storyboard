@@ -35,8 +35,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4P3-zK-HqS">
-                                <rect key="frame" x="80" y="538" width="53" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4P3-zK-HqS">
+                                <rect key="frame" x="16" y="538" width="144" height="30"/>
                                 <state key="normal" title="Refresh"/>
                                 <connections>
                                     <action selector="onRefreshPressed" destination="TTy-86-aNs" eventType="touchUpInside" id="2wv-pf-F8T"/>
@@ -50,9 +50,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZd-mg-lsS">
-                                <rect key="frame" x="179" y="540" width="77" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZd-mg-lsS">
+                                <rect key="frame" x="160" y="538" width="144" height="30"/>
                                 <state key="normal" title="Websocket"/>
                                 <connections>
                                     <action selector="onRefreshWebsocketPressed" destination="TTy-86-aNs" eventType="touchUpInside" id="7hh-sW-OWT"/>
@@ -61,11 +60,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="4P3-zK-HqS" firstAttribute="centerX" secondItem="KxK-oh-5KO" secondAttribute="centerX" id="BdP-u5-seY"/>
+                            <constraint firstItem="gZd-mg-lsS" firstAttribute="leading" secondItem="4P3-zK-HqS" secondAttribute="trailing" id="1W2-Hi-h6o"/>
+                            <constraint firstItem="4P3-zK-HqS" firstAttribute="width" secondItem="gZd-mg-lsS" secondAttribute="width" id="1jH-cd-usR"/>
+                            <constraint firstItem="gTY-6T-yQv" firstAttribute="top" secondItem="gZd-mg-lsS" secondAttribute="bottom" id="8pg-fG-5Ra"/>
                             <constraint firstItem="8qa-Wn-6Ga" firstAttribute="leading" secondItem="KxK-oh-5KO" secondAttribute="leadingMargin" id="DPi-WY-Mc8"/>
                             <constraint firstItem="8qa-Wn-6Ga" firstAttribute="top" secondItem="gcA-zH-akF" secondAttribute="bottom" id="EUh-F3-1XI"/>
+                            <constraint firstItem="gZd-mg-lsS" firstAttribute="top" secondItem="8qa-Wn-6Ga" secondAttribute="bottom" id="GDZ-v5-tpv"/>
                             <constraint firstItem="4P3-zK-HqS" firstAttribute="top" secondItem="8qa-Wn-6Ga" secondAttribute="bottom" id="IQM-Zf-ccc"/>
                             <constraint firstAttribute="trailingMargin" secondItem="8qa-Wn-6Ga" secondAttribute="trailing" id="MEr-qh-O94"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="gZd-mg-lsS" secondAttribute="trailing" id="Ro5-Zw-7wO"/>
+                            <constraint firstItem="4P3-zK-HqS" firstAttribute="leading" secondItem="KxK-oh-5KO" secondAttribute="leadingMargin" id="sSK-dK-ZVw"/>
                             <constraint firstItem="gTY-6T-yQv" firstAttribute="top" secondItem="4P3-zK-HqS" secondAttribute="bottom" id="vGU-Q9-vhy"/>
                         </constraints>
                     </view>
