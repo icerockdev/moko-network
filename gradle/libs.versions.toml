@@ -18,7 +18,7 @@ mokoResourcesVersion = "0.16.2"
 mokoMvvmVersion = "0.11.0"
 mokoErrorsVersion = "0.4.0"
 mokoTestVersion = "0.4.0"
-mokoNetworkVersion = "0.16.1"
+mokoNetworkVersion = "0.17.0"
 kbignumVersion = "2.2.0"
 multidexVersion = "2.0.1"
 
