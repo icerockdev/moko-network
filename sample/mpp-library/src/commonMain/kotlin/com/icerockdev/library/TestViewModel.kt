@@ -119,7 +119,7 @@ class TestViewModel : ViewModel() {
             httpClient.webSocket("ws://${platformLocalhost}:8080/myws/echo") {
                 _websocketInfo.value += "connected websocket\n"
 
-                val incomingJob = launch {
+                val incomingJob = viewModelScope.launch {
                     incoming.consumeEach { frame ->
                         println(frame.toString())
 
