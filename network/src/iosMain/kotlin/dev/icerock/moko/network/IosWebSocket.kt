@@ -92,7 +92,6 @@ internal class IosWebSocket(
             },
             delegateQueue = NSOperationQueue.currentQueue()
         )
-        println("urlSession was built: $urlSession")
         webSocket = urlSession.webSocketTaskWithURL(socketEndpoint)
 
         CoroutineScope(coroutineContext).launch {
@@ -111,9 +110,7 @@ internal class IosWebSocket(
     }
 
     fun start() {
-        println("urlSession will resume")
         webSocket.resume()
-        println("urlSession did resume")
     }
 
     private fun listenMessages() {

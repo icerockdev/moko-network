@@ -39,7 +39,6 @@ class WSIosHttpClientEngine(
 
     @InternalAPI
     override suspend fun execute(data: HttpRequestData): HttpResponseData {
-        println("execute $data")
 
         val callContext = callContext()
         return if (data.isUpgradeRequest()) {
@@ -56,12 +55,10 @@ class WSIosHttpClientEngine(
         val requestTime = GMTDate()
         val url: String = data.url.toString()
         val socketEndpoint = NSURL.URLWithString(url)!!
-
-        println("start session to $socketEndpoint")
+        
         val session = IosWebSocket(socketEndpoint, callContext).apply { start() }
 
         val originResponse = session.originResponse.await()
-        println("opened protocol: $originResponse")
 
         return HttpResponseData(
             statusCode = HttpStatusCode.OK,
