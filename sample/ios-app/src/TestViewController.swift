@@ -27,7 +27,7 @@ class TestViewController: UIViewController {
     }
     
     @IBAction func onRefreshPressed() {
-        viewModel.onRefreshPressed()
+        viewModel.onRefreshPetPressed()
     }
     
     @IBAction func onRefreshWebsocketPressed() {

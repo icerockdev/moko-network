@@ -92,7 +92,7 @@ class TestViewModel : ViewModel() {
         loadNews()
     }
 
-    fun onRefreshPressed() {
+    fun onRefreshPetPressed() {
         reloadPet()
     }
 
@@ -110,38 +110,36 @@ class TestViewModel : ViewModel() {
     }
 
     private fun reloadWebsocket() {
+
+        val httpClient = HttpClient(createHttpClientEngine()) {
+            install(WebSockets)
+        }
         viewModelScope.launch {
-            val httpClient = HttpClient(createHttpClientEngine()) {
-                install(WebSockets)
-            }
-            viewModelScope.launch {
-                _websocketInfo.value += "try connect websocket\n"
+            _websocketInfo.value += "try connect websocket\n"
+            httpClient.webSocket("ws://0.0.0.0:8080/myws/echo") {
+                _websocketInfo.value += "connected websocket\n"
 
-                httpClient.webSocket("wss://echo.websocket.org") {
-                    _websocketInfo.value += "connected websocket\n"
+                val incomingJob = launch {
+                    incoming.consumeEach { frame ->
+                        println(frame.toString())
 
-                    val incomingJob = launch {
-                        incoming.consumeEach { frame ->
-                            println(frame.toString())
+                        if (frame is Frame.Text) {
+                            val text: String = frame.readText()
+                            _websocketInfo.value += "received $text\n"
 
-                            if (frame is Frame.Text) {
-                                val text: String = frame.readText()
-                                _websocketInfo.value += "received $text\n"
-
-                                outgoing.send(Frame.Text(">$text"))
-                                _websocketInfo.value += "send response\n"
-                            }
+                            outgoing.send(Frame.Text(">$text"))
+                            _websocketInfo.value += "send response\n"
                         }
                     }
-                    send("Hello world!")
-                    _websocketInfo.value += "send first message\n"
-
-                    incomingJob.join()
-                    _websocketInfo.value += "incoming job end\n"
                 }
+                send("Hello world!")
+                _websocketInfo.value += "send first message\n"
 
-                _websocketInfo.value += "websocket closed\n"
+                incomingJob.join()
+                _websocketInfo.value += "incoming job end\n"
             }
+
+            _websocketInfo.value += "websocket closed\n"
         }
     }
 
