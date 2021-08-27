@@ -99,7 +99,7 @@ internal class IosWebSocket(
                 if (frame is Frame.Text) {
                     val message = NSURLSessionWebSocketMessage(frame.readText())
                     webSocket.sendMessage(message) { nsError ->
-                        if (nsError != null) throw Exception(nsError.description)
+                        if (nsError != null) throw SendMessageException(nsError.description)
                     }
                 }
 
@@ -117,7 +117,7 @@ internal class IosWebSocket(
         webSocket.receiveMessageWithCompletionHandler { message, nsError ->
             when {
                 nsError != null -> {
-                    throw Exception(nsError.description)
+                    throw ReceiveMessageException(nsError.description)
                 }
                 message != null -> {
                     message.string?.let { _incoming.trySend(Frame.Text(it)) }
