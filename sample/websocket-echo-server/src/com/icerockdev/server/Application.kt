@@ -32,7 +32,7 @@ fun Application.module(testing: Boolean = false) {
 
         webSocket("/myws/echo") {
             send(Frame.Text("Hi from server"))
-            while (true) {
+            for(i in 1..20) {
                 val frame = incoming.receive()
                 if (frame is Frame.Text) {
                     send(Frame.Text("Client said: " + frame.readText()))
