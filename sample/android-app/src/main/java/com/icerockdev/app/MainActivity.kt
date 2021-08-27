@@ -29,14 +29,19 @@ class MainActivity : MvvmActivity<ActivityMainBinding, TestViewModel>() {
         viewModel.exceptionHandler.bind(this, this)
 
         val textView: TextView = findViewById(R.id.textView)
-        val refreshButton: Button = findViewById(R.id.refreshButton)
-
+        val petsRefreshButton: Button = findViewById(R.id.refreshButton)
+        val websocketRefreshButton: Button = findViewById(R.id.websocketButton)
+        
         viewModel.petInfo.ld().observe(this, Observer { url ->
             textView.text = url
         })
 
-        refreshButton.setOnClickListener {
-            viewModel.onRefreshPressed()
+        petsRefreshButton.setOnClickListener {
+            viewModel.onRefreshPetPressed()
+        }
+        
+        websocketRefreshButton.setOnClickListener{
+            viewModel.onRefreshWebsocketPressed()
         }
     }
 }
