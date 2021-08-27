@@ -19,7 +19,3 @@ actual fun createHttpClientEngine(block: HttpClientEngineConfig.() -> Unit): Htt
         }
     }
 }
-
-actual fun createHttpClientEngine(): HttpClientEngine {
-    return OkHttp.create()
-}
