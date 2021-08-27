@@ -25,7 +25,7 @@ private const val INTERNAL_SERVER_ERROR_CODE_MAX = 599
  */
 @Suppress("LongParameterList")
 fun ExceptionMappersStorage.registerAllNetworkMappers(
-    errorsTexts: NetworkErorrsTexts = NetworkErorrsTexts()
+    errorsTexts: NetworkErrorsTexts = NetworkErrorsTexts()
 ): ExceptionMappersStorage {
     return condition<StringDesc>(
         condition = { it.isNetworkConnectionError() },
