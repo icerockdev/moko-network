@@ -23,6 +23,7 @@ buildscript {
 apply(plugin = "org.jetbrains.kotlin.jvm")
 apply(plugin = "dev.icerock.moko.gradle.detekt")
 apply(plugin = "dev.icerock.moko.gradle.publication")
+apply(plugin = "dev.icerock.moko.gradle.publication.nexus")
 
 group = "dev.icerock.moko"
 version = libs.versions.mokoNetworkVersion.get()
