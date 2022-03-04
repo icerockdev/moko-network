@@ -52,7 +52,7 @@ class OneOfTest {
     }
 
     @Test
-    fun `oneOf decode Doge & Cat fails`() {
+    fun `oneOf decode Doge and Cat fails`() {
         val input = """{"bark":true,"hunts":true,"breed":"Husky","age":3}"""
 
         assertFailsWith(DataNotFitOneOfSchema::class) {

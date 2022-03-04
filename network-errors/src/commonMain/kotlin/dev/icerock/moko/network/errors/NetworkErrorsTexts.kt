@@ -6,7 +6,7 @@ package dev.icerock.moko.network.errors
 
 import dev.icerock.moko.resources.StringResource
 
-data class NetworkErorrsTexts(
+data class NetworkErrorsTexts(
     val networkConnectionErrorText: StringResource = MR.strings.networkConnectionErrorText,
     val serializationErrorText: StringResource = MR.strings.serializationErrorText,
     val httpNetworkErrorsTexts: HttpNetworkErrorsTexts = HttpNetworkErrorsTexts(),

@@ -16,12 +16,6 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
-
-        jcenter {
-            content {
-                includeGroup("org.jetbrains.kotlinx")
-            }
-        }
     }
 
     versionCatalogs {
@@ -30,6 +24,3 @@ dependencyResolutionManagement {
         }
     }
 }
-
-includeBuild("../network-build-logic")
-

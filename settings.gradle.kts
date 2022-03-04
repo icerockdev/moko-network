@@ -9,15 +9,9 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
-
-        jcenter {
-            content {
-                includeGroup("org.jetbrains.kotlinx")
-            }
-        }
     }
 }
-includeBuild("network-build-logic")
+
 includeBuild("network-generator")
 
 include(":network")

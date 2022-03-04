@@ -70,9 +70,9 @@ class KtorCodegen : AbstractKotlinCodegen() {
         openApiProcessor.apply {
             addProcessor(OneOfOperatorProcessor(ONE_OF_REPLACE_TYPE_NAME))
             addProcessor(SchemaEnumNullProcessor())
-            addProcessor(ComposedSchemaProcessor { operation, path, method ->
+            ComposedSchemaProcessor { operation, path, method ->
                 getOrGenerateOperationId(operation, path, method)
-            })
+            }.also { addProcessor(it) }
         }
 
         GlobalSettings.setProperty(CodegenConstants.SKIP_FORM_MODEL, "false")
@@ -164,7 +164,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
         servers: List<Server>?
     ): CodegenOperation {
         val codegenOperation = super.fromOperation(path, httpMethod, operation, servers)
-        codegenOperation.httpMethod = codegenOperation.httpMethod.toLowerCase().capitalize()
+        codegenOperation.httpMethod = codegenOperation.httpMethod.lowercase().capitalize()
         var currentPath = codegenOperation.path
         for (param in codegenOperation.pathParams) {
             currentPath = currentPath.replace("{" + param.baseName + "}", "$" + param.paramName)

@@ -48,7 +48,7 @@ class AnyOfTest {
     }
 
     @Test
-    fun `anyOf decode PetByType & PetByAge success`() {
+    fun `anyOf decode PetByType and PetByAge success`() {
         val input = """{"pet_type":"Cat","hunts":true,"age":4}"""
 
         val output = json.decodeFromString(AnyOfPetByAgePetByType.serializer(), input)
@@ -63,7 +63,7 @@ class AnyOfTest {
     }
 
     @Test
-    fun `anyOf decode PetByType & PetByAge failed`() {
+    fun `anyOf decode PetByType and PetByAge failed`() {
         val input = """{"nickname": "Mr. Paws","hunts": false}"""
 
         assertFailsWith(DataNotFitAnyOfSchema::class) {
@@ -102,7 +102,7 @@ class AnyOfTest {
     }
 
     @Test
-    fun `anyOf encode PetByType & PetByAge`() {
+    fun `anyOf encode PetByType and PetByAge`() {
         val input = AnyOfPetByAgePetByType(
             petByAge = PetByAge(age = 4),
             petByType = PetByType(petType = "Cat", hunts = true)

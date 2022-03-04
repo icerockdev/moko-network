@@ -3,11 +3,11 @@
  */
 
 plugins {
-    id("multiplatform-library-convention")
-    id("dev.icerock.mobile.multiplatform.android-manifest")
+    id("dev.icerock.moko.gradle.multiplatform.mobile")
     id("dev.icerock.mobile.multiplatform-resources")
-    id("publication-convention")
-    id("javadoc-stub-convention")
+    id("dev.icerock.moko.gradle.detekt")
+    id("dev.icerock.moko.gradle.publication")
+    id("dev.icerock.moko.gradle.stub.javadoc")
 }
 
 dependencies {
