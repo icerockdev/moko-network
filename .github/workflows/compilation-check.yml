@@ -17,9 +17,9 @@ jobs:
         with:
           java-version: 11
       - name: Check plugin
-        run: ./gradlew -p network-generator detekt build publishToMavenLocal
+        run: ./gradlew -p network-generator build publishToMavenLocal
       - name: Check runtime
-        run: ./gradlew detekt build publishToMavenLocal syncMultiPlatformLibraryDebugFrameworkIosX64
+        run: ./gradlew build publishToMavenLocal syncMultiPlatformLibraryDebugFrameworkIosX64
       - name: Install pods
         run: cd sample/ios-app && pod install
       - name: Check iOS
