@@ -3,11 +3,12 @@
  */
 
 plugins {
-    id("multiplatform-library-convention")
-    id("dev.icerock.mobile.multiplatform.android-manifest")
+    id("dev.icerock.moko.gradle.multiplatform.mobile")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("publication-convention")
-    id("javadoc-stub-convention")
+    id("dev.icerock.moko.gradle.detekt")
+    id("dev.icerock.moko.gradle.publication")
+    id("dev.icerock.moko.gradle.stub.javadoc")
+    id("dev.icerock.moko.gradle.tests")
 }
 
 kotlin {
@@ -29,9 +30,6 @@ kotlin {
 
         val jvmMain by getting {
             dependsOn(commonJvmAndroid)
-            dependencies {
-                api(libs.ktorClientOkHttp)
-            }
         }
 
         val jvmTest by getting {
@@ -49,13 +47,13 @@ dependencies {
     androidMainApi(libs.ktorClientOkHttp)
     iosMainApi(libs.ktorClientIos)
 
-    "androidMainImplementation"(libs.appCompat)
+    androidMainImplementation(libs.appCompat)
 
     commonTestImplementation(libs.ktorClientMock)
     commonTestImplementation(libs.kotlinTest)
     commonTestImplementation(libs.kotlinTestAnnotations)
 
-    "androidTestImplementation"(libs.kotlinTestJUnit)
+    androidTestImplementation(libs.kotlinTestJUnit)
 }
 
 tasks.named("publishToMavenLocal") {
