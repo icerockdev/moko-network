@@ -30,6 +30,7 @@ suspend inline fun <reified Value : Any> HttpClient.createRequest(
     body: Any = EmptyContent,
     contentType: ContentType? = null
 ): Value {
+    @Suppress("SwallowedException")
     try {
         return request {
             method = methodType

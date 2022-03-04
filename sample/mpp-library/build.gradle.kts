@@ -4,19 +4,15 @@
 
 plugins {
     id("com.android.library")
-    id("android-base-convention")
-    id("detekt-convention")
+    id("dev.icerock.moko.gradle.android.base")
     id("org.jetbrains.kotlin.multiplatform")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("dev.icerock.mobile.multiplatform.targets")
     id("dev.icerock.mobile.multiplatform-resources")
     id("dev.icerock.mobile.multiplatform-network-generator")
-    id("dev.icerock.mobile.multiplatform.android-manifest")
     id("dev.icerock.mobile.multiplatform.ios-framework")
-}
-
-kotlin {
-    android()
-    ios()
+    id("dev.icerock.moko.gradle.detekt")
+    id("dev.icerock.moko.gradle.tests")
 }
 
 dependencies {
@@ -36,7 +32,7 @@ dependencies {
     commonMainApi(projects.networkBignum)
     commonMainApi(projects.networkErrors)
 
-    "androidMainImplementation"(libs.lifecycleViewModel)
+    androidMainImplementation(libs.lifecycleViewModel)
     
     commonTestImplementation(libs.ktorClientMock)
     commonTestImplementation(libs.kotlinTest)

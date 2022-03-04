@@ -7,7 +7,6 @@ package com.icerockdev.app
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.icerockdev.app.databinding.ActivityMainBinding
 import com.icerockdev.library.TestViewModel
@@ -31,9 +30,9 @@ class MainActivity : MvvmActivity<ActivityMainBinding, TestViewModel>() {
         val textView: TextView = findViewById(R.id.textView)
         val refreshButton: Button = findViewById(R.id.refreshButton)
 
-        viewModel.petInfo.ld().observe(this, Observer { url ->
+        viewModel.petInfo.ld().observe(this) { url ->
             textView.text = url
-        })
+        }
 
         refreshButton.setOnClickListener {
             viewModel.onRefreshPressed()

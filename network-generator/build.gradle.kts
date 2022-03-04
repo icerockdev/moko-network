@@ -3,19 +3,26 @@
  */
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version("1.5.20")
-    id("detekt-convention")
-    id("publication-convention")
     id("com.gradle.plugin-publish") version ("0.15.0")
     id("java-gradle-plugin")
-
 }
 
 buildscript {
+    repositories {
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+    }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.4.31")
+        classpath(libs.kotlinGradlePlugin)
+        classpath(libs.mokoGradlePlugin)
+        classpath(libs.kotlinSerializationGradlePlugin)
     }
 }
+
+apply(plugin = "org.jetbrains.kotlin.jvm")
+apply(plugin = "dev.icerock.moko.gradle.detekt")
+apply(plugin = "dev.icerock.moko.gradle.publication")
 
 group = "dev.icerock.moko"
 version = libs.versions.mokoNetworkVersion.get()
@@ -34,8 +41,10 @@ java {
     withSourcesJar()
 }
 
-publishing.publications.register("mavenJava", MavenPublication::class) {
-    from(components["java"])
+configure<PublishingExtension> {
+    publications.register("mavenJava", MavenPublication::class) {
+        from(components["java"])
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

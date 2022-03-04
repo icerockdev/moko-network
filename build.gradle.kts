@@ -10,11 +10,12 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("dev.icerock.moko:resources-generator:0.16.2")
+        classpath(libs.kotlinGradlePlugin)
+        classpath(libs.androidGradlePlugin)
+        classpath(libs.mokoGradlePlugin)
+        classpath(libs.mokoResourcesGradlePlugin)
+        classpath(libs.kotlinSerializationGradlePlugin)
         classpath("dev.icerock.moko:network-generator") // substituted
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.5.20")
-
-        classpath(":network-build-logic")
     }
 }
 
