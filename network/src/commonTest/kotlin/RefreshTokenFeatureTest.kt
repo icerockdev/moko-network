@@ -2,23 +2,19 @@
  * Copyright 2021 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
-import dev.icerock.moko.network.features.RefreshTokenFeature
-import dev.icerock.moko.network.features.TokenFeature
+import dev.icerock.moko.network.plugins.RefreshTokenFeature
+import dev.icerock.moko.network.plugins.TokenPlugin
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandler
-import io.ktor.client.engine.mock.respondBadRequest
 import io.ktor.client.engine.mock.respondError
 import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.request
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -54,7 +50,7 @@ class RefreshTokenFeatureTest {
         val validToken = "124"
         val tokenHolder = MutableStateFlow<String?>(invalidToken)
         val client = createMockClient(
-            tokenProvider = object : TokenFeature.TokenProvider {
+            tokenProvider = object : TokenPlugin.TokenProvider {
                 override fun getToken(): String? {
                     return tokenHolder.value
                 }
@@ -84,7 +80,7 @@ class RefreshTokenFeatureTest {
     }
 
     private fun createMockClient(
-        tokenProvider: TokenFeature.TokenProvider? = null,
+        tokenProvider: TokenPlugin.TokenProvider? = null,
         featureConfig: RefreshTokenFeature.Config.() -> Unit,
         handler: MockRequestHandler
     ): HttpClient {
@@ -94,7 +90,7 @@ class RefreshTokenFeatureTest {
             }
 
             if (tokenProvider != null) {
-                install(TokenFeature) {
+                install(TokenPlugin) {
                     this.tokenHeaderName = AUTH_HEADER_NAME
                     this.tokenProvider = tokenProvider
                 }

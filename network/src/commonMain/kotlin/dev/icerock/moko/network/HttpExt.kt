@@ -7,8 +7,10 @@ package dev.icerock.moko.network
 import dev.icerock.moko.network.exceptions.ResponseException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.ReceivePipelineException
+import io.ktor.client.call.body
 import io.ktor.client.request.request
 import io.ktor.client.request.url
+import io.ktor.client.request.setBody
 import io.ktor.client.utils.EmptyContent
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
@@ -36,8 +38,8 @@ suspend inline fun <reified Value : Any> HttpClient.createRequest(
             method = methodType
             url(path)
             if (contentType != null) contentType(contentType)
-            this.body = body
-        }
+            setBody(body)
+        }.body()
     } catch (e: ReceivePipelineException) {
         if (e.cause is ResponseException) {
             throw e.cause

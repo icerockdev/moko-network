@@ -13,8 +13,8 @@ import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.livedata.readOnly
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.icerock.moko.network.LanguageProvider
-import dev.icerock.moko.network.features.LanguageFeature
-import dev.icerock.moko.network.features.TokenFeature
+import dev.icerock.moko.network.plugins.LanguagePlugin
+import dev.icerock.moko.network.plugins.TokenPlugin
 import dev.icerock.moko.network.generated.apis.PetApi
 import dev.icerock.moko.resources.desc.desc
 import io.ktor.client.HttpClient
@@ -38,7 +38,7 @@ class TestViewModel : ViewModel() {
     )
 
     private val httpClient = HttpClient {
-        install(LanguageFeature) {
+        install(LanguagePlugin) {
             languageHeaderName = "X-Language"
             languageCodeProvider = LanguageProvider()
         }
@@ -51,9 +51,9 @@ class TestViewModel : ViewModel() {
             }
         }
 
-        install(TokenFeature) {
+        install(TokenPlugin) {
             tokenHeaderName = "Authorization"
-            tokenProvider = object : TokenFeature.TokenProvider {
+            tokenProvider = object : TokenPlugin.TokenProvider {
                 override fun getToken(): String? = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
             }
         }

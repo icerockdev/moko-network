@@ -6,9 +6,9 @@ package dev.icerock.moko.network
 
 import android.content.res.Resources
 import androidx.core.os.ConfigurationCompat
-import dev.icerock.moko.network.features.LanguageFeature
+import dev.icerock.moko.network.plugins.LanguagePlugin
 
-actual class LanguageProvider : LanguageFeature.LanguageCodeProvider {
+actual class LanguageProvider : LanguagePlugin.LanguageCodeProvider {
     override fun getLanguageCode(): String? {
         return ConfigurationCompat.getLocales(Resources.getSystem().configuration).get(0).language
     }

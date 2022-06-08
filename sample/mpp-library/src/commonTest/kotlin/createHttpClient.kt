@@ -5,7 +5,7 @@
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
 import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParser
-import dev.icerock.moko.network.features.ExceptionFeature
+import dev.icerock.moko.network.plugins.ExceptionPlugin
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandler
@@ -23,7 +23,7 @@ fun createMockClient(
             addHandler(handler)
         }
 
-        install(ExceptionFeature) {
+        install(ExceptionPlugin) {
             exceptionFactory = HttpExceptionFactory(
                 defaultParser = ErrorExceptionParser(json),
                 customParsers = mapOf(

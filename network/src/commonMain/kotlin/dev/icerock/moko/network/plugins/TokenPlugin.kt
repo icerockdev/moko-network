@@ -2,15 +2,15 @@
  * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package dev.icerock.moko.network.features
+package dev.icerock.moko.network.plugins
 
 import io.ktor.client.HttpClient
-import io.ktor.client.features.HttpClientFeature
+import io.ktor.client.plugins.HttpClientPlugin
 import io.ktor.client.request.HttpRequestPipeline
 import io.ktor.client.request.header
 import io.ktor.util.AttributeKey
 
-class TokenFeature private constructor(
+class TokenPlugin private constructor(
     private val tokenHeaderName: String,
     private val tokenProvider: TokenProvider
 ) {
@@ -18,22 +18,22 @@ class TokenFeature private constructor(
     class Config {
         var tokenHeaderName: String? = null
         var tokenProvider: TokenProvider? = null
-        fun build() = TokenFeature(
+        fun build() = TokenPlugin(
             tokenHeaderName ?: throw IllegalArgumentException("HeaderName should be contain"),
             tokenProvider ?: throw IllegalArgumentException("TokenProvider should be contain")
         )
     }
 
-    companion object Feature : HttpClientFeature<Config, TokenFeature> {
-        override val key = AttributeKey<TokenFeature>("TokenFeature")
+    companion object Plugin : HttpClientPlugin<Config, TokenPlugin> {
+        override val key = AttributeKey<TokenPlugin>("TokenPlugin")
 
         override fun prepare(block: Config.() -> Unit) = Config().apply(block).build()
 
-        override fun install(feature: TokenFeature, scope: HttpClient) {
+        override fun install(plugin: TokenPlugin, scope: HttpClient) {
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
-                feature.tokenProvider.getToken()?.apply {
-                    context.headers.remove(feature.tokenHeaderName)
-                    context.header(feature.tokenHeaderName, this)
+                plugin.tokenProvider.getToken()?.apply {
+                    context.headers.remove(plugin.tokenHeaderName)
+                    context.header(plugin.tokenHeaderName, this)
                 }
             }
         }
