@@ -5,11 +5,11 @@
 package dev.icerock.moko.network
 
 import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.engine.ios.Ios
+import io.ktor.client.engine.darwin.Darwin
 
 actual fun createHttpClientEngine(block: HttpClientEngineConfig.() -> Unit): HttpClientEngine {
     val config = HttpClientEngineConfig().also(block)
-    return Ios.create {
+    return Darwin.create {
         this.configureSession {
             config.iosTimeoutIntervalForRequest?.let { setTimeoutIntervalForRequest(it) }
             config.iosTimeoutIntervalForResource?.let { setTimeoutIntervalForResource(it) }
