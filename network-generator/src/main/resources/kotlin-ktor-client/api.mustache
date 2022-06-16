@@ -4,10 +4,12 @@ package {{apiPackage}}
 {{#imports}}import {{import}}
 {{/imports}}
 
+import io.ktor.client.call.body
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
 import io.ktor.client.request.forms.FormDataContent
+import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
@@ -19,6 +21,8 @@ import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.serializer
 import io.ktor.client.call.ReceivePipelineException
 import io.ktor.http.content.TextContent
+import io.ktor.http.encodedPath
+import io.ktor.http.path
 
 {{#operations}}
 {{>classes_modifiers}}interface {{classname}} {
@@ -79,7 +83,7 @@ import io.ktor.http.content.TextContent
         {{#bodyParams}}
         @Suppress("SENSELESS_COMPARISON")
         if({{paramName}} != null) {
-            builder.body = TextContent(
+            builder.setBody(TextContent(
         {{#dataType}}
             {{#isArray}}
                 {{#uniqueItems}}
@@ -106,7 +110,7 @@ import io.ktor.http.content.TextContent
                 {{paramName}}),
         {{/dataType}}
                 ContentType.Application.Json.withoutParameters()
-            )
+            ))
         }
         {{/bodyParams}}
 
@@ -116,7 +120,7 @@ import io.ktor.http.content.TextContent
             {{paramName}}?.let { append("{{baseName}}", it.toString()) }
             {{/formParams}}
         })
-        builder.body = formData
+        builder.setBody(formData)
         {{/hasFormParams}}
         with(builder.headers) {
             append("Accept", "application/json")
@@ -127,12 +131,12 @@ import io.ktor.http.content.TextContent
             {{#vendorExtensions.x-successResponse}}
                 val serializer = {{>property_serializer}}
                 //not primitive type
-                val result: String = _httpClient.request(builder)
+                val result: String = _httpClient.request(builder).body()
                 return _json.decodeFromString(serializer, result)
             {{/vendorExtensions.x-successResponse}}
         {{/returnType}}
         {{^returnType}}
-            return _httpClient.request(builder)
+            return _httpClient.request(builder).body()
         {{/returnType}}
         } catch (pipeline: ReceivePipelineException) {
             throw pipeline.cause

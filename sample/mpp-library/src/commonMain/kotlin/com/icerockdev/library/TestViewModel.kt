@@ -18,9 +18,9 @@ import dev.icerock.moko.network.plugins.TokenPlugin
 import dev.icerock.moko.network.generated.apis.PetApi
 import dev.icerock.moko.resources.desc.desc
 import io.ktor.client.HttpClient
-import io.ktor.client.features.logging.LogLevel
-import io.ktor.client.features.logging.Logger
-import io.ktor.client.features.logging.Logging
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import news.apis.NewsApi
