@@ -64,7 +64,7 @@ import io.ktor.http.path
             takeFrom(_basePath)
             encodedPath = encodedPath.let { startingPath ->
                 path("{{path}}")
-                return@let startingPath + encodedPath.substring(1)
+                return@let startingPath + encodedPath
             }
             {{#hasQueryParams}}
             @Suppress("UNNECESSARY_SAFE_CALL")
