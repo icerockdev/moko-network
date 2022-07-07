@@ -2,7 +2,7 @@
  * Copyright 2021 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
-import dev.icerock.moko.network.plugins.RefreshTokenFeature
+import dev.icerock.moko.network.plugins.RefreshTokenPlugin
 import dev.icerock.moko.network.plugins.TokenPlugin
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -10,7 +10,6 @@ import io.ktor.client.engine.mock.MockRequestHandler
 import io.ktor.client.engine.mock.respondError
 import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.request
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,12 +17,12 @@ import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RefreshTokenFeatureTest {
+class RefreshTokenPluginTest {
     @Test
     fun `refresh token not called when request credentials not actual`() {
         val isFirstRequestHolder = MutableStateFlow<Boolean>(true)
         val client = createMockClient(
-            featureConfig = {
+            pluginConfig = {
                 this.updateTokenHandler = {
                     throw IllegalStateException("update token should not be called at all")
                 }
@@ -38,7 +37,7 @@ class RefreshTokenFeatureTest {
         )
 
         val result = runBlocking {
-            client.get<HttpResponse>("localhost")
+            client.get("localhost")
         }
 
         assertEquals(expected = HttpStatusCode.OK, actual = result.status)
@@ -55,7 +54,7 @@ class RefreshTokenFeatureTest {
                     return tokenHolder.value
                 }
             },
-            featureConfig = {
+            pluginConfig = {
                 this.updateTokenHandler = {
                     tokenHolder.value = validToken
                     true
@@ -72,7 +71,7 @@ class RefreshTokenFeatureTest {
         )
 
         val result = runBlocking {
-            client.get<HttpResponse>("localhost")
+            client.get("localhost")
         }
 
         assertEquals(expected = HttpStatusCode.OK, actual = result.status)
@@ -81,7 +80,7 @@ class RefreshTokenFeatureTest {
 
     private fun createMockClient(
         tokenProvider: TokenPlugin.TokenProvider? = null,
-        featureConfig: RefreshTokenFeature.Config.() -> Unit,
+        pluginConfig: RefreshTokenPlugin.Config.() -> Unit,
         handler: MockRequestHandler
     ): HttpClient {
         return HttpClient(MockEngine) {
@@ -95,7 +94,7 @@ class RefreshTokenFeatureTest {
                     this.tokenProvider = tokenProvider
                 }
             }
-            install(RefreshTokenFeature, featureConfig)
+            install(RefreshTokenPlugin, pluginConfig)
         }
     }
 

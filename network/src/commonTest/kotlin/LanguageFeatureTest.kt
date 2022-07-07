@@ -29,7 +29,7 @@ class LanguageFeatureTest {
         )
 
         val result = runBlocking {
-            client.get<HttpResponse>("localhost")
+            client.get("localhost")
         }
 
         assertEquals(expected = HttpStatusCode.OK, actual = result.status)
@@ -48,7 +48,7 @@ class LanguageFeatureTest {
         )
 
         val result = runBlocking {
-            client.get<HttpResponse>("localhost")
+            client.get("localhost")
         }
 
         assertEquals(expected = HttpStatusCode.OK, actual = result.status)

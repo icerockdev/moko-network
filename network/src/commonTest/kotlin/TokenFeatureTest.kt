@@ -9,7 +9,6 @@ import io.ktor.client.engine.mock.MockRequestHandler
 import io.ktor.client.engine.mock.respondBadRequest
 import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
@@ -31,7 +30,7 @@ class TokenFeatureTest {
         )
 
         val result = runBlocking {
-            client.get<HttpResponse>("localhost")
+            client.get("localhost")
         }
 
         assertEquals(expected = HttpStatusCode.OK, actual = result.status)
@@ -52,7 +51,7 @@ class TokenFeatureTest {
         )
 
         val result = runBlocking {
-            client.get<HttpResponse>("localhost")
+            client.get("localhost")
         }
 
         assertEquals(expected = HttpStatusCode.OK, actual = result.status)

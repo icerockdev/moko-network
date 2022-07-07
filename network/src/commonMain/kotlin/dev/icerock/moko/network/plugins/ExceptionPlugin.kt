@@ -7,10 +7,11 @@ package dev.icerock.moko.network.plugins
 import dev.icerock.moko.network.exceptionfactory.ExceptionFactory
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpClientPlugin
-import io.ktor.client.statement.HttpResponsePipeline
+import io.ktor.client.plugins.HttpSend
+import io.ktor.client.plugins.plugin
+import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.isSuccess
 import io.ktor.util.AttributeKey
-import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.charsets.Charset
 import io.ktor.utils.io.core.readText
 
@@ -31,20 +32,18 @@ class ExceptionPlugin(private val exceptionFactory: ExceptionFactory) {
         override fun prepare(block: Config.() -> Unit) = Config().apply(block).build()
 
         override fun install(plugin: ExceptionPlugin, scope: HttpClient) {
-            scope.responsePipeline.intercept(HttpResponsePipeline.Receive) { (_, body) ->
-                if (body !is ByteReadChannel) return@intercept
-
-                val response = context.response
-                if (!response.status.isSuccess()) {
-                    val packet = body.readRemaining()
+            scope.plugin(HttpSend).intercept { request ->
+                val call = execute(request)
+                if (!call.response.status.isSuccess()) {
+                    val packet = call.response.bodyAsChannel().readRemaining()
                     val responseString = packet.readText(charset = Charset.forName("UTF-8"))
                     throw plugin.exceptionFactory.createException(
-                        request = context.request,
-                        response = context.response,
+                        request = call.request,
+                        response = call.response,
                         responseBody = responseString
                     )
                 }
-                proceedWith(subject)
+                call
             }
         }
     }
