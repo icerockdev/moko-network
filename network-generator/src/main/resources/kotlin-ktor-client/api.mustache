@@ -121,7 +121,8 @@ import io.ktor.http.content.TextContent
         with(builder.headers) {
             append("Accept", "application/json")
             {{#headerParams}}
-            append("{{baseName}}", {{paramName}})
+            if ({{paramName}} != null)
+                append("{{baseName}}", {{paramName}})
             {{/headerParams}}
         }
 
