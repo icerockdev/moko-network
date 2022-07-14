@@ -4,10 +4,10 @@
 }
 {{/isMap}}
 {{#isArray}}
-    {{#items}}{{>property_serializer}}{{/items}}.let {
-        {{#uniqueItems}}SetSerializer(it){{/uniqueItems}}
-        {{^uniqueItems}}ListSerializer(it){{/uniqueItems}}
-    }
+{{#items}}{{>property_serializer}}{{/items}}.let {
+{{#uniqueItems}}SetSerializer(it){{/uniqueItems}}
+{{^uniqueItems}}ListSerializer(it){{/uniqueItems}}
+}
 {{/isArray}}
 {{^containerType}}
 {{dataType}}.serializer()
