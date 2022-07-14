@@ -120,6 +120,9 @@ import io.ktor.http.content.TextContent
         {{/hasFormParams}}
         with(builder.headers) {
             append("Accept", "application/json")
+            {{#headerParams}}
+            append("{{baseName}}", {{paramName}})
+            {{/headerParams}}
         }
 
         try {

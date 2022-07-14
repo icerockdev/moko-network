@@ -93,4 +93,8 @@ mokoNetwork {
         enumFallbackNull = true
         inputSpec = file("src/enumFallbackNull.yaml")
     }
+    spec("requestHeader") {
+        packageName = "openapi.requestHeader"
+        inputSpec = file("src/requestHeaders.yaml")
+    }
 }
