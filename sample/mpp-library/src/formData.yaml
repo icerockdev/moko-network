@@ -41,6 +41,7 @@ paths:
               properties:
                 signup:
                   $ref: '#/components/schemas/SignupRequest'
+                  required: true
                 avatar:
                   type: string
                   format: binary
