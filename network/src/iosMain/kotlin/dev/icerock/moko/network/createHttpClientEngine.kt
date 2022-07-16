@@ -14,5 +14,5 @@ actual fun createHttpClientEngine(block: HttpClientEngineConfig.() -> Unit): Htt
             config.iosTimeoutIntervalForRequest?.let { setTimeoutIntervalForRequest(it) }
             config.iosTimeoutIntervalForResource?.let { setTimeoutIntervalForResource(it) }
         }
-    }
+    }.let { WSIosHttpClientEngine(it) }
 }
