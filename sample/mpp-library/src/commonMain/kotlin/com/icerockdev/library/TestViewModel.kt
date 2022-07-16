@@ -116,7 +116,7 @@ class TestViewModel : ViewModel() {
         }
         viewModelScope.launch {
             _websocketInfo.value += "try connect websocket\n"
-            httpClient.webSocket("ws://${emulatorLocalhost}:8080/myws/echo") {
+            httpClient.webSocket("ws://$emulatorLocalhost:8080/myws/echo") {
                 _websocketInfo.value += "connected websocket\n"
 
                 val incomingJob = viewModelScope.launch {

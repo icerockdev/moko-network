@@ -12,7 +12,6 @@ import com.icerockdev.app.databinding.ActivityMainBinding
 import com.icerockdev.library.TestViewModel
 import dev.icerock.moko.mvvm.MvvmActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
-import dev.icerock.moko.mvvm.livedata.bindText
 
 class MainActivity : MvvmActivity<ActivityMainBinding, TestViewModel>() {
     override val layoutId: Int = R.layout.activity_main
@@ -32,7 +31,7 @@ class MainActivity : MvvmActivity<ActivityMainBinding, TestViewModel>() {
         val websocketText: TextView = findViewById(R.id.websocketText)
         val petsRefreshButton: Button = findViewById(R.id.refreshButton)
         val websocketRefreshButton: Button = findViewById(R.id.websocketButton)
-        
+
         viewModel.petInfo.ld().observe(this) { data ->
             restText.text = data
         }
@@ -43,8 +42,8 @@ class MainActivity : MvvmActivity<ActivityMainBinding, TestViewModel>() {
         petsRefreshButton.setOnClickListener {
             viewModel.onRefreshPetPressed()
         }
-        
-        websocketRefreshButton.setOnClickListener{
+
+        websocketRefreshButton.setOnClickListener {
             viewModel.onRefreshWebsocketPressed()
         }
     }
