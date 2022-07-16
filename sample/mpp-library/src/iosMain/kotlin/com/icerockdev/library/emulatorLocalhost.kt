@@ -4,4 +4,4 @@
 
 package com.icerockdev.library
 
-actual val platformLocalhost = "10.0.2.2"
+actual val emulatorLocalhost = "0.0.0.0"

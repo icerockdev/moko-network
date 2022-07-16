@@ -4,4 +4,4 @@
 
 package com.icerockdev.library
 
-expect val platformLocalhost: String
+actual val emulatorLocalhost = "10.0.2.2"

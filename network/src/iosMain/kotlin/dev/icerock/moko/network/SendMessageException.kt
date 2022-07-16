@@ -4,4 +4,6 @@
 
 package dev.icerock.moko.network
 
-class SendMessageException(message: String?) : Exception(message)
+import io.ktor.utils.io.errors.IOException
+
+class SendMessageException(message: String) : IOException(message)

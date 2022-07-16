@@ -54,6 +54,8 @@ apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
     commonMainApi("dev.icerock.moko:network:0.17.0")
+    commonMainApi("dev.icerock.moko:network-bignum:0.17.0") // kbignum serializer
+    commonMainApi("dev.icerock.moko:network-errors:0.17.0") // moko-errors integration
 }
 ```
 

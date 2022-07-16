@@ -26,7 +26,7 @@ class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.H
         response: HttpResponse,
         responseBody: String?
     ): ResponseException? {
-        @Suppress("TooGenericExceptionCaught")
+        @Suppress("TooGenericExceptionCaught", "SwallowedException")
         try {
             val body = responseBody.orEmpty()
             val jsonRoot = json.parseToJsonElement(body)

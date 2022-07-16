@@ -4,4 +4,6 @@
 
 package dev.icerock.moko.network
 
-class ReceiveMessageException(message: String?) : Exception(message)
+import io.ktor.utils.io.errors.IOException
+
+class ReceiveMessageException(message: String) : IOException(message)

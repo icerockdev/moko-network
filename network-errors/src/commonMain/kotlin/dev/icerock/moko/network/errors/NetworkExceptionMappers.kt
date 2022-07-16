@@ -25,7 +25,7 @@ private const val INTERNAL_SERVER_ERROR_CODE_MAX = 599
  */
 @Suppress("LongParameterList")
 fun ExceptionMappersStorage.registerAllNetworkMappers(
-    errorsTexts: NetworkErorrsTexts
+    errorsTexts: NetworkErrorsTexts = NetworkErrorsTexts()
 ): ExceptionMappersStorage {
     return condition<StringDesc>(
         condition = { it.isNetworkConnectionError() },
@@ -61,8 +61,7 @@ private fun getNetworkErrorExceptionStringDescMapper(
         errorException.isUnauthorized -> httpNetworkErrorsTexts.unauthorizedErrorText.desc()
         errorException.isNotFound -> httpNetworkErrorsTexts.notFoundErrorText.desc()
         errorException.isAccessDenied -> httpNetworkErrorsTexts.accessDeniedErrorText.desc()
-        httpStatusCode >= HttpStatusCode.InternalServerError.value &&
-                httpStatusCode <= INTERNAL_SERVER_ERROR_CODE_MAX -> {
+        httpStatusCode in HttpStatusCode.InternalServerError.value..INTERNAL_SERVER_ERROR_CODE_MAX -> {
             StringDesc.ResourceFormatted(
                 httpNetworkErrorsTexts.internalServerErrorText,
                 httpStatusCode

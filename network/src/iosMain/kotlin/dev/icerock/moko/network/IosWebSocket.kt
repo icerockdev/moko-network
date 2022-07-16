@@ -22,7 +22,9 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import platform.Foundation.NSData
+import platform.Foundation.NSError
 import platform.Foundation.NSOperationQueue
+import platform.Foundation.NSPOSIXErrorDomain
 import platform.Foundation.NSURL
 import platform.Foundation.NSURLSession
 import platform.Foundation.NSURLSessionConfiguration
@@ -99,10 +101,13 @@ internal class IosWebSocket(
                 if (frame is Frame.Text) {
                     val message = NSURLSessionWebSocketMessage(frame.readText())
                     webSocket.sendMessage(message) { nsError ->
-                        if (nsError != null) throw SendMessageException(nsError.description)
+                        if (nsError == null) return@sendMessage
+
+                        nsError.closeSocketOrThrow {
+                            throw SendMessageException(nsError.description ?: nsError.toString())
+                        }
                     }
                 }
-
             }
         }
 
@@ -117,7 +122,9 @@ internal class IosWebSocket(
         webSocket.receiveMessageWithCompletionHandler { message, nsError ->
             when {
                 nsError != null -> {
-                    throw ReceiveMessageException(nsError.description)
+                    nsError.closeSocketOrThrow {
+                        throw ReceiveMessageException(nsError.description ?: nsError.toString())
+                    }
                 }
                 message != null -> {
                     message.string?.let { _incoming.trySend(Frame.Text(it)) }
@@ -125,6 +132,18 @@ internal class IosWebSocket(
             }
             listenMessages()
         }
+    }
+
+    private fun NSError.closeSocketOrThrow(throwBlock: () -> Unit) {
+        if (domain !in listOf("kNWErrorDomainPOSIX", NSPOSIXErrorDomain)) return throwBlock()
+        if (code != 57L) return throwBlock()
+
+        val closeReason = CloseReason(
+            code = CloseReason.Codes.NORMAL,
+            message = description ?: toString()
+        )
+        _closeReason.complete(closeReason)
+        webSocket.cancel()
     }
 
     override fun terminate() {

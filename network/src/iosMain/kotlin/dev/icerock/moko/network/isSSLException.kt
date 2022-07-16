@@ -5,7 +5,6 @@
 package dev.icerock.moko.network
 
 import io.ktor.client.engine.ios.IosHttpRequestException
-import io.ktor.util.KtorExperimentalAPI
 import platform.Foundation.NSURLErrorCannotLoadFromNetwork
 import platform.Foundation.NSURLErrorClientCertificateRequired
 import platform.Foundation.NSURLErrorSecureConnectionFailed
@@ -24,7 +23,6 @@ private val sslKeys = mapOf(
     NSURLErrorCannotLoadFromNetwork to SSLExceptionType.CannotLoadFromNetwork
 )
 
-@KtorExperimentalAPI
 actual fun Throwable.isSSLException(): Boolean {
     val iosHttpException = this as? IosHttpRequestException ?: return false
     return sslKeys.keys.contains(
@@ -32,7 +30,6 @@ actual fun Throwable.isSSLException(): Boolean {
     )
 }
 
-@KtorExperimentalAPI
 actual fun Throwable.getSSLExceptionType(): SSLExceptionType? {
     val iosHttpException = this as? IosHttpRequestException ?: return null
     return sslKeys[iosHttpException.origin.code]

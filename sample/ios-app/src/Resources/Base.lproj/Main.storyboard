@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zIh-nI-gcX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zIh-nI-gcX">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -43,7 +43,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="8qa-Wn-6Ga">
-                                <rect key="frame" x="16" y="44" width="288" height="494"/>
+                                <rect key="frame" x="16" y="44" width="288" height="239"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" systemColor="labelColor"/>
@@ -57,25 +57,37 @@
                                     <action selector="onRefreshWebsocketPressed" destination="TTy-86-aNs" eventType="touchUpInside" id="7hh-sW-OWT"/>
                                 </connections>
                             </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="sfh-E6-oSV">
+                                <rect key="frame" x="16" y="291" width="288" height="239"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="gZd-mg-lsS" firstAttribute="leading" secondItem="4P3-zK-HqS" secondAttribute="trailing" id="1W2-Hi-h6o"/>
                             <constraint firstItem="4P3-zK-HqS" firstAttribute="width" secondItem="gZd-mg-lsS" secondAttribute="width" id="1jH-cd-usR"/>
+                            <constraint firstItem="sfh-E6-oSV" firstAttribute="height" secondItem="8qa-Wn-6Ga" secondAttribute="height" id="5ag-Ou-no9"/>
                             <constraint firstItem="gTY-6T-yQv" firstAttribute="top" secondItem="gZd-mg-lsS" secondAttribute="bottom" id="8pg-fG-5Ra"/>
                             <constraint firstItem="8qa-Wn-6Ga" firstAttribute="leading" secondItem="KxK-oh-5KO" secondAttribute="leadingMargin" id="DPi-WY-Mc8"/>
                             <constraint firstItem="8qa-Wn-6Ga" firstAttribute="top" secondItem="gcA-zH-akF" secondAttribute="bottom" id="EUh-F3-1XI"/>
-                            <constraint firstItem="gZd-mg-lsS" firstAttribute="top" secondItem="8qa-Wn-6Ga" secondAttribute="bottom" id="GDZ-v5-tpv"/>
-                            <constraint firstItem="4P3-zK-HqS" firstAttribute="top" secondItem="8qa-Wn-6Ga" secondAttribute="bottom" id="IQM-Zf-ccc"/>
                             <constraint firstAttribute="trailingMargin" secondItem="8qa-Wn-6Ga" secondAttribute="trailing" id="MEr-qh-O94"/>
                             <constraint firstAttribute="trailingMargin" secondItem="gZd-mg-lsS" secondAttribute="trailing" id="Ro5-Zw-7wO"/>
+                            <constraint firstItem="sfh-E6-oSV" firstAttribute="top" secondItem="8qa-Wn-6Ga" secondAttribute="bottom" constant="8" id="fdN-Nx-83P"/>
+                            <constraint firstItem="sfh-E6-oSV" firstAttribute="leading" secondItem="KxK-oh-5KO" secondAttribute="leadingMargin" id="fj1-Jn-nc2"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="sfh-E6-oSV" secondAttribute="trailing" id="p5G-7R-TWk"/>
+                            <constraint firstItem="4P3-zK-HqS" firstAttribute="top" secondItem="sfh-E6-oSV" secondAttribute="bottom" constant="8" id="q3F-eN-ZmH"/>
                             <constraint firstItem="4P3-zK-HqS" firstAttribute="leading" secondItem="KxK-oh-5KO" secondAttribute="leadingMargin" id="sSK-dK-ZVw"/>
                             <constraint firstItem="gTY-6T-yQv" firstAttribute="top" secondItem="4P3-zK-HqS" secondAttribute="bottom" id="vGU-Q9-vhy"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Test" id="0jM-60-fjM"/>
                     <connections>
-                        <outlet property="textView" destination="8qa-Wn-6Ga" id="PTA-Rr-5Tg"/>
+                        <outlet property="restText" destination="8qa-Wn-6Ga" id="czz-Al-OsU"/>
+                        <outlet property="webSocketText" destination="sfh-E6-oSV" id="rAj-Dl-Tb4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jxh-nl-GiI" userLabel="First Responder" sceneMemberID="firstResponder"/>

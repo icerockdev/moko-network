@@ -121,7 +121,7 @@ internal class ComposedSchemaProcessor(
                 operationIdGenerator(
                     operation,
                     pathName,
-                    method.name.toLowerCase().capitalize()
+                    method.name.lowercase().capitalize()
                 ) + "_response_" + this.responseName
             }
             is SchemaContext.Response -> this.responseName
@@ -129,7 +129,7 @@ internal class ComposedSchemaProcessor(
             is SchemaContext.OperationRequest -> operationIdGenerator(
                 operation,
                 pathName,
-                method.name.toLowerCase().capitalize()
+                method.name.lowercase().capitalize()
             ) + "_requestBody"
             is SchemaContext.ParameterComponent -> this.parameterName
             is SchemaContext.SchemaComponent -> this.schemaName

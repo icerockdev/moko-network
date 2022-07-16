@@ -5,9 +5,8 @@
 package com.icerockdev.library
 
 import dev.icerock.moko.errors.mappers.ExceptionMappersStorage
-import dev.icerock.moko.network.errors.NetworkErorrsTexts
 import dev.icerock.moko.network.errors.registerAllNetworkMappers
 
 fun initExceptionStorage() {
-    ExceptionMappersStorage.registerAllNetworkMappers(errorsTexts = NetworkErorrsTexts())
+    ExceptionMappersStorage.registerAllNetworkMappers()
 }

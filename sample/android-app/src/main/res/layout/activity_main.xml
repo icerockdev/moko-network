@@ -16,7 +16,14 @@
         tools:context=".app.MainActivity">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/restText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/websocketText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
