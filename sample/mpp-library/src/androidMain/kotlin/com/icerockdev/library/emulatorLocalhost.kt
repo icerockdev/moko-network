@@ -4,4 +4,5 @@
 
 package com.icerockdev.library
 
+@Suppress("MayBeConst")
 actual val emulatorLocalhost = "10.0.2.2"
