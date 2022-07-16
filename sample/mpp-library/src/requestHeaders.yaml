@@ -1,0 +1,35 @@
+openapi: 3.0.0
+info:
+  title: API
+  version: v1
+paths:
+  /user:
+    get:
+      tags:
+        - Auth
+      summary: sign in with token
+      operationId: 'auth'
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Ok'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoResponse'
+components:
+  schemas:
+    UserInfoResponse:
+      description: 'authorization response'
+      required:
+        - login
+      properties:
+        login:
+          type: string

@@ -1,0 +1,31 @@
+/*
+ * Copyright 2022 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
+ */
+
+package dev.icerock.moko.network.features
+
+import io.ktor.client.HttpClient
+import io.ktor.client.features.HttpClientFeature
+import io.ktor.client.request.HttpRequestPipeline
+import io.ktor.client.request.header
+import io.ktor.http.HttpHeaders
+import io.ktor.util.AttributeKey
+
+class DynamicUserAgent(
+    val agentProvider: () -> String?
+) {
+    class Config(var agentProvider: () -> String? = { null })
+
+    companion object Feature : HttpClientFeature<Config, DynamicUserAgent> {
+        override val key: AttributeKey<DynamicUserAgent> = AttributeKey("DynamicUserAgent")
+
+        override fun prepare(block: Config.() -> Unit): DynamicUserAgent =
+            DynamicUserAgent(Config().apply(block).agentProvider)
+
+        override fun install(feature: DynamicUserAgent, scope: HttpClient) {
+            scope.requestPipeline.intercept(HttpRequestPipeline.State) {
+                feature.agentProvider()?.let { context.header(HttpHeaders.UserAgent, it) }
+            }
+        }
+    }
+}

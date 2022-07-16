@@ -7,7 +7,8 @@ import MultiPlatformLibrary
 
 class TestViewController: UIViewController {
     
-    @IBOutlet private var textView: UITextView!
+    @IBOutlet private var restText: UITextView!
+    @IBOutlet private var webSocketText: UITextView!
     
     private var viewModel: TestViewModel!
     
@@ -18,12 +19,20 @@ class TestViewController: UIViewController {
         viewModel.exceptionHandler.bind(viewController: self)
         
         viewModel.petInfo.addObserver { [weak self] info in
-            self?.textView.text = info as String?
+            self?.restText.text = info as String?
+        }
+        
+        viewModel.websocketInfo.addObserver { [weak self] info in
+            self?.webSocketText.text = info as String?
         }
     }
     
     @IBAction func onRefreshPressed() {
-        viewModel.onRefreshPressed()
+        viewModel.onRefreshPetPressed()
+    }
+    
+    @IBAction func onRefreshWebsocketPressed() {
+        viewModel.onRefreshWebsocketPressed()
     }
     
     deinit {
