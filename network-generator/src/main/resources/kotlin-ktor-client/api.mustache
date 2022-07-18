@@ -147,7 +147,7 @@ import io.ktor.utils.io.core.Input
         val fileName = "image.jpg"
 
         try {
-            {{#returnType}}return {{/returnType}}_httpClient.submitFormWithBinaryData {
+            {{#returnType}}return {{/returnType}}_httpClient.submitFormWithBinaryData{{^returnType}}<String>{{/returnType}} {
                 url {
                     takeFrom(_basePath)
                     encodedPath = encodedPath.let { startingPath ->
