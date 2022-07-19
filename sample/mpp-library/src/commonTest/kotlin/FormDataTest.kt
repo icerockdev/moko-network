@@ -39,8 +39,8 @@ class FormDataTest {
             val body = request.body
             assertTrue(body is MultiPartFormDataContent)
             // TODO #122 fix test and logic of generated formdata support
-            assertContains(body.toByteArray().decodeToString(), "SignupRequest(firstName=first, lastName=last, phone=+799, email=a@b, password=111, passwordRepeat=111, countryId=1, cityId=2, company=test, middleName=null, post=null, interests=null)")
-            assertContains(body.toByteArray().decodeToString(), data.decodeToString())
+            assertContains(body.toByteArray().decodeToString(), "{\"firstName\":\"first\",\"lastName\":\"last\",\"phone\":\"+799\",\"email\":\"a@b\",\"password\":\"111\",\"passwordRepeat\":\"111\",\"countryId\":1,\"cityId\":2,\"company\":\"test\"}", true)
+            assertContains(body.toByteArray().decodeToString(), data.decodeToString(), true)
 
             respondOk(
                 """
@@ -84,7 +84,7 @@ class FormDataTest {
 
     private fun mockData(): ByteArray {
         val random: Random = Random.Default
-        return ByteArray(8) { random.nextBytes(1)[0] }
+        return ByteArray(64) { random.nextBytes(1)[0] }
     }
 
     private fun ByteArray.toSource(): Source = Buffer().also { it.write(this) }
