@@ -38,6 +38,7 @@ dependencies {
     commonTestImplementation(libs.kotlinTest)
     commonTestImplementation(libs.mokoTest)
     commonTestImplementation(libs.kotlinTestAnnotations)
+    commonTestImplementation(libs.okio)
 
     androidTestImplementation(libs.kotlinTestJUnit)
 }

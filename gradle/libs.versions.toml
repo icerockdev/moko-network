@@ -32,6 +32,7 @@ robolectricVersion = "4.6.1"
 ktorClientVersion = "1.6.7"
 kbignumVersion = "2.4.12"
 multidexVersion = "2.0.1"
+okioVersion = "3.2.0"
 
 [libraries]
 # android
@@ -86,3 +87,7 @@ kotlinSerializationGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-serial
 androidGradlePlugin = { module = "com.android.tools.build:gradle", version = "7.0.4" }
 mokoResourcesGradlePlugin = { module = "dev.icerock.moko:resources-generator", version.ref = "mokoResourcesVersion" }
 mokoGradlePlugin = { module = "dev.icerock.moko:moko-gradle-plugin", version = "0.1.0" }
+
+
+# other
+okio = { module = "com.squareup.okio:okio", version.ref = "okioVersion" }
