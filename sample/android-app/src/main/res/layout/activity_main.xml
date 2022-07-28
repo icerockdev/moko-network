@@ -16,16 +16,38 @@
         tools:context=".app.MainActivity">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/restText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:contentDescription="@null" />
 
-        <Button
-            android:id="@+id/refreshButton"
+        <TextView
+            android:id="@+id/websocketText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@null" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Refresh" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/refreshButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Pets refresh" />
+
+            <Button
+                android:id="@+id/websocketButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Websocket refresh" />
+        </LinearLayout>
+
     </LinearLayout>
 </layout>

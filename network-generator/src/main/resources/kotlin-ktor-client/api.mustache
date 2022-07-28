@@ -124,6 +124,10 @@ import io.ktor.http.path
         {{/hasFormParams}}
         with(builder.headers) {
             append("Accept", "application/json")
+            {{#headerParams}}
+            if ({{paramName}} != null)
+                append("{{baseName}}", {{paramName}})
+            {{/headerParams}}
         }
 
         try {

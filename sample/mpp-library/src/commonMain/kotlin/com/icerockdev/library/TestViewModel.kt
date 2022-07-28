@@ -77,13 +77,20 @@ class TestViewModel : ViewModel() {
     private val _petInfo = MutableLiveData<String?>(null)
     val petInfo: LiveData<String?> = _petInfo.readOnly()
 
+    private val _websocketInfo = MutableLiveData<String?>("")
+    val websocketInfo: LiveData<String?> = _websocketInfo.readOnly()
+
     init {
         reloadPet()
         loadNews()
     }
 
-    fun onRefreshPressed() {
+    fun onRefreshPetPressed() {
         reloadPet()
+    }
+
+    fun onRefreshWebsocketPressed() {
+        reloadWebsocket()
     }
 
     private fun reloadPet() {
@@ -92,6 +99,40 @@ class TestViewModel : ViewModel() {
                 val pet = petApi.findPetsByStatus(listOf("available"))
                 _petInfo.value = pet.toString()
             }.execute()
+        }
+    }
+
+    private fun reloadWebsocket() {
+
+        val httpClient = HttpClient(createHttpClientEngine()) {
+            install(WebSockets)
+        }
+        viewModelScope.launch {
+            _websocketInfo.value += "try connect websocket\n"
+            httpClient.webSocket("ws://$emulatorLocalhost:8080/myws/echo") {
+                _websocketInfo.value += "connected websocket\n"
+
+                val incomingJob = viewModelScope.launch {
+                    incoming.consumeEach { frame ->
+                        println(frame.toString())
+
+                        if (frame is Frame.Text) {
+                            val text: String = frame.readText()
+                            _websocketInfo.value += "received $text\n"
+
+                            outgoing.send(Frame.Text(">$text"))
+                            _websocketInfo.value += "send response\n"
+                        }
+                    }
+                }
+                send("Hello world!")
+                _websocketInfo.value += "send first message\n"
+
+                incomingJob.join()
+                _websocketInfo.value += "incoming job end\n"
+            }
+
+            _websocketInfo.value += "websocket closed\n"
         }
     }
 
