@@ -5,7 +5,7 @@
 package dev.icerock.moko.network.features
 
 import io.ktor.client.HttpClient
-import io.ktor.client.features.HttpClientFeature
+import io.ktor.client.plugins.HttpClientPlugin
 import io.ktor.client.request.HttpRequestPipeline
 import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
@@ -16,7 +16,7 @@ class DynamicUserAgent(
 ) {
     class Config(var agentProvider: () -> String? = { null })
 
-    companion object Feature : HttpClientFeature<Config, DynamicUserAgent> {
+    companion object Feature : HttpClientPlugin<Config, DynamicUserAgent> {
         override val key: AttributeKey<DynamicUserAgent> = AttributeKey("DynamicUserAgent")
 
         override fun prepare(block: Config.() -> Unit): DynamicUserAgent =
