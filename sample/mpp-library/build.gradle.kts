@@ -20,6 +20,7 @@ dependencies {
     commonMainImplementation(libs.ktorClient)
     commonMainImplementation(libs.ktorClientLogging)
     commonMainImplementation(libs.kotlinSerialization)
+    commonMainImplementation(libs.ktorClientWebSocket)
     commonMainImplementation(libs.kbignum)
 
     commonMainApi(libs.mokoMvvmCore)

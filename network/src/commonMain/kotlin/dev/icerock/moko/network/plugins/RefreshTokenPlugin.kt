@@ -27,8 +27,10 @@ class RefreshTokenPlugin(
         var isCredentialsActual: ((HttpRequest) -> Boolean)? = null
 
         fun build() = RefreshTokenPlugin(
-            updateTokenHandler ?: throw IllegalArgumentException("updateTokenHandler should be passed"),
-            isCredentialsActual ?: throw IllegalArgumentException("isCredentialsActual should be passed")
+            updateTokenHandler
+                ?: throw IllegalArgumentException("updateTokenHandler should be passed"),
+            isCredentialsActual
+                ?: throw IllegalArgumentException("isCredentialsActual should be passed")
         )
     }
 

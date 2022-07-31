@@ -10,7 +10,7 @@ import platform.Foundation.currentLocale
 import platform.Foundation.languageCode
 
 actual class LanguageProvider : LanguagePlugin.LanguageCodeProvider {
-    override fun getLanguageCode(): String? {
+    override fun getLanguageCode(): String {
         return NSLocale.currentLocale.languageCode
     }
 }

@@ -15,7 +15,7 @@ kotlinxSerializationVersion = "1.3.2"
 coroutinesVersion = "1.6.0-native-mt"
 
 # moko
-mokoResourcesVersion = "0.18.0"
+mokoResourcesVersion = "0.20.1"
 mokoMvvmVersion = "0.12.0"
 mokoErrorsVersion = "0.6.0"
 mokoTestVersion = "0.6.1"
@@ -48,6 +48,7 @@ coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version
 ktorClientOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientVersion" }
 ktorClient = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientVersion" }
 ktorClientLogging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientVersion" }
+ktorClientWebSocket = { module = "io.ktor:ktor-client-websockets", version.ref = "ktorClientVersion" }
 ktorClientMock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorClientVersion" }
 ktorClientIos =  { module = "io.ktor:ktor-client-ios", version.ref = "ktorClientVersion" }
 

@@ -4,7 +4,6 @@
 
 package com.icerockdev.library
 
-import dev.icerock.moko.errors.MR
 import dev.icerock.moko.errors.handler.ExceptionHandler
 import dev.icerock.moko.errors.mappers.ExceptionMappersStorage
 import dev.icerock.moko.errors.presenters.AlertErrorPresenter
@@ -13,14 +12,19 @@ import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.livedata.readOnly
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.icerock.moko.network.LanguageProvider
+import dev.icerock.moko.network.createHttpClientEngine
+import dev.icerock.moko.network.generated.apis.PetApi
 import dev.icerock.moko.network.plugins.LanguagePlugin
 import dev.icerock.moko.network.plugins.TokenPlugin
-import dev.icerock.moko.network.generated.apis.PetApi
-import dev.icerock.moko.resources.desc.desc
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.WebSockets
+import io.ktor.client.plugins.websocket.webSocket
+import io.ktor.websocket.Frame
+import io.ktor.websocket.readText
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import news.apis.NewsApi
@@ -28,11 +32,7 @@ import news.apis.NewsApi
 class TestViewModel : ViewModel() {
 
     val exceptionHandler = ExceptionHandler(
-        errorPresenter = AlertErrorPresenter(
-            // temporary fix https://youtrack.jetbrains.com/issue/KT-41823
-            alertTitle = MR.strings.moko_errors_presenters_alertDialogTitle.desc(),
-            positiveButtonText = MR.strings.moko_errors_presenters_alertPositiveButton.desc()
-        ),
+        errorPresenter = AlertErrorPresenter(),
         exceptionMapper = ExceptionMappersStorage.throwableMapper(),
         onCatch = { it.printStackTrace() }
     )
@@ -54,7 +54,7 @@ class TestViewModel : ViewModel() {
         install(TokenPlugin) {
             tokenHeaderName = "Authorization"
             tokenProvider = object : TokenPlugin.TokenProvider {
-                override fun getToken(): String? = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
+                override fun getToken(): String = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
             }
         }
     }
@@ -125,7 +125,7 @@ class TestViewModel : ViewModel() {
                         }
                     }
                 }
-                send("Hello world!")
+                send(Frame.Text("Hello world!"))
                 _websocketInfo.value += "send first message\n"
 
                 incomingJob.join()
