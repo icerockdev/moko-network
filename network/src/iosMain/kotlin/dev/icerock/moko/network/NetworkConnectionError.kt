@@ -4,11 +4,11 @@
 
 package dev.icerock.moko.network
 
-import io.ktor.client.engine.ios.IosHttpRequestException
+import io.ktor.client.engine.darwin.DarwinHttpRequestException
 
 actual fun Throwable.isNetworkConnectionError(): Boolean {
     return when (this) {
-        is IosHttpRequestException -> isSSLException().not()
+        is DarwinHttpRequestException -> isSSLException().not()
         else -> false
     }
 }

@@ -4,13 +4,13 @@
 
 package dev.icerock.moko.network
 
-import dev.icerock.moko.network.features.LanguageFeature
+import dev.icerock.moko.network.plugins.LanguagePlugin
 import platform.Foundation.NSLocale
 import platform.Foundation.currentLocale
 import platform.Foundation.languageCode
 
-actual class LanguageProvider : LanguageFeature.LanguageCodeProvider {
-    override fun getLanguageCode(): String? {
+actual class LanguageProvider : LanguagePlugin.LanguageCodeProvider {
+    override fun getLanguageCode(): String {
         return NSLocale.currentLocale.languageCode
     }
 }

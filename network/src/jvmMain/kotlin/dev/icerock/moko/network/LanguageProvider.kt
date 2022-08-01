@@ -1,9 +1,9 @@
 package dev.icerock.moko.network
 
-import dev.icerock.moko.network.features.LanguageFeature
+import dev.icerock.moko.network.plugins.LanguagePlugin
 import java.util.Locale
 
-actual class LanguageProvider : LanguageFeature.LanguageCodeProvider {
+actual class LanguageProvider : LanguagePlugin.LanguageCodeProvider {
     override fun getLanguageCode(): String? {
         return Locale.getDefault().displayLanguage
     }
