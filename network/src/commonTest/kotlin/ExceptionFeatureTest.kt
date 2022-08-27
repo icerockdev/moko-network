@@ -8,15 +8,13 @@ import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParse
 import dev.icerock.moko.network.exceptions.ErrorException
 import dev.icerock.moko.network.exceptions.ResponseException
 import dev.icerock.moko.network.exceptions.ValidationException
-import dev.icerock.moko.network.features.ExceptionFeature
+import dev.icerock.moko.network.plugins.ExceptionPlugin
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandler
-import io.ktor.client.engine.mock.respondBadRequest
 import io.ktor.client.engine.mock.respondError
 import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -32,7 +30,7 @@ class ExceptionFeatureTest {
         }
 
         val result = runBlocking {
-            kotlin.runCatching { client.get<HttpResponse>("localhost") }
+            kotlin.runCatching { client.get("localhost") }
         }
 
         assertEquals(expected = false, actual = result.isFailure)
@@ -55,7 +53,7 @@ class ExceptionFeatureTest {
         }
 
         val result = runBlocking {
-            kotlin.runCatching { client.get<String>("localhost") }
+            kotlin.runCatching { client.get("localhost") }
         }
 
         assertEquals(expected = true, actual = result.isFailure)
@@ -82,7 +80,7 @@ class ExceptionFeatureTest {
         }
 
         val result = runBlocking {
-            kotlin.runCatching { client.get<String>("localhost") }
+            kotlin.runCatching { client.get("localhost") }
         }
 
         assertEquals(expected = true, actual = result.isFailure)
@@ -107,7 +105,7 @@ class ExceptionFeatureTest {
         }
 
         val result = runBlocking {
-            kotlin.runCatching { client.get<String>("localhost") }
+            kotlin.runCatching { client.get("localhost") }
         }
 
         assertEquals(expected = true, actual = result.isFailure)
@@ -131,7 +129,7 @@ class ExceptionFeatureTest {
         }
 
         val result = runBlocking {
-            kotlin.runCatching { client.get<String>("localhost") }
+            kotlin.runCatching { client.get("localhost") }
         }
 
         assertEquals(expected = true, actual = result.isFailure)
@@ -166,7 +164,7 @@ class ExceptionFeatureTest {
         }
 
         val result = runBlocking {
-            kotlin.runCatching { client.get<String>("localhost") }
+            kotlin.runCatching { client.get("localhost") }
         }
 
         assertEquals(expected = true, actual = result.isFailure)
@@ -202,7 +200,7 @@ class ExceptionFeatureTest {
         }
 
         val result = runBlocking {
-            kotlin.runCatching { client.get<String>("localhost") }
+            kotlin.runCatching { client.get("localhost") }
         }
 
         assertEquals(expected = true, actual = result.isFailure)
@@ -229,9 +227,8 @@ class ExceptionFeatureTest {
         }
 
         val result = runBlocking {
-            kotlin.runCatching { client.get<String>("localhost") }
+            kotlin.runCatching { client.get("localhost") }
         }
-
         assertEquals(expected = true, actual = result.isFailure)
         val exc = result.exceptionOrNull()
         assertTrue(actual = exc is ResponseException)
@@ -247,7 +244,7 @@ class ExceptionFeatureTest {
                 addHandler(handler)
             }
 
-            install(ExceptionFeature) {
+            install(ExceptionPlugin) {
                 exceptionFactory = HttpExceptionFactory(
                     defaultParser = ErrorExceptionParser(json),
                     customParsers = mapOf(

@@ -8,6 +8,7 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respondOk
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import tests.utils.readResourceText
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -24,7 +25,7 @@ class PetApiTest {
         httpClient = HttpClient(MockEngine) {
             engine {
                 addHandler { request ->
-                    respondOk(content = petstoreSearchResponse)
+                    respondOk(content = readResourceText("PetstoreSearchResponse.json"))
                 }
             }
         }

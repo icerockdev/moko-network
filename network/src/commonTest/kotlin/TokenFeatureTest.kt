@@ -2,18 +2,15 @@
  * Copyright 2021 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
-import dev.icerock.moko.network.features.TokenFeature
+import dev.icerock.moko.network.plugins.TokenPlugin
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandler
 import io.ktor.client.engine.mock.respondBadRequest
 import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -21,7 +18,7 @@ class TokenFeatureTest {
     @Test
     fun `token added when exist`() {
         val client = createMockClient(
-            tokenProvider = object : TokenFeature.TokenProvider {
+            tokenProvider = object : TokenPlugin.TokenProvider {
                 override fun getToken(): String {
                     return "mytoken"
                 }
@@ -33,7 +30,7 @@ class TokenFeatureTest {
         )
 
         val result = runBlocking {
-            client.get<HttpResponse>("localhost")
+            client.get("localhost")
         }
 
         assertEquals(expected = HttpStatusCode.OK, actual = result.status)
@@ -42,7 +39,7 @@ class TokenFeatureTest {
     @Test
     fun `token not added when not exist`() {
         val client = createMockClient(
-            tokenProvider = object : TokenFeature.TokenProvider {
+            tokenProvider = object : TokenPlugin.TokenProvider {
                 override fun getToken(): String? {
                     return null
                 }
@@ -54,14 +51,14 @@ class TokenFeatureTest {
         )
 
         val result = runBlocking {
-            client.get<HttpResponse>("localhost")
+            client.get("localhost")
         }
 
         assertEquals(expected = HttpStatusCode.OK, actual = result.status)
     }
 
     private fun createMockClient(
-        tokenProvider: TokenFeature.TokenProvider,
+        tokenProvider: TokenPlugin.TokenProvider,
         handler: MockRequestHandler
     ): HttpClient {
         return HttpClient(MockEngine) {
@@ -69,7 +66,7 @@ class TokenFeatureTest {
                 addHandler(handler)
             }
 
-            install(TokenFeature) {
+            install(TokenPlugin) {
                 this.tokenHeaderName = AUTH_HEADER_NAME
                 this.tokenProvider = tokenProvider
             }
