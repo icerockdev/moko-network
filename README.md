@@ -36,7 +36,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "dev.icerock.moko:network-generator:0.18.0"
+        classpath "dev.icerock.moko:network-generator:0.19.0"
     }
 }
 
@@ -53,9 +53,9 @@ project build.gradle
 apply plugin: "dev.icerock.mobile.multiplatform-network-generator"
 
 dependencies {
-    commonMainApi("dev.icerock.moko:network:0.18.0")
-    commonMainApi("dev.icerock.moko:network-bignum:0.18.0") // kbignum serializer
-    commonMainApi("dev.icerock.moko:network-errors:0.18.0") // moko-errors integration
+    commonMainApi("dev.icerock.moko:network:0.19.0")
+    commonMainApi("dev.icerock.moko:network-bignum:0.19.0") // kbignum serializer
+    commonMainApi("dev.icerock.moko:network-errors:0.19.0") // moko-errors integration
 }
 ```
 
