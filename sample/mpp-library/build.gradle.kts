@@ -20,6 +20,7 @@ dependencies {
     commonMainImplementation(libs.ktorClient)
     commonMainImplementation(libs.ktorClientLogging)
     commonMainImplementation(libs.kotlinSerialization)
+    commonMainImplementation(libs.ktorClientWebSocket)
     commonMainImplementation(libs.kbignum)
 
     commonMainApi(libs.mokoMvvmCore)
@@ -99,3 +100,32 @@ mokoNetwork {
         inputSpec = file("src/requestHeaders.yaml")
     }
 }
+
+val copyIosX64TestResources = tasks.register<Copy>("copyIosX64TestResources") {
+    from("src/commonTest/resources")
+    into("build/bin/iosX64/debugTest/resources")
+}
+
+tasks.matching { it.name == "iosX64Test" }.configureEach {
+    dependsOn(copyIosX64TestResources)
+}
+
+val copyIosArm64TestResources = tasks.register<Copy>("copyIosArm64TestResources") {
+    from("src/commonTest/resources")
+    into("build/bin/iosSimulatorArm64/debugTest/resources")
+}
+
+tasks.matching { it.name == "iosSimulatorArm64Test" }.configureEach {
+    dependsOn(copyIosArm64TestResources)
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
+    .matching { it.name.contains("UnitTest") }
+    .configureEach {
+        doLast {
+            val testResourcesDir = File(projectDir, "src/commonTest/resources")
+            if (testResourcesDir.exists().not()) return@doLast
+            testResourcesDir.copyRecursively(destinationDir, overwrite = true)
+        }
+    }
+

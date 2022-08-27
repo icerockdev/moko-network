@@ -4,10 +4,12 @@ package {{apiPackage}}
 {{#imports}}import {{import}}
 {{/imports}}
 
+import io.ktor.client.call.body
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
 import io.ktor.client.request.forms.FormDataContent
+import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
@@ -26,6 +28,8 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.content.TextContent
 import io.ktor.http.Headers
 import io.ktor.utils.io.core.Input
+import io.ktor.http.encodedPath
+import io.ktor.http.path
 
 {{#operations}}
 {{>classes_modifiers}}interface {{classname}} {
@@ -68,7 +72,7 @@ import io.ktor.utils.io.core.Input
             takeFrom(_basePath)
             encodedPath = encodedPath.let { startingPath ->
                 path("{{path}}")
-                return@let startingPath + encodedPath.substring(1)
+                return@let startingPath + encodedPath
             }
             {{#hasQueryParams}}
             @Suppress("UNNECESSARY_SAFE_CALL")
@@ -87,7 +91,7 @@ import io.ktor.utils.io.core.Input
         {{#bodyParams}}
         @Suppress("SENSELESS_COMPARISON")
         if({{paramName}} != null) {
-            builder.body = TextContent(
+            builder.setBody(TextContent(
         {{#dataType}}
             {{#isArray}}
                 {{#uniqueItems}}
@@ -114,9 +118,18 @@ import io.ktor.utils.io.core.Input
                 {{paramName}}),
         {{/dataType}}
                 ContentType.Application.Json.withoutParameters()
-            )
+            ))
         }
         {{/bodyParams}}
+
+        {{#hasFormParams}}
+        val formData = FormDataContent(Parameters.build {
+            {{#formParams}}
+            {{paramName}}?.let { append("{{baseName}}", it.toString()) }
+            {{/formParams}}
+        })
+        builder.setBody(formData)
+        {{/hasFormParams}}
 
         with(builder.headers) {
             append("Accept", "application/json")
@@ -131,12 +144,12 @@ import io.ktor.utils.io.core.Input
             {{#vendorExtensions.x-successResponse}}
                 val serializer = {{>property_serializer}}
                 //not primitive type
-                val result: String = _httpClient.request(builder)
+                val result: String = _httpClient.request(builder).body()
                 return _json.decodeFromString(serializer, result)
             {{/vendorExtensions.x-successResponse}}
         {{/returnType}}
         {{^returnType}}
-            return _httpClient.request(builder)
+            return _httpClient.request(builder).body()
         {{/returnType}}
         } catch (pipeline: ReceivePipelineException) {
             throw pipeline.cause

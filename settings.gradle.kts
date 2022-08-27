@@ -19,4 +19,5 @@ include(":network-errors")
 include(":network-bignum")
 
 include(":sample:android-app")
+include(":sample:websocket-echo-server")
 include(":sample:mpp-library")

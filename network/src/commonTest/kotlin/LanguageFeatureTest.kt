@@ -2,8 +2,7 @@
  * Copyright 2021 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
-import dev.icerock.moko.network.features.LanguageFeature
-import dev.icerock.moko.network.features.TokenFeature
+import dev.icerock.moko.network.plugins.LanguagePlugin
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandler
@@ -20,7 +19,7 @@ class LanguageFeatureTest {
     @Test
     fun `language added when exist`() {
         val client = createMockClient(
-            provider = object : LanguageFeature.LanguageCodeProvider {
+            provider = object : LanguagePlugin.LanguageCodeProvider {
                 override fun getLanguageCode(): String = "ru"
             },
             handler = { request ->
@@ -30,7 +29,7 @@ class LanguageFeatureTest {
         )
 
         val result = runBlocking {
-            client.get<HttpResponse>("localhost")
+            client.get("localhost")
         }
 
         assertEquals(expected = HttpStatusCode.OK, actual = result.status)
@@ -39,7 +38,7 @@ class LanguageFeatureTest {
     @Test
     fun `language not added when not exist`() {
         val client = createMockClient(
-            provider = object : LanguageFeature.LanguageCodeProvider {
+            provider = object : LanguagePlugin.LanguageCodeProvider {
                 override fun getLanguageCode(): String? = null
             },
             handler = { request ->
@@ -49,14 +48,14 @@ class LanguageFeatureTest {
         )
 
         val result = runBlocking {
-            client.get<HttpResponse>("localhost")
+            client.get("localhost")
         }
 
         assertEquals(expected = HttpStatusCode.OK, actual = result.status)
     }
 
     private fun createMockClient(
-        provider: LanguageFeature.LanguageCodeProvider,
+        provider: LanguagePlugin.LanguageCodeProvider,
         handler: MockRequestHandler
     ): HttpClient {
         return HttpClient(MockEngine) {
@@ -64,7 +63,7 @@ class LanguageFeatureTest {
                 addHandler(handler)
             }
 
-            install(LanguageFeature) {
+            install(LanguagePlugin) {
                 this.languageHeaderName = LANGUAGE_HEADER_NAME
                 this.languageCodeProvider = provider
             }
