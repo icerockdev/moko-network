@@ -60,17 +60,21 @@ class MainActivity : MvvmActivity<ActivityMainBinding, TestViewModel>() {
             viewModel.fakeSignupWithAvatar(makeFakeAvatar())
         }
 
-        viewModel.eventsDispatcher.bind(this, object : TestViewModel.EventListener {
-            override fun onFakeSignupResult(result: String) {
-                Toast.makeText(this@MainActivity, result, Toast.LENGTH_SHORT).show()
+        viewModel.eventsDispatcher.bind(
+            this,
+            object : TestViewModel.EventListener {
+                override fun onFakeSignupResult(result: String) {
+                    Toast.makeText(this@MainActivity, result, Toast.LENGTH_SHORT).show()
+                }
             }
-        })
+        )
     }
 
+    @Suppress("MagicNumber")
     private fun makeFakeAvatar(): Input {
         val byteArrayOutputStream = ByteArrayOutputStream()
         val avatar = ContextCompat.getDrawable(this, R.drawable.logo)!!.toBitmap()
-        avatar.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        avatar.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
         return ByteArrayInputStream(byteArrayOutputStream.toByteArray()).asInput()
     }
 }
