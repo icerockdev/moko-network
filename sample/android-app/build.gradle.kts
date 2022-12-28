@@ -9,6 +9,7 @@ plugins {
 }
 
 android {
+    compileSdk = 33
     buildFeatures.dataBinding = true
 
     defaultConfig {
@@ -17,10 +18,12 @@ android {
         multiDexEnabled = true      
         versionCode = 1
         versionName = "0.1.0"
+        targetSdk = 33
     }
 }
 
 dependencies {
+    implementation(libs.coreKtx)
     implementation(libs.appCompat)
     implementation(libs.mokoMvvmDataBinding)
     implementation(libs.multidex)

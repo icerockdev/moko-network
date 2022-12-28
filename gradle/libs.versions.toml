@@ -5,6 +5,7 @@ kotlinVersion = "1.6.20"
 lifecycleViewModelVersion = "2.3.1"
 glideVersion = "4.12.0"
 androidAppCompatVersion = "1.3.0"
+coreKtxVersion = "1.9.0"
 
 # jvm
 openApiGeneratorVersion = "5.2.0"
@@ -39,6 +40,7 @@ appCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidApp
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
 lifecycleViewModel =  { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewModelVersion" }
 multidex = { module = "androidx.multidex:multidex", version.ref = "multidexVersion" }
+coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 
 # kotlinx
 kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationVersion" }
