@@ -73,7 +73,7 @@ class MainActivity : MvvmActivity<ActivityMainBinding, TestViewModel>() {
     @Suppress("MagicNumber")
     private fun makeFakeAvatar(): Input {
         val byteArrayOutputStream = ByteArrayOutputStream()
-        val avatar = ContextCompat.getDrawable(this, R.drawable.logo)!!.toBitmap()
+        val avatar = requireNotNull(ContextCompat.getDrawable(this, R.drawable.logo)).toBitmap()
         avatar.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
         return ByteArrayInputStream(byteArrayOutputStream.toByteArray()).asInput()
     }
