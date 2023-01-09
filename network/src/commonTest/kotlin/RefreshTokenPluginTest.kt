@@ -49,11 +49,7 @@ class RefreshTokenPluginTest {
         val validToken = "124"
         val tokenHolder = MutableStateFlow<String?>(invalidToken)
         val client = createMockClient(
-            tokenProvider = object : TokenPlugin.TokenProvider {
-                override fun getToken(): String? {
-                    return tokenHolder.value
-                }
-            },
+            tokenProvider = { tokenHolder.value },
             pluginConfig = {
                 this.updateTokenHandler = {
                     tokenHolder.value = validToken
@@ -62,13 +58,12 @@ class RefreshTokenPluginTest {
                 this.isCredentialsActual = { request ->
                     request.headers[AUTH_HEADER_NAME] == tokenHolder.value
                 }
-            },
-            handler = { request ->
-                if (request.headers[AUTH_HEADER_NAME] == invalidToken) {
-                    respondError(status = HttpStatusCode.Unauthorized)
-                } else respondOk()
             }
-        )
+        ) { request ->
+            if (request.headers[AUTH_HEADER_NAME] == invalidToken) {
+                respondError(status = HttpStatusCode.Unauthorized)
+            } else respondOk()
+        }
 
         val result = runBlocking {
             client.get("localhost")

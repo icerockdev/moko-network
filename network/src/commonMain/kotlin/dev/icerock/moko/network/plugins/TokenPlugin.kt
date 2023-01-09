@@ -39,7 +39,7 @@ class TokenPlugin private constructor(
         }
     }
 
-    interface TokenProvider {
+    fun interface TokenProvider {
         fun getToken(): String?
     }
 }
