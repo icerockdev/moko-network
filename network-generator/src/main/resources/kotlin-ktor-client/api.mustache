@@ -10,6 +10,7 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
@@ -27,7 +28,7 @@ import io.ktor.http.path
 {{#operations}}
 {{>classes_modifiers}}interface {{classname}} {
 
-{{#operation}}
+    {{#operation}}
     /**
     * {{summary}}
     * {{notes}}
@@ -35,6 +36,14 @@ import io.ktor.http.path
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
     */
     {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
+
+    /**
+    * {{summary}}
+    * {{notes}}
+    {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
+    {{/allParams}}* @return HttpResponse
+    */
+    {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : HttpResponse
 
     {{/operation}}
 
@@ -49,6 +58,7 @@ import io.ktor.http.path
     private val _json = json
 
     {{#operation}}
+
     /**
     * {{summary}}
     * {{notes}}
@@ -57,6 +67,31 @@ import io.ktor.http.path
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
     override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
+        try {
+        {{#returnType}}
+        {{#vendorExtensions.x-successResponse}}
+            val serializer = {{>property_serializer}}
+            //not primitive type
+            val result: String = {{operationId}}Response({{#allParams}}{{paramName}},{{/allParams}}).body()
+            return _json.decodeFromString(serializer, result)
+        {{/vendorExtensions.x-successResponse}}
+        {{/returnType}}
+        {{^returnType}}
+            return _httpClient.request(builder).body()
+        {{/returnType}}
+        } catch (pipeline: ReceivePipelineException) {
+            throw pipeline.cause
+        }
+    }
+
+    /**
+    * {{summary}}
+    * {{notes}}
+    {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
+    {{/allParams}}* @return HttpResponse
+    */{{#returnType}}
+    @Suppress("UNCHECKED_CAST"){{/returnType}}
+    override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : HttpResponse {
         val builder = HttpRequestBuilder()
 
         builder.method = HttpMethod.{{httpMethod}}
@@ -130,21 +165,7 @@ import io.ktor.http.path
             {{/headerParams}}
         }
 
-        try {
-        {{#returnType}}
-            {{#vendorExtensions.x-successResponse}}
-                val serializer = {{>property_serializer}}
-                //not primitive type
-                val result: String = _httpClient.request(builder).body()
-                return _json.decodeFromString(serializer, result)
-            {{/vendorExtensions.x-successResponse}}
-        {{/returnType}}
-        {{^returnType}}
-            return _httpClient.request(builder).body()
-        {{/returnType}}
-        } catch (pipeline: ReceivePipelineException) {
-            throw pipeline.cause
-        }
+        return _httpClient.request(builder)
     }
 
     {{/operation}}
