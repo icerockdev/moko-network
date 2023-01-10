@@ -72,12 +72,12 @@ import io.ktor.http.path
         {{#vendorExtensions.x-successResponse}}
             val serializer = {{>property_serializer}}
             //not primitive type
-            val result: String = {{operationId}}Response({{#allParams}}{{paramName}},{{/allParams}}).body()
+            val result: String = {{operationId}}Response({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}).body()
             return _json.decodeFromString(serializer, result)
         {{/vendorExtensions.x-successResponse}}
         {{/returnType}}
         {{^returnType}}
-            return _httpClient.request(builder).body()
+            {{operationId}}Response({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}})
         {{/returnType}}
         } catch (pipeline: ReceivePipelineException) {
             throw pipeline.cause
