@@ -53,8 +53,8 @@ class TestViewModel : ViewModel() {
 
         install(TokenPlugin) {
             tokenHeaderName = "Authorization"
-            tokenProvider = object : TokenPlugin.TokenProvider {
-                override fun getToken(): String = "ed155d0a445e4b4fbd878fe1f3bc1b7f"
+            tokenProvider = TokenPlugin.TokenProvider {
+                "ed155d0a445e4b4fbd878fe1f3bc1b7f"
             }
         }
     }

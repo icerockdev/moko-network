@@ -18,16 +18,11 @@ class TokenFeatureTest {
     @Test
     fun `token added when exist`() {
         val client = createMockClient(
-            tokenProvider = object : TokenPlugin.TokenProvider {
-                override fun getToken(): String {
-                    return "mytoken"
-                }
-            },
-            handler = { request ->
-                if (request.headers[AUTH_HEADER_NAME] == "mytoken") respondOk()
-                else respondBadRequest()
-            }
-        )
+            tokenProvider = { "mytoken" }
+        ) { request ->
+            if (request.headers[AUTH_HEADER_NAME] == "mytoken") respondOk()
+            else respondBadRequest()
+        }
 
         val result = runBlocking {
             client.get("localhost")
@@ -39,16 +34,11 @@ class TokenFeatureTest {
     @Test
     fun `token not added when not exist`() {
         val client = createMockClient(
-            tokenProvider = object : TokenPlugin.TokenProvider {
-                override fun getToken(): String? {
-                    return null
-                }
-            },
-            handler = { request ->
-                if (request.headers.contains(AUTH_HEADER_NAME).not()) respondOk()
-                else respondBadRequest()
-            }
-        )
+            tokenProvider = { null }
+        ) { request ->
+            if (request.headers.contains(AUTH_HEADER_NAME).not()) respondOk()
+            else respondBadRequest()
+        }
 
         val result = runBlocking {
             client.get("localhost")

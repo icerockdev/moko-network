@@ -25,11 +25,9 @@ dependencies {
 
     commonMainApi(libs.mokoMvvmCore)
     commonMainApi(libs.mokoMvvmLiveData)
-    commonMainApi(libs.mokoNetwork)
-    commonMainApi(libs.mokoNetworkErrors)
-    commonMainApi(libs.mokoNetworkBignum)
 
     commonMainApi(projects.network)
+    commonMainApi(projects.networkEngine)
     commonMainApi(projects.networkBignum)
     commonMainApi(projects.networkErrors)
 
