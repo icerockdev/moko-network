@@ -4,9 +4,10 @@
 
 package dev.icerock.moko.network
 
-import io.ktor.client.engine.darwin.DarwinHttpRequestException
+import platform.Foundation.NSError
 import platform.Foundation.NSURLErrorCannotLoadFromNetwork
 import platform.Foundation.NSURLErrorClientCertificateRequired
+import platform.Foundation.NSURLErrorDomain
 import platform.Foundation.NSURLErrorSecureConnectionFailed
 import platform.Foundation.NSURLErrorServerCertificateHasBadDate
 import platform.Foundation.NSURLErrorServerCertificateHasUnknownRoot
@@ -24,13 +25,14 @@ private val sslKeys = mapOf(
 )
 
 actual fun Throwable.isSSLException(): Boolean {
-    val iosHttpException = this as? DarwinHttpRequestException ?: return false
-    return sslKeys.keys.contains(
-        iosHttpException.origin.code
-    )
+    val nsError: NSError = ThrowableToNSErrorMapper(this) ?: return false
+
+    return nsError.domain == NSURLErrorDomain && sslKeys.keys.contains(nsError.code)
 }
 
 actual fun Throwable.getSSLExceptionType(): SSLExceptionType? {
-    val iosHttpException = this as? DarwinHttpRequestException ?: return null
-    return sslKeys[iosHttpException.origin.code]
+    val nsError: NSError = ThrowableToNSErrorMapper(this) ?: return null
+    if (nsError.domain != NSURLErrorDomain) return null
+
+    return sslKeys[nsError.code]
 }

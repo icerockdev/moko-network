@@ -4,11 +4,24 @@
 
 package dev.icerock.moko.network
 
-import io.ktor.client.engine.darwin.DarwinHttpRequestException
+import platform.Foundation.NSError
+import platform.Foundation.NSURLErrorCannotConnectToHost
+import platform.Foundation.NSURLErrorCannotFindHost
+import platform.Foundation.NSURLErrorCannotLoadFromNetwork
+import platform.Foundation.NSURLErrorDomain
 
 actual fun Throwable.isNetworkConnectionError(): Boolean {
-    return when (this) {
-        is DarwinHttpRequestException -> isSSLException().not()
+    val nsError: NSError? = ThrowableToNSErrorMapper(this)
+
+    return when {
+        this.isSSLException().not() -> true
+
+        nsError?.domain == NSURLErrorDomain && nsError?.code in listOf(
+            NSURLErrorCannotConnectToHost,
+            NSURLErrorCannotFindHost,
+            NSURLErrorCannotLoadFromNetwork
+        ) -> true
+
         else -> false
     }
 }
