@@ -12,8 +12,9 @@ import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.request.get
 import io.ktor.client.statement.request
 import io.ktor.http.HttpStatusCode
+import io.ktor.utils.io.errors.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -63,6 +64,106 @@ class RefreshTokenPluginTest {
             if (request.headers[AUTH_HEADER_NAME] == invalidToken) {
                 respondError(status = HttpStatusCode.Unauthorized)
             } else respondOk()
+        }
+
+        val result = runBlocking {
+            client.get("localhost")
+        }
+
+        assertEquals(expected = HttpStatusCode.OK, actual = result.status)
+        assertEquals(expected = validToken, actual = result.request.headers[AUTH_HEADER_NAME])
+    }
+
+    @Test
+    fun `mutex not lock permanently when isCredentialsActual fail`() {
+        val invalidToken = "123"
+        val validToken = "124"
+        val tokenHolder = MutableStateFlow<String?>(invalidToken)
+        var isFirstTime = true
+
+        val client = createMockClient(
+            tokenProvider = object : TokenPlugin.TokenProvider {
+                override fun getToken(): String? {
+                    return tokenHolder.value
+                }
+            },
+            pluginConfig = {
+                this.updateTokenHandler = {
+                    tokenHolder.value = validToken
+                    true
+                }
+                this.isCredentialsActual = { request ->
+                    with(request.headers[AUTH_HEADER_NAME] == tokenHolder.value) {
+                        if (isFirstTime) {
+                            isFirstTime = false
+                            throw IOException("simulate io Error")
+                        }
+                        this
+                    }
+                }
+            },
+            handler = { request ->
+                if (request.headers[AUTH_HEADER_NAME] == invalidToken) {
+                    respondError(status = HttpStatusCode.Unauthorized)
+                } else respondOk()
+            }
+        )
+
+        runCatching {
+            runBlocking {
+                client.get("localhost")
+            }
+        }.onFailure {
+            println("simulate first request fail")
+        }
+
+        val result = runBlocking {
+            client.get("localhost")
+        }
+
+        assertEquals(expected = HttpStatusCode.OK, actual = result.status)
+        assertEquals(expected = validToken, actual = result.request.headers[AUTH_HEADER_NAME])
+    }
+
+    @Test
+    fun `mutex not lock permanently when updateTokenHandler fail`() {
+        val invalidToken = "123"
+        val validToken = "124"
+        val tokenHolder = MutableStateFlow<String?>(invalidToken)
+        var isFirstTime = true
+
+        val client = createMockClient(
+            tokenProvider = object : TokenPlugin.TokenProvider {
+                override fun getToken(): String? {
+                    return tokenHolder.value
+                }
+            },
+            pluginConfig = {
+                this.updateTokenHandler = {
+                    if (isFirstTime) {
+                        isFirstTime = false
+                        throw IOException("simulate io Error")
+                    }
+                    tokenHolder.value = validToken
+                    true
+                }
+                this.isCredentialsActual = { request ->
+                    request.headers[AUTH_HEADER_NAME] == tokenHolder.value
+                }
+            },
+            handler = { request ->
+                if (request.headers[AUTH_HEADER_NAME] == invalidToken) {
+                    respondError(status = HttpStatusCode.Unauthorized)
+                } else respondOk()
+            }
+        )
+
+        runCatching {
+            runBlocking {
+                client.get("localhost")
+            }
+        }.onFailure {
+            println("simulate first request fail")
         }
 
         val result = runBlocking {
