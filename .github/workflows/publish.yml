@@ -11,7 +11,7 @@ on:
 jobs:
   publish:
     name: Publish library at mavenCentral
-    runs-on: macOS-latest
+    runs-on: macOS-11
     env:
       OSSRH_USER: ${{ secrets.OSSRH_USER }}
       OSSRH_KEY: ${{ secrets.OSSRH_KEY }}
