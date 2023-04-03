@@ -4,6 +4,7 @@ package {{apiPackage}}
 {{#imports}}import {{import}}
 {{/imports}}
 
+import dev.icerock.moko.network.NetworkResponse
 import io.ktor.client.call.body
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
@@ -43,7 +44,7 @@ import io.ktor.http.path
     {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
     {{/allParams}}* @return HttpResponse
     */
-    {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : HttpResponse
+    {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}NetworkResponse<{{{returnType}}}>{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
 
     {{/operation}}
 
@@ -70,10 +71,7 @@ import io.ktor.http.path
         try {
         {{#returnType}}
         {{#vendorExtensions.x-successResponse}}
-            val serializer = {{>property_serializer}}
-            //not primitive type
-            val result: String = {{operationId}}Response({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}).body()
-            return _json.decodeFromString(serializer, result)
+            return {{operationId}}Response({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}).body
         {{/vendorExtensions.x-successResponse}}
         {{/returnType}}
         {{^returnType}}
@@ -91,7 +89,7 @@ import io.ktor.http.path
     {{/allParams}}* @return HttpResponse
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
-    override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : HttpResponse {
+    override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}NetworkResponse<{{{returnType}}}>{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
         val builder = HttpRequestBuilder()
 
         builder.method = HttpMethod.{{httpMethod}}
@@ -165,7 +163,16 @@ import io.ktor.http.path
             {{/headerParams}}
         }
 
-        return _httpClient.request(builder)
+        val response = _httpClient.request(builder)
+        {{#returnType}}
+        {{#vendorExtensions.x-successResponse}}
+        val serializer = {{>property_serializer}}
+        return NetworkResponse(
+            response,
+            _json.decodeFromString(serializer, response.body())
+        )
+        {{/vendorExtensions.x-successResponse}}
+        {{/returnType}}
     }
 
     {{/operation}}
