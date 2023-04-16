@@ -2,6 +2,8 @@
  * Copyright 2021 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
+@file:Suppress("Filename")
+
 package dev.icerock.moko.network
 
 import platform.Foundation.NSError
@@ -30,6 +32,7 @@ actual fun Throwable.isSSLException(): Boolean {
     return nsError.domain == NSURLErrorDomain && sslKeys.keys.contains(nsError.code)
 }
 
+@Suppress("ReturnCount")
 actual fun Throwable.getSSLExceptionType(): SSLExceptionType? {
     val nsError: NSError = ThrowableToNSErrorMapper(this) ?: return null
     if (nsError.domain != NSURLErrorDomain) return null

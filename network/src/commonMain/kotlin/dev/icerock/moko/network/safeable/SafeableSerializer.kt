@@ -6,14 +6,12 @@ package dev.icerock.moko.network.safeable
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlin.native.concurrent.ThreadLocal
 
-@Serializer(forClass = Safeable::class)
 class SafeableSerializer<T : Any>(
     tSerializer: KSerializer<T>
 ) : KSerializer<Safeable<T>> {

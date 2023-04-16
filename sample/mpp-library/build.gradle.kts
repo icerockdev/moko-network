@@ -122,7 +122,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
         doLast {
             val testResourcesDir = File(projectDir, "src/commonTest/resources")
             if (testResourcesDir.exists().not()) return@doLast
-            testResourcesDir.copyRecursively(destinationDir, overwrite = true)
+            testResourcesDir.copyRecursively(destinationDirectory.get().asFile, overwrite = true)
         }
     }
 

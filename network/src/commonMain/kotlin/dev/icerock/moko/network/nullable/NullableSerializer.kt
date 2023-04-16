@@ -5,14 +5,12 @@
 package dev.icerock.moko.network.nullable
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-@Serializer(forClass = Nullable::class)
 class NullableSerializer<T : Any>(
     tSerializer: KSerializer<T>
 ) : KSerializer<Nullable<T>> {

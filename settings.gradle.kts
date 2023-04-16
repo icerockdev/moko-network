@@ -9,8 +9,11 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
+        mavenLocal()
     }
 }
+
+rootProject.name = "moko-network"
 
 includeBuild("network-generator")
 

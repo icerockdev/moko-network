@@ -53,11 +53,15 @@ class ValidationExceptionParser(private val json: Json) : HttpExceptionFactory.H
 
                         if (jsonObject.containsKey(JSON_MESSAGE_KEY)) {
                             message = jsonObject.getValue(JSON_MESSAGE_KEY).jsonPrimitive.content
-                        } else return@forEach
+                        } else {
+                            return@forEach
+                        }
 
                         if (jsonObject.containsKey(JSON_FIELD_KEY)) {
                             field = jsonObject.getValue(JSON_FIELD_KEY).jsonPrimitive.content
-                        } else return@forEach
+                        } else {
+                            return@forEach
+                        }
 
                         errors.add(ValidationException.Error(field, message))
                     } catch (e: Exception) {

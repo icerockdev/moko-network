@@ -4,6 +4,7 @@
 
 package dev.icerock.moko.network.errors
 
+import dev.icerock.moko.errors.MR
 import dev.icerock.moko.errors.mappers.ExceptionMappersStorage
 import dev.icerock.moko.network.SSLExceptionType
 import dev.icerock.moko.network.exceptions.ErrorException
@@ -30,7 +31,7 @@ fun ExceptionMappersStorage.registerAllNetworkMappers(
     return condition<StringDesc>(
         condition = { it.isNetworkConnectionError() },
         mapper = { errorsTexts.networkConnectionErrorText.desc() }
-    ).condition<StringDesc>(
+    ).condition(
         condition = { it.isSSLException() },
         mapper = {
             getSSLExceptionStringDescMapper(
@@ -46,7 +47,7 @@ fun ExceptionMappersStorage.registerAllNetworkMappers(
             errorException = it,
             httpNetworkErrorsTexts = errorsTexts.httpNetworkErrorsTexts
         )
-    }.register<ValidationException, StringDesc>(::validationExceptionStringDescMapper)
+    }.register(::validationExceptionStringDescMapper)
 }
 
 /**
@@ -67,7 +68,8 @@ private fun getNetworkErrorExceptionStringDescMapper(
                 httpStatusCode
             )
         }
-        else -> errorException.description?.desc() ?: ExceptionMappersStorage.getFallbackValue()
+
+        else -> MR.strings.moko_errors_unknownError.desc()
     }
 }
 
@@ -88,7 +90,7 @@ private fun getSSLExceptionStringDescMapper(
         SSLExceptionType.ClientCertificateRejected -> sslNetworkErrorsTexts.clientCertificateRejected.desc()
         SSLExceptionType.ClientCertificateRequired -> sslNetworkErrorsTexts.clientCertificateRequired.desc()
         SSLExceptionType.CannotLoadFromNetwork -> sslNetworkErrorsTexts.cannotLoadFromNetwork.desc()
-        else -> ExceptionMappersStorage.getFallbackValue()
+        else -> MR.strings.moko_errors_unknownError.desc()
     }
 }
 
