@@ -9,7 +9,6 @@ plugins {
 }
 
 android {
-    compileSdk = 33
     buildFeatures.dataBinding = true
 
     defaultConfig {
@@ -18,7 +17,6 @@ android {
         multiDexEnabled = true      
         versionCode = 1
         versionName = "0.1.0"
-        targetSdk = 33
     }
 }
 
