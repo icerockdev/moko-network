@@ -4,6 +4,7 @@ package {{apiPackage}}
 {{#imports}}import {{import}}
 {{/imports}}
 
+import dev.icerock.moko.network.NetworkResponse
 import io.ktor.client.call.body
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
@@ -27,7 +28,7 @@ import io.ktor.http.path
 {{#operations}}
 {{>classes_modifiers}}interface {{classname}} {
 
-{{#operation}}
+    {{#operation}}
     /**
     * {{summary}}
     * {{notes}}
@@ -35,6 +36,14 @@ import io.ktor.http.path
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
     */
     {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
+
+    /**
+    * {{summary}}
+    * {{notes}}
+    {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
+    {{/allParams}}* @return HttpResponse
+    */
+    {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}NetworkResponse<{{{returnType}}}>{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
 
     {{/operation}}
 
@@ -49,6 +58,7 @@ import io.ktor.http.path
     private val _json = json
 
     {{#operation}}
+
     /**
     * {{summary}}
     * {{notes}}
@@ -57,6 +67,28 @@ import io.ktor.http.path
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
     override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
+        try {
+        {{#returnType}}
+        {{#vendorExtensions.x-successResponse}}
+            return {{operationId}}Response({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}).body()
+        {{/vendorExtensions.x-successResponse}}
+        {{/returnType}}
+        {{^returnType}}
+            {{operationId}}Response({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}})
+        {{/returnType}}
+        } catch (pipeline: ReceivePipelineException) {
+            throw pipeline.cause
+        }
+    }
+
+    /**
+    * {{summary}}
+    * {{notes}}
+    {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
+    {{/allParams}}* @return HttpResponse
+    */{{#returnType}}
+    @Suppress("UNCHECKED_CAST"){{/returnType}}
+    override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}NetworkResponse<{{{returnType}}}>{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
         val builder = HttpRequestBuilder()
 
         builder.method = HttpMethod.{{httpMethod}}
@@ -130,21 +162,16 @@ import io.ktor.http.path
             {{/headerParams}}
         }
 
-        try {
+        val response = _httpClient.request(builder)
         {{#returnType}}
-            {{#vendorExtensions.x-successResponse}}
-                val serializer = {{>property_serializer}}
-                //not primitive type
-                val result: String = _httpClient.request(builder).body()
-                return _json.decodeFromString(serializer, result)
-            {{/vendorExtensions.x-successResponse}}
+        {{#vendorExtensions.x-successResponse}}
+        val serializer = {{>property_serializer}}
+        return NetworkResponse(
+            httpResponse = response,
+            bodyReader = { _json.decodeFromString(serializer, it.body()) }
+        )
+        {{/vendorExtensions.x-successResponse}}
         {{/returnType}}
-        {{^returnType}}
-            return _httpClient.request(builder).body()
-        {{/returnType}}
-        } catch (pipeline: ReceivePipelineException) {
-            throw pipeline.cause
-        }
     }
 
     {{/operation}}
