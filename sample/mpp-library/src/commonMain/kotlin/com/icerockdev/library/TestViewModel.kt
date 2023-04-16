@@ -144,7 +144,6 @@ class TestViewModel : ViewModel() {
     }
 
     private fun reloadWebsocket() {
-
         val httpClient = HttpClient(createHttpClientEngine()) {
             install(WebSockets)
         }
