@@ -7,7 +7,9 @@ import cases.formData.models.Response
 import cases.formData.models.SignupRequest
 import io.ktor.client.engine.mock.MockRequestHandler
 import io.ktor.client.engine.mock.respondOk
+import io.ktor.client.engine.mock.toByteArray
 import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.http.content.OutgoingContent
 import io.ktor.utils.io.core.ByteReadPacket
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -19,8 +21,28 @@ class FormDataTest {
     @Test
     fun `formData body`() {
         val api = createApi { request ->
-            val body = request.body
+            val body: OutgoingContent = request.body
             assertTrue(body is MultiPartFormDataContent)
+
+            val content: String = body.toByteArray().decodeToString()
+            val contentWithFixedBoundary: String = content
+                .replace(body.boundary, "==boundary==")
+                .replace("\r\n", "\n")
+            assertEquals(
+                expected = """--==boundary==
+Content-Disposition: form-data; name=signup
+Content-Length: 150
+
+{"firstName":"first","lastName":"last","phone":"+799","email":"a@b","password":"111","passwordRepeat":"111","countryId":1,"cityId":2,"company":"test"}
+--==boundary==
+Content-Disposition: form-data; name=avatar; filename=avatar
+
+ABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABAB
+--==boundary==--
+""",
+                actual = contentWithFixedBoundary
+            )
+
             respondOk(
                 """
 {
@@ -33,6 +55,10 @@ class FormDataTest {
             )
         }
 
+        val avatarBytes = ByteArray(100) { index ->
+            if (index % 2 == 0) 'A'.toByte()
+            else 'B'.toByte()
+        }
         val result = runBlocking {
             api.signup(
                 signup = SignupRequest(
@@ -46,7 +72,7 @@ class FormDataTest {
                     cityId = 2,
                     company = "test"
                 ),
-                avatar = ByteReadPacket(ByteArray(100))
+                avatar = ByteReadPacket(avatarBytes)
             )
         }
 
