@@ -4,6 +4,7 @@ package {{apiPackage}}
 {{#imports}}import {{import}}
 {{/imports}}
 
+import dev.icerock.moko.network.NetworkResponse
 import io.ktor.client.call.body
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
@@ -34,7 +35,7 @@ import io.ktor.http.path
 {{#operations}}
 {{>classes_modifiers}}interface {{classname}} {
 
-{{#operation}}
+    {{#operation}}
     /**
     * {{summary}}
     * {{notes}}
@@ -42,6 +43,14 @@ import io.ktor.http.path
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
     */
     {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{#isBinary}}Input{{/isBinary}}{{^isBinary}}{{{dataType}}}{{/isBinary}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
+
+    /**
+    * {{summary}}
+    * {{notes}}
+    {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
+    {{/allParams}}* @return HttpResponse
+    */
+    {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{#isBinary}}Input{{/isBinary}}{{^isBinary}}{{{dataType}}}{{/isBinary}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}NetworkResponse<{{{returnType}}}>{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
 
     {{/operation}}
 
@@ -64,6 +73,28 @@ import io.ktor.http.path
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
     override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{#isBinary}}Input{{/isBinary}}{{^isBinary}}{{{dataType}}}{{/isBinary}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
+        try {
+        {{#returnType}}
+        {{#vendorExtensions.x-successResponse}}
+            return {{operationId}}Response({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}).body()
+        {{/vendorExtensions.x-successResponse}}
+        {{/returnType}}
+        {{^returnType}}
+            {{operationId}}Response({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}})
+        {{/returnType}}
+        } catch (pipeline: ReceivePipelineException) {
+            throw pipeline.cause
+        }
+    }
+
+    /**
+    * {{summary}}
+    * {{notes}}
+    {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
+    {{/allParams}}* @return HttpResponse
+    */{{#returnType}}
+    @Suppress("UNCHECKED_CAST"){{/returnType}}
+    override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{#isBinary}}Input{{/isBinary}}{{^isBinary}}{{{dataType}}}{{/isBinary}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}NetworkResponse<{{{returnType}}}>{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
         {{^hasFormParams}}
         val builder = HttpRequestBuilder()
 
@@ -122,15 +153,6 @@ import io.ktor.http.path
         }
         {{/bodyParams}}
 
-        {{#hasFormParams}}
-        val formData = FormDataContent(Parameters.build {
-            {{#formParams}}
-            {{paramName}}?.let { append("{{baseName}}", it.toString()) }
-            {{/formParams}}
-        })
-        builder.setBody(formData)
-        {{/hasFormParams}}
-
         with(builder.headers) {
             append("Accept", "application/json")
             {{#headerParams}}
@@ -139,83 +161,66 @@ import io.ktor.http.path
             {{/headerParams}}
         }
 
-        try {
-        {{#returnType}}
-            {{#vendorExtensions.x-successResponse}}
-                val serializer = {{>property_serializer}}
-                //not primitive type
-                val result: String = _httpClient.request(builder).body()
-                return _json.decodeFromString(serializer, result)
-            {{/vendorExtensions.x-successResponse}}
-        {{/returnType}}
-        {{^returnType}}
-            return _httpClient.request(builder).body()
-        {{/returnType}}
-        } catch (pipeline: ReceivePipelineException) {
-            throw pipeline.cause
-        }
+        val response = _httpClient.request(builder)
         {{/hasFormParams}}
-
         {{#hasFormParams}}
-
-        try {
-            {{#returnType}}val response = {{/returnType}}_httpClient.submitFormWithBinaryData(
-                formData = formData {
+        {{#returnType}}val response = {{/returnType}}_httpClient.submitFormWithBinaryData(
+            formData = formData {
             {{#formParams}}
-                {{#isBinary}}
-                    {{paramName}}?.let { {{paramName}} ->
-                        appendInput(
-                            key = "{{baseName}}",
-                            block = { {{paramName}} },
-                            headers = Headers.build {
-                                append(HttpHeaders.ContentDisposition, "filename={{baseName}}")
-                            }
-                        )
-                    }
-                {{/isBinary}}
-                {{^isBinary}}
-                    {{paramName}}?.let { {{paramName}} ->
-                        append(
-                            key = "{{baseName}}",
-                            value = _json.encodeToString({{{dataType}}}.serializer(), {{paramName}})
-                        )
-                    }
-                {{/isBinary}}
+            {{#isBinary}}
+                {{paramName}}?.let { {{paramName}} ->
+                    appendInput(
+                        key = "{{baseName}}",
+                        block = { {{paramName}} },
+                        headers = Headers.build {
+                            append(HttpHeaders.ContentDisposition, "filename={{baseName}}")
+                        }
+                    )
+                }
+            {{/isBinary}}
+            {{^isBinary}}
+                {{paramName}}?.let { {{paramName}} ->
+                    append(
+                        key = "{{baseName}}",
+                        value = _json.encodeToString({{{dataType}}}.serializer(), {{paramName}})
+                    )
+                }
+            {{/isBinary}}
             {{/formParams}}
-                }
-            ) {
-                url {
-                    takeFrom(_basePath)
-                    encodedPath = encodedPath.let { startingPath ->
-                        path("{{path}}")
-                        return@let startingPath + encodedPath
-                    }
-                    {{#hasQueryParams}}
-                    @Suppress("UNNECESSARY_SAFE_CALL")
-                    with(parameters) {
-                        {{#queryParams}}
-                        {{#isContainer}}
-                        {{paramName}}?.let { appendAll("{{baseName}}", it.map { it.toString() }) }
-                        {{/isContainer}}
-                        {{^isContainer}}
-                        {{paramName}}?.let { append("{{baseName}}", it.toString()) }
-                        {{/isContainer}}
-                        {{/queryParams}}
-                    }
-                    {{/hasQueryParams}}
-                }
             }
-            {{#returnType}}
-            {{#vendorExtensions.x-successResponse}}
-            val serializer = {{>property_serializer}}
-            val result: String = response.body()
-            return _json.decodeFromString(serializer, result)
-            {{/vendorExtensions.x-successResponse}}
-            {{/returnType}}
-        } catch (pipeline: ReceivePipelineException) {
-            throw pipeline.cause
+        ) {
+            url {
+                takeFrom(_basePath)
+                encodedPath = encodedPath.let { startingPath ->
+                    path("{{path}}")
+                    return@let startingPath + encodedPath
+                }
+                {{#hasQueryParams}}
+                @Suppress("UNNECESSARY_SAFE_CALL")
+                with(parameters) {
+                    {{#queryParams}}
+                    {{#isContainer}}
+                    {{paramName}}?.let { appendAll("{{baseName}}", it.map { it.toString() }) }
+                    {{/isContainer}}
+                    {{^isContainer}}
+                    {{paramName}}?.let { append("{{baseName}}", it.toString()) }
+                    {{/isContainer}}
+                    {{/queryParams}}
+                }
+                {{/hasQueryParams}}
+            }
         }
         {{/hasFormParams}}
+
+        {{#returnType}}
+        {{#vendorExtensions.x-successResponse}}
+        val serializer = {{>property_serializer}}
+        return NetworkResponse(
+            httpResponse = response,
+            bodyReader = { _json.decodeFromString(serializer, it.body()) }
+        )
+        {{/vendorExtensions.x-successResponse}}
+        {{/returnType}}
     }
     {{/operation}}
 }
