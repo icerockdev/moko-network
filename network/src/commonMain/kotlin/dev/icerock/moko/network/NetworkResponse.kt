@@ -6,7 +6,9 @@ package dev.icerock.moko.network
 
 import io.ktor.client.statement.HttpResponse
 
-data class NetworkResponse<BODY>(
+data class NetworkResponse<T>(
     val httpResponse: HttpResponse,
-    val body: BODY
-)
+    private val bodyReader: suspend (HttpResponse) -> T
+) {
+    suspend fun body(): T = bodyReader(httpResponse)
+}

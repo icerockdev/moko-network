@@ -11,7 +11,6 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
@@ -71,7 +70,7 @@ import io.ktor.http.path
         try {
         {{#returnType}}
         {{#vendorExtensions.x-successResponse}}
-            return {{operationId}}Response({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}).body
+            return {{operationId}}Response({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}).body()
         {{/vendorExtensions.x-successResponse}}
         {{/returnType}}
         {{^returnType}}
@@ -168,8 +167,8 @@ import io.ktor.http.path
         {{#vendorExtensions.x-successResponse}}
         val serializer = {{>property_serializer}}
         return NetworkResponse(
-            response,
-            _json.decodeFromString(serializer, response.body())
+            httpResponse = response,
+            bodyReader = { _json.decodeFromString(serializer, it.body()) }
         )
         {{/vendorExtensions.x-successResponse}}
         {{/returnType}}
