@@ -1,35 +1,36 @@
 [versions]
-kotlinVersion = "1.6.20"
+kotlinVersion = "1.8.10"
 
 # android
-lifecycleViewModelVersion = "2.3.1"
-glideVersion = "4.12.0"
-androidAppCompatVersion = "1.3.0"
+lifecycleViewModelVersion = "2.6.1"
+glideVersion = "4.14.2"
+androidAppCompatVersion = "1.6.1"
+coreKtxVersion = "1.10.0"
 
 # jvm
 openApiGeneratorVersion = "5.2.0"
 guavaVersion = "30.1-jre"
 
 # kotlinx
-kotlinxSerializationVersion = "1.3.2"
-coroutinesVersion = "1.6.0-native-mt"
+kotlinxSerializationVersion = "1.5.0"
+coroutinesVersion = "1.6.4"
 
 # moko
-mokoResourcesVersion = "0.20.1"
-mokoMvvmVersion = "0.12.0"
-mokoErrorsVersion = "0.6.0"
+mokoResourcesVersion = "0.21.2"
+mokoMvvmVersion = "0.16.0"
+mokoErrorsVersion = "0.7.0"
 mokoTestVersion = "0.6.1"
-mokoNetworkVersion = "0.20.1"
+mokoNetworkVersion = "0.21.0"
 
 # tests
-espressoCoreVersion = "3.2.0"
-testRunnerVersion = "1.2.0"
-testExtJunitVersion = "1.1.1"
-androidxTestVersion = "1.3.0"
-robolectricVersion = "4.6.1"
+espressoCoreVersion = "3.5.1"
+testRunnerVersion = "1.5.0"
+testExtJunitVersion = "1.1.5"
+androidxTestVersion = "1.5.0"
+robolectricVersion = "4.9"
 
 # other
-ktorClientVersion = "2.0.1"
+ktorClientVersion = "2.2.2"
 kbignumVersion = "2.4.12"
 multidexVersion = "2.0.1"
 
@@ -39,6 +40,7 @@ appCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidApp
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
 lifecycleViewModel =  { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewModelVersion" }
 multidex = { module = "androidx.multidex:multidex", version.ref = "multidexVersion" }
+coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 
 # kotlinx
 kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationVersion" }
@@ -70,7 +72,7 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 testRunner = { module = "androidx.test:runner", version.ref = "testRunnerVersion" }
 testRules = { module = "androidx.test:rules", version.ref = "testRunnerVersion" }
 testExtJunit = { module = "androidx.test.ext:junit", version.ref = "testExtJunitVersion" }
-kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlinVersion" }
+kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlinVersion" }
 kotlinTestAnnotations = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlinVersion" }
 mokoTest =  { module = "dev.icerock.moko:test-core", version.ref = "mokoTestVersion" }
 
@@ -81,6 +83,6 @@ guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
 # gradle plugins
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinVersion" }
 kotlinSerializationGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlinVersion" }
-androidGradlePlugin = { module = "com.android.tools.build:gradle", version = "7.0.4" }
+androidGradlePlugin = { module = "com.android.tools.build:gradle", version = "7.4.2" }
 mokoResourcesGradlePlugin = { module = "dev.icerock.moko:resources-generator", version.ref = "mokoResourcesVersion" }
-mokoGradlePlugin = { module = "dev.icerock.moko:moko-gradle-plugin", version = "0.1.0" }
+mokoGradlePlugin = { module = "dev.icerock.moko:moko-gradle-plugin", version = "0.3.0" }

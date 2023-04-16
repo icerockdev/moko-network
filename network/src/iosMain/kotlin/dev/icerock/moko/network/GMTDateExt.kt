@@ -24,17 +24,19 @@ actual fun String.toDate(format: String): GMTDate {
         val timestamp: Long = (date.timeIntervalSince1970 * MILLISECONDS_IN_SECONDS).toLong()
         GMTDate(timestamp)
     } catch (npe: NullPointerException) {
-        throw IllegalArgumentException("Parsing error: the date format is incorrect")
+        throw IllegalArgumentException("Parsing error: the date format is incorrect", npe)
     }
 }
 
 actual fun GMTDate.toString(format: String): String {
     val formatter = NSDateFormatter()
-    val locale = NSLocale.currentLocale()
+    val locale: NSLocale = NSLocale.currentLocale()
     formatter.setDateFormat(format)
     formatter.setLocale(locale)
-    val timestamp = (this.timestamp.toDouble() / MILLISECONDS_IN_SECONDS) -
-            (NSDate().timeIntervalSince1970 - NSDate().timeIntervalSinceReferenceDate)
-    val date: NSDate = NSDate(timestamp)
+    val timeInSeconds: Double = this.timestamp.toDouble() / MILLISECONDS_IN_SECONDS
+    val nowSeconds: Double =
+        NSDate().timeIntervalSince1970 - NSDate().timeIntervalSinceReferenceDate
+    val timestamp: Double = timeInSeconds - nowSeconds
+    val date = NSDate(timestamp)
     return formatter.stringFromDate(date)
 }

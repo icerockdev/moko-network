@@ -9,6 +9,10 @@ plugins {
     id("dev.icerock.moko.gradle.stub.javadoc")
 }
 
+android {
+    namespace = "dev.icerock.moko.network.bignum"
+}
+
 kotlin {
     jvm()
 }

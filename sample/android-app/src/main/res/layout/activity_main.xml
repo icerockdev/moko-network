@@ -49,5 +49,16 @@
                 android:text="Websocket refresh" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/fakeSignupWithAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fake signup with avatar" />
+        </LinearLayout>
     </LinearLayout>
 </layout>

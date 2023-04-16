@@ -10,6 +10,10 @@ plugins {
     id("dev.icerock.moko.gradle.stub.javadoc")
 }
 
+android {
+    namespace = "dev.icerock.moko.network.errors"
+}
+
 dependencies {
     commonMainImplementation(libs.kotlinSerialization)
 

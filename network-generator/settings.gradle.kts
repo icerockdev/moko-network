@@ -24,3 +24,5 @@ dependencyResolutionManagement {
         }
     }
 }
+
+rootProject.name = "network-generator"

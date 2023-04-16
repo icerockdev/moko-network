@@ -12,6 +12,8 @@ dependencyResolutionManagement {
     }
 }
 
+rootProject.name = "moko-network"
+
 includeBuild("network-generator")
 
 include(":network")
@@ -21,4 +23,5 @@ include(":network-engine")
 
 include(":sample:android-app")
 include(":sample:websocket-echo-server")
+include(":sample:form-data-binary-server")
 include(":sample:mpp-library")

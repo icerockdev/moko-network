@@ -71,10 +71,14 @@ data class MultiPartContent(val parts: List<Part>) : OutgoingContent.WriteChanne
             headers: Headers = Headers.Empty,
             writer: suspend ByteWriteChannel.() -> Unit
         ) {
-            val contentTypeHeaders: Headers = if (contentType != null) headersOf(
-                HttpHeaders.ContentType,
-                contentType.toString()
-            ) else headersOf()
+            val contentTypeHeaders: Headers = if (contentType != null) {
+                headersOf(
+                    HttpHeaders.ContentType,
+                    contentType.toString()
+                )
+            } else {
+                headersOf()
+            }
             add(Part(name, filename, headers + contentTypeHeaders, writer))
         }
 

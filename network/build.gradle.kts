@@ -11,6 +11,10 @@ plugins {
     id("dev.icerock.moko.gradle.tests")
 }
 
+android {
+    namespace = "dev.icerock.moko.network"
+}
+
 kotlin {
     jvm()
 
