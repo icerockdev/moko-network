@@ -51,7 +51,6 @@ class RefreshTokenPlugin(
                 }
 
                 refreshTokenHttpPluginMutex.withLock {
-
                     // If token of the request isn't actual, then token has already been updated and
                     // let's just to try repeat request
                     if (!plugin.isCredentialsActual(subject.request)) {

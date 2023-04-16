@@ -21,6 +21,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.coreKtx)
     implementation(libs.appCompat)
     implementation(libs.mokoMvvmDataBinding)
     implementation(libs.multidex)

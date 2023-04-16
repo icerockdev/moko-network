@@ -4,9 +4,12 @@
 
 package com.icerockdev.library
 
+import cases.formData.apis.AuthApi
+import cases.formData.models.SignupRequest
 import dev.icerock.moko.errors.handler.ExceptionHandler
 import dev.icerock.moko.errors.mappers.ExceptionMappersStorage
 import dev.icerock.moko.errors.presenters.AlertErrorPresenter
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.livedata.readOnly
@@ -22,6 +25,7 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocket
+import io.ktor.utils.io.core.Input
 import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
 import kotlinx.coroutines.channels.consumeEach
@@ -36,6 +40,8 @@ class TestViewModel : ViewModel() {
         exceptionMapper = ExceptionMappersStorage.throwableMapper(),
         onCatch = { it.printStackTrace() }
     )
+
+    val eventsDispatcher = EventsDispatcher<EventListener>()
 
     private val httpClient = HttpClient {
         install(LanguagePlugin) {
@@ -74,6 +80,14 @@ class TestViewModel : ViewModel() {
         }
     )
 
+    private val authApi = AuthApi(
+        basePath = "http://$emulatorLocalhost:8080",
+        httpClient = httpClient,
+        json = Json {
+            ignoreUnknownKeys = true
+        }
+    )
+
     private val _petInfo = MutableLiveData<String?>(null)
     val petInfo: LiveData<String?> = _petInfo.readOnly()
 
@@ -93,6 +107,33 @@ class TestViewModel : ViewModel() {
         reloadWebsocket()
     }
 
+    fun fakeSignupWithAvatar(avatar: Input) {
+        viewModelScope.launch {
+            exceptionHandler.handle {
+                authApi.signup(
+                    signup = SignupRequest(
+                        firstName = "firstName123",
+                        lastName = "lastName123",
+                        middleName = "middleName123",
+                        phone = "+123123123",
+                        email = "asd@asd.asd",
+                        password = "asdasd",
+                        passwordRepeat = "asdasd",
+                        countryId = 1,
+                        cityId = 1,
+                        company = "asdasd",
+                        post = "123123",
+                        interests = "zxczxc"
+                    ),
+                    avatar = avatar
+                )
+                eventsDispatcher.dispatchEvent {
+                    onFakeSignupResult("Fake signup success!")
+                }
+            }.execute()
+        }
+    }
+
     private fun reloadPet() {
         viewModelScope.launch {
             exceptionHandler.handle {
@@ -103,7 +144,6 @@ class TestViewModel : ViewModel() {
     }
 
     private fun reloadWebsocket() {
-
         val httpClient = HttpClient(createHttpClientEngine()) {
             install(WebSockets)
         }
@@ -152,5 +192,9 @@ class TestViewModel : ViewModel() {
                 println("error to get news $exception")
             }
         }
+    }
+
+    interface EventListener {
+        fun onFakeSignupResult(result: String)
     }
 }

@@ -2,7 +2,7 @@
  * Copyright 2022 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package dev.icerock.moko.network.features
+package dev.icerock.moko.network.plugins
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpClientPlugin
@@ -22,9 +22,9 @@ class DynamicUserAgent(
         override fun prepare(block: Config.() -> Unit): DynamicUserAgent =
             DynamicUserAgent(Config().apply(block).agentProvider)
 
-        override fun install(feature: DynamicUserAgent, scope: HttpClient) {
+        override fun install(plugin: DynamicUserAgent, scope: HttpClient) {
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
-                feature.agentProvider()?.let { context.header(HttpHeaders.UserAgent, it) }
+                plugin.agentProvider()?.let { context.header(HttpHeaders.UserAgent, it) }
             }
         }
     }

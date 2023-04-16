@@ -21,7 +21,14 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.serializer
 import io.ktor.client.call.ReceivePipelineException
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.forms.submitFormWithBinaryData
+import io.ktor.http.ContentDisposition
+import io.ktor.http.HttpHeaders
 import io.ktor.http.content.TextContent
+import io.ktor.http.Headers
+import io.ktor.utils.io.core.Input
 import io.ktor.http.encodedPath
 import io.ktor.http.path
 
@@ -35,7 +42,7 @@ import io.ktor.http.path
     {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
     */
-    {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
+    {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{#isBinary}}Input{{/isBinary}}{{^isBinary}}{{{dataType}}}{{/isBinary}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
 
     /**
     * {{summary}}
@@ -43,7 +50,7 @@ import io.ktor.http.path
     {{#allParams}}* @param {{paramName}} {{description}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
     {{/allParams}}* @return HttpResponse
     */
-    {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}NetworkResponse<{{{returnType}}}>{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
+    {{^nonPublicApi}}public {{/nonPublicApi}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{#isBinary}}Input{{/isBinary}}{{^isBinary}}{{{dataType}}}{{/isBinary}}{{^required}}? = null{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}NetworkResponse<{{{returnType}}}>{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}}
 
     {{/operation}}
 
@@ -58,7 +65,6 @@ import io.ktor.http.path
     private val _json = json
 
     {{#operation}}
-
     /**
     * {{summary}}
     * {{notes}}
@@ -66,7 +72,7 @@ import io.ktor.http.path
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
-    override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
+    override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{#isBinary}}Input{{/isBinary}}{{^isBinary}}{{{dataType}}}{{/isBinary}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
         try {
         {{#returnType}}
         {{#vendorExtensions.x-successResponse}}
@@ -88,7 +94,8 @@ import io.ktor.http.path
     {{/allParams}}* @return HttpResponse
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
-    override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}NetworkResponse<{{{returnType}}}>{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
+    override {{^nonPublicApi}}public {{/nonPublicApi}}{{#isOpen}}open {{/isOpen}}suspend fun {{operationId}}Response({{#allParams}}{{paramName}}: {{#isBinary}}Input{{/isBinary}}{{^isBinary}}{{{dataType}}}{{/isBinary}}{{^required}}?{{/required}}{{^-last}}, {{/-last}}{{/allParams}}) : {{#returnType}}NetworkResponse<{{{returnType}}}>{{/returnType}}{{^returnType}}kotlin.Unit{{/returnType}} {
+        {{^hasFormParams}}
         val builder = HttpRequestBuilder()
 
         builder.method = HttpMethod.{{httpMethod}}
@@ -146,14 +153,6 @@ import io.ktor.http.path
         }
         {{/bodyParams}}
 
-        {{#hasFormParams}}
-        val formData = FormDataContent(Parameters.build {
-            {{#formParams}}
-            {{paramName}}?.let { append("{{baseName}}", it.toString()) }
-            {{/formParams}}
-        })
-        builder.setBody(formData)
-        {{/hasFormParams}}
         with(builder.headers) {
             append("Accept", "application/json")
             {{#headerParams}}
@@ -163,6 +162,56 @@ import io.ktor.http.path
         }
 
         val response = _httpClient.request(builder)
+        {{/hasFormParams}}
+        {{#hasFormParams}}
+        {{#returnType}}val response = {{/returnType}}_httpClient.submitFormWithBinaryData(
+            formData = formData {
+            {{#formParams}}
+            {{#isBinary}}
+                {{paramName}}?.let { {{paramName}} ->
+                    appendInput(
+                        key = "{{baseName}}",
+                        block = { {{paramName}} },
+                        headers = Headers.build {
+                            append(HttpHeaders.ContentDisposition, "filename={{baseName}}")
+                        }
+                    )
+                }
+            {{/isBinary}}
+            {{^isBinary}}
+                {{paramName}}?.let { {{paramName}} ->
+                    append(
+                        key = "{{baseName}}",
+                        value = _json.encodeToString({{{dataType}}}.serializer(), {{paramName}})
+                    )
+                }
+            {{/isBinary}}
+            {{/formParams}}
+            }
+        ) {
+            url {
+                takeFrom(_basePath)
+                encodedPath = encodedPath.let { startingPath ->
+                    path("{{path}}")
+                    return@let startingPath + encodedPath
+                }
+                {{#hasQueryParams}}
+                @Suppress("UNNECESSARY_SAFE_CALL")
+                with(parameters) {
+                    {{#queryParams}}
+                    {{#isContainer}}
+                    {{paramName}}?.let { appendAll("{{baseName}}", it.map { it.toString() }) }
+                    {{/isContainer}}
+                    {{^isContainer}}
+                    {{paramName}}?.let { append("{{baseName}}", it.toString()) }
+                    {{/isContainer}}
+                    {{/queryParams}}
+                }
+                {{/hasQueryParams}}
+            }
+        }
+        {{/hasFormParams}}
+
         {{#returnType}}
         {{#vendorExtensions.x-successResponse}}
         val serializer = {{>property_serializer}}
