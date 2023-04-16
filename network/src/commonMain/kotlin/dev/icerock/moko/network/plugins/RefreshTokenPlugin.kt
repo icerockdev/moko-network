@@ -16,6 +16,7 @@ import io.ktor.client.statement.request
 import io.ktor.http.HttpStatusCode
 import io.ktor.util.AttributeKey
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class RefreshTokenPlugin(
     private val updateTokenHandler: suspend () -> Boolean,
@@ -49,30 +50,28 @@ class RefreshTokenPlugin(
                     return@intercept
                 }
 
-                refreshTokenHttpPluginMutex.lock()
+                refreshTokenHttpPluginMutex.withLock {
 
-                // If token of the request isn't actual, then token has already been updated and
-                // let's just to try repeat request
-                if (!plugin.isCredentialsActual(subject.request)) {
-                    refreshTokenHttpPluginMutex.unlock()
-                    val requestBuilder = HttpRequestBuilder().takeFrom(subject.request)
-                    val result: HttpResponse = scope.request(requestBuilder)
-                    proceedWith(result)
-                    return@intercept
-                }
+                    // If token of the request isn't actual, then token has already been updated and
+                    // let's just to try repeat request
+                    if (!plugin.isCredentialsActual(subject.request)) {
+                        val requestBuilder = HttpRequestBuilder().takeFrom(subject.request)
+                        val result: HttpResponse = scope.request(requestBuilder)
+                        proceedWith(result)
+                        return@intercept
+                    }
 
-                // Else if token of the request is actual (same as in the storage), then need to send
-                // refresh request.
-                if (plugin.updateTokenHandler.invoke()) {
-                    // If the request refresh was successful, then let's just to try repeat request
-                    refreshTokenHttpPluginMutex.unlock()
-                    val requestBuilder = HttpRequestBuilder().takeFrom(subject.request)
-                    val result: HttpResponse = scope.request(requestBuilder)
-                    proceedWith(result)
-                } else {
-                    // If the request refresh was unsuccessful
-                    refreshTokenHttpPluginMutex.unlock()
-                    proceedWith(subject)
+                    // Else if token of the request is actual (same as in the storage), then need to send
+                    // refresh request.
+                    if (plugin.updateTokenHandler.invoke()) {
+                        // If the request refresh was successful, then let's just to try repeat request
+                        val requestBuilder = HttpRequestBuilder().takeFrom(subject.request)
+                        val result: HttpResponse = scope.request(requestBuilder)
+                        proceedWith(result)
+                    } else {
+                        // If the request refresh was unsuccessful
+                        proceedWith(subject)
+                    }
                 }
             }
         }

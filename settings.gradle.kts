@@ -17,6 +17,7 @@ includeBuild("network-generator")
 include(":network")
 include(":network-errors")
 include(":network-bignum")
+include(":network-engine")
 
 include(":sample:android-app")
 include(":sample:websocket-echo-server")

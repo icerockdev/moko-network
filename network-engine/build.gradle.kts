@@ -4,7 +4,6 @@
 
 plugins {
     id("dev.icerock.moko.gradle.multiplatform.mobile")
-    id("org.jetbrains.kotlin.plugin.serialization")
     id("dev.icerock.moko.gradle.detekt")
     id("dev.icerock.moko.gradle.publication")
     id("dev.icerock.moko.gradle.stub.javadoc")
@@ -19,6 +18,9 @@ kotlin {
 
         val commonJvmAndroid = create("commonJvmAndroid") {
             dependsOn(commonMain)
+            dependencies {
+                api(libs.ktorClientOkHttp)
+            }
         }
 
         val androidMain by getting {
@@ -28,31 +30,11 @@ kotlin {
         val jvmMain by getting {
             dependsOn(commonJvmAndroid)
         }
-
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.kotlinTestJUnit)
-            }
-        }
     }
 }
 
 dependencies {
     commonMainImplementation(libs.coroutines)
-    commonMainApi(libs.kotlinSerialization)
-    commonMainApi(libs.ktorClient)
-
-    androidMainImplementation(libs.appCompat)
-
-    commonTestImplementation(libs.ktorClientMock)
-    commonTestImplementation(libs.kotlinTest)
-    commonTestImplementation(libs.kotlinTestAnnotations)
-
-    androidTestImplementation(libs.kotlinTestJUnit)
-}
-
-tasks.named("publishToMavenLocal") {
-    val pluginPublish = gradle.includedBuild("network-generator")
-        .task(":publishToMavenLocal")
-    dependsOn(pluginPublish)
+    commonMainApi(projects.network)
+    iosMainApi(libs.ktorClientIos)
 }
