@@ -7,6 +7,7 @@ package dev.icerock.moko.network.tasks
 import dev.icerock.moko.network.KtorCodegen
 import dev.icerock.moko.network.SpecInfo
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+import java.io.File
 
 open class GenerateTask : GenerateTask() {
     init {
@@ -33,9 +34,7 @@ open class GenerateTask : GenerateTask() {
 
         doFirst {
             // clean directory before generate new code
-            val cleanupDir = outputDir.get()
-            val dir = project.file(cleanupDir)
-            dir.deleteRecursively()
+            File(outputDir.get()).deleteRecursively()
         }
     }
 }
