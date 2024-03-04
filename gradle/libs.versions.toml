@@ -20,7 +20,7 @@ mokoResourcesVersion = "0.21.2"
 mokoMvvmVersion = "0.16.0"
 mokoErrorsVersion = "0.7.0"
 mokoTestVersion = "0.6.1"
-mokoNetworkVersion = "0.21.1"
+mokoNetworkVersion = "0.21.2"
 
 # tests
 espressoCoreVersion = "3.5.1"
