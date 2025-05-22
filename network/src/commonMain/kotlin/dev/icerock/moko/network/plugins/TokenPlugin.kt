@@ -4,40 +4,35 @@
 
 package dev.icerock.moko.network.plugins
 
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.HttpClientPlugin
-import io.ktor.client.request.HttpRequestPipeline
+import io.ktor.client.plugins.createClientPlugin
 import io.ktor.client.request.header
-import io.ktor.util.AttributeKey
 
-class TokenPlugin private constructor(
-    private val tokenHeaderName: String,
-    private val tokenProvider: TokenProvider
+val TokenPlugin = createClientPlugin(
+    name = "TokenPlugin",
+    createConfiguration = ::TokenPluginConfig
 ) {
+    val tokenHeaderName = pluginConfig.tokenHeaderName
+    val tokenProvider = pluginConfig.tokenProvider
 
-    class Config {
-        var tokenHeaderName: String? = null
-        var tokenProvider: TokenProvider? = null
-        fun build() = TokenPlugin(
-            tokenHeaderName ?: throw IllegalArgumentException("HeaderName should be contain"),
-            tokenProvider ?: throw IllegalArgumentException("TokenProvider should be contain")
-        )
+    if (tokenHeaderName == null) {
+        throw IllegalArgumentException("HeaderName should be contain")
     }
 
-    companion object Plugin : HttpClientPlugin<Config, TokenPlugin> {
-        override val key = AttributeKey<TokenPlugin>("TokenPlugin")
+    if (tokenProvider == null) {
+        throw IllegalArgumentException("TokenProvider should be contain")
+    }
 
-        override fun prepare(block: Config.() -> Unit) = Config().apply(block).build()
-
-        override fun install(plugin: TokenPlugin, scope: HttpClient) {
-            scope.requestPipeline.intercept(HttpRequestPipeline.State) {
-                plugin.tokenProvider.getToken()?.apply {
-                    context.headers.remove(plugin.tokenHeaderName)
-                    context.header(plugin.tokenHeaderName, this)
-                }
-            }
+    onRequest { request, _ ->
+        tokenProvider.getToken()?.apply {
+            request.headers.remove(tokenHeaderName)
+            request.headers.append(tokenHeaderName, this)
         }
     }
+}
+
+class TokenPluginConfig {
+    var tokenHeaderName: String? = null
+    var tokenProvider: TokenProvider? = null
 
     fun interface TokenProvider {
         fun getToken(): String?
