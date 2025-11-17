@@ -11,12 +11,12 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-netty:2.2.1")
-    implementation("io.ktor:ktor-server-core:2.2.1")
-    implementation("ch.qos.logback:logback-classic:1.2.11")
+    implementation("io.ktor:ktor-server-netty:3.3.2")
+    implementation("io.ktor:ktor-server-core:3.3.2")
+    implementation("ch.qos.logback:logback-classic:1.5.21")
 }

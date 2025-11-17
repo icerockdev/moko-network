@@ -5,6 +5,7 @@
 package dev.icerock.moko.network.bignum
 
 import com.soywiz.kbignum.BigNum
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -12,6 +13,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializer(forClass = BigNum::class)
 object BigNumSerializer : KSerializer<BigNum> {
     override val descriptor = PrimitiveSerialDescriptor(

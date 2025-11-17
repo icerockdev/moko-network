@@ -18,6 +18,7 @@ android {
         versionCode = 1
         versionName = "0.1.0"
     }
+    namespace = "com.icerockdev.app"
 }
 
 dependencies {
@@ -25,5 +26,5 @@ dependencies {
     implementation(libs.appCompat)
     implementation(libs.mokoMvvmDataBinding)
     implementation(libs.multidex)
-    implementation(projects.sample.mppLibrary)
+    implementation(project(":sample:mpp-library"))
 }

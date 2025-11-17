@@ -3,7 +3,8 @@
  */
 
 plugins {
-    id("dev.icerock.moko.gradle.multiplatform.mobile")
+    id("com.android.library")
+    kotlin("multiplatform")
     id("dev.icerock.mobile.multiplatform-resources")
     id("dev.icerock.moko.gradle.detekt")
     id("dev.icerock.moko.gradle.publication")
@@ -12,17 +13,41 @@ plugins {
 
 android {
     namespace = "dev.icerock.moko.network.errors"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 26
+    }
 }
 
-dependencies {
-    commonMainImplementation(libs.kotlinSerialization)
+kotlin {
+    androidTarget()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
-    commonMainApi(libs.mokoErrors)
-    commonMainApi(libs.mokoResources)
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.kotlinSerialization)
+                api(libs.mokoErrors)
+                api(libs.mokoResources)
+                implementation(project(":network"))
+            }
+        }
 
-    commonMainImplementation(projects.network)
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
+    }
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "dev.icerock.moko.network.errors"
+    resourcesPackage = "dev.icerock.moko.network.errors"
 }

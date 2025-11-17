@@ -4,7 +4,7 @@
 
 package dev.icerock.moko.network
 
-import dev.icerock.moko.network.plugins.LanguagePlugin
+import dev.icerock.moko.network.plugins.LanguagePlugin.LanguageCodeProvider
 
 @Suppress("EmptyDefaultConstructor")
-expect class LanguageProvider() : LanguagePlugin.LanguageCodeProvider
+expect class LanguageProvider() : LanguageCodeProvider

@@ -3,7 +3,8 @@
  */
 
 plugins {
-    id("dev.icerock.moko.gradle.multiplatform.mobile")
+    id("com.android.library")
+    kotlin("multiplatform")
     id("dev.icerock.moko.gradle.detekt")
     id("dev.icerock.moko.gradle.publication")
     id("dev.icerock.moko.gradle.stub.javadoc")
@@ -11,15 +12,37 @@ plugins {
 
 android {
     namespace = "dev.icerock.moko.network.bignum"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 26
+    }
 }
 
 kotlin {
+    androidTarget()
     jvm()
-}
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
-dependencies {
-    commonMainImplementation(libs.kotlinSerialization)
-    commonMainApi(libs.kbignum)
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.kotlinSerialization)
+                api(libs.kbignum)
+                implementation(project(":network"))
+            }
+        }
 
-    commonMainImplementation(projects.network)
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
+    }
 }

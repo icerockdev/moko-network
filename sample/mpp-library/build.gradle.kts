@@ -7,7 +7,6 @@ plugins {
     id("dev.icerock.moko.gradle.android.base")
     id("org.jetbrains.kotlin.multiplatform")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("dev.icerock.mobile.multiplatform.targets")
     id("dev.icerock.mobile.multiplatform-resources")
     id("dev.icerock.mobile.multiplatform-network-generator")
     id("dev.icerock.mobile.multiplatform.ios-framework")
@@ -15,34 +14,77 @@ plugins {
     id("dev.icerock.moko.gradle.tests")
 }
 
-dependencies {
-    commonMainImplementation(libs.coroutines)
-    commonMainImplementation(libs.ktorClient)
-    commonMainImplementation(libs.ktorClientLogging)
-    commonMainImplementation(libs.kotlinSerialization)
-    commonMainImplementation(libs.ktorClientWebSocket)
-    commonMainImplementation(libs.kbignum)
+android {
+    namespace = "com.icerockdev.library"
+    compileSdk = 35
 
-    commonMainApi(libs.mokoMvvmCore)
-    commonMainApi(libs.mokoMvvmLiveData)
+    defaultConfig {
+        minSdk = 26
+    }
+}
 
-    commonMainApi(projects.network)
-    commonMainApi(projects.networkEngine)
-    commonMainApi(projects.networkBignum)
-    commonMainApi(projects.networkErrors)
+kotlin {
+    androidTarget()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
-    androidMainImplementation(libs.lifecycleViewModel)
-    
-    commonTestImplementation(libs.ktorClientMock)
-    commonTestImplementation(libs.kotlinTest)
-    commonTestImplementation(libs.mokoTest)
-    commonTestImplementation(libs.kotlinTestAnnotations)
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.coroutines)
+                implementation(libs.ktorClient)
+                implementation(libs.ktorClientLogging)
+                implementation(libs.kotlinSerialization)
+                implementation(libs.ktorClientWebSocket)
+                implementation(libs.kbignum)
 
-    androidTestImplementation(libs.kotlinTestJUnit)
+                api(libs.mokoMvvmCore)
+                api(libs.mokoMvvmLiveData)
+
+                api(project(":network"))
+                api(project(":network-bignum"))
+                api(project(":network-engine"))
+                api(project(":network-errors"))
+            }
+        }
+
+        val androidMain by getting {
+            dependsOn(commonMain)
+            dependencies {
+                implementation(libs.lifecycleViewModel)
+            }
+        }
+
+        val commonTest by getting {
+            dependencies {
+                implementation(libs.ktorClientMock)
+                implementation(libs.mokoTest)
+                implementation(libs.kotlinTestAnnotations)
+            }
+        }
+
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(libs.kotlinTestJUnit)
+            }
+        }
+
+        //val iosTest by creating
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
+    }
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "com.icerockdev.library"
+    resourcesPackage = "com.icerockdev.library"
 }
 
 mokoNetwork {

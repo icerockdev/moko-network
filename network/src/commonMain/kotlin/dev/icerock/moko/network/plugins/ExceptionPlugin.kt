@@ -12,8 +12,9 @@ import io.ktor.client.plugins.plugin
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.isSuccess
 import io.ktor.util.AttributeKey
-import io.ktor.utils.io.charsets.Charset
+import io.ktor.utils.io.charsets.Charsets
 import io.ktor.utils.io.core.readText
+import io.ktor.utils.io.readRemaining
 
 class ExceptionPlugin(private val exceptionFactory: ExceptionFactory) {
 
@@ -36,7 +37,7 @@ class ExceptionPlugin(private val exceptionFactory: ExceptionFactory) {
                 val call = execute(request)
                 if (!call.response.status.isSuccess()) {
                     val packet = call.response.bodyAsChannel().readRemaining()
-                    val responseString = packet.readText(charset = Charset.forName("UTF-8"))
+                    val responseString = packet.readText(charset = Charsets.UTF_8)
                     throw plugin.exceptionFactory.createException(
                         request = call.request,
                         response = call.response,

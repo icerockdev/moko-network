@@ -1,24 +1,24 @@
 [versions]
-kotlinVersion = "1.8.10"
+kotlinVersion = "2.2.10"
 
 # android
-lifecycleViewModelVersion = "2.6.1"
-glideVersion = "4.14.2"
-androidAppCompatVersion = "1.6.1"
-coreKtxVersion = "1.10.0"
+lifecycleViewModelVersion = "2.9.4"
+glideVersion = "5.0.5"
+androidAppCompatVersion = "1.7.1"
+coreKtxVersion = "1.16.0"
 
 # jvm
 openApiGeneratorVersion = "5.2.0"
 guavaVersion = "30.1-jre"
 
 # kotlinx
-kotlinxSerializationVersion = "1.5.0"
-coroutinesVersion = "1.6.4"
+kotlinxSerializationVersion = "1.9.0"
+coroutinesVersion = "1.10.2"
 
 # moko
-mokoResourcesVersion = "0.21.2"
-mokoMvvmVersion = "0.16.0"
-mokoErrorsVersion = "0.7.0"
+mokoResourcesVersion = "0.25.1"
+mokoMvvmVersion = "0.16.1"
+mokoErrorsVersion = "0.8.0"
 mokoTestVersion = "0.6.1"
 mokoNetworkVersion = "0.21.2"
 
@@ -30,7 +30,7 @@ androidxTestVersion = "1.5.0"
 robolectricVersion = "4.9"
 
 # other
-ktorClientVersion = "2.2.2"
+ktorClientVersion = "3.3.2"
 kbignumVersion = "2.4.12"
 multidexVersion = "2.0.1"
 
@@ -72,7 +72,6 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 testRunner = { module = "androidx.test:runner", version.ref = "testRunnerVersion" }
 testRules = { module = "androidx.test:rules", version.ref = "testRunnerVersion" }
 testExtJunit = { module = "androidx.test.ext:junit", version.ref = "testExtJunitVersion" }
-kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlinVersion" }
 kotlinTestAnnotations = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlinVersion" }
 mokoTest =  { module = "dev.icerock.moko:test-core", version.ref = "mokoTestVersion" }
 
@@ -83,6 +82,6 @@ guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
 # gradle plugins
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinVersion" }
 kotlinSerializationGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlinVersion" }
-androidGradlePlugin = { module = "com.android.tools.build:gradle", version = "7.4.2" }
+androidGradlePlugin = { module = "com.android.tools.build:gradle", version = "8.13.1" }
 mokoResourcesGradlePlugin = { module = "dev.icerock.moko:resources-generator", version.ref = "mokoResourcesVersion" }
-mokoGradlePlugin = { module = "dev.icerock.moko:moko-gradle-plugin", version = "0.3.0" }
+mokoGradlePlugin = { module = "dev.icerock.moko:moko-gradle-plugin", version = "0.5.1" }

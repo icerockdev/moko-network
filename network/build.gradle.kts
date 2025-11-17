@@ -3,7 +3,8 @@
  */
 
 plugins {
-    id("dev.icerock.moko.gradle.multiplatform.mobile")
+    id("com.android.library")
+    kotlin("multiplatform")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("dev.icerock.moko.gradle.detekt")
     id("dev.icerock.moko.gradle.publication")
@@ -13,46 +14,66 @@ plugins {
 
 android {
     namespace = "dev.icerock.moko.network"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 26
+    }
 }
 
 kotlin {
+    jvmToolchain(17)
+
+    androidTarget()
     jvm()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.coroutines)
+                api(libs.kotlinSerialization)
+                api(libs.ktorClient)
+            }
+        }
 
-        val commonJvmAndroid = create("commonJvmAndroid") {
+        val commonJvmAndroid by creating {
             dependsOn(commonMain)
         }
-
         val androidMain by getting {
             dependsOn(commonJvmAndroid)
+            dependencies {
+                implementation(libs.appCompat)
+            }
         }
-
         val jvmMain by getting {
             dependsOn(commonJvmAndroid)
         }
 
+        val commonTest by getting {
+            dependencies {
+                implementation(libs.ktorClientMock)
+                implementation(libs.kotlinTestAnnotations)
+            }
+        }
         val jvmTest by getting {
             dependencies {
                 implementation(libs.kotlinTestJUnit)
             }
         }
+
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
     }
-}
-
-dependencies {
-    commonMainImplementation(libs.coroutines)
-    commonMainApi(libs.kotlinSerialization)
-    commonMainApi(libs.ktorClient)
-
-    androidMainImplementation(libs.appCompat)
-
-    commonTestImplementation(libs.ktorClientMock)
-    commonTestImplementation(libs.kotlinTest)
-    commonTestImplementation(libs.kotlinTestAnnotations)
-
-    androidTestImplementation(libs.kotlinTestJUnit)
 }
 
 tasks.named("publishToMavenLocal") {
